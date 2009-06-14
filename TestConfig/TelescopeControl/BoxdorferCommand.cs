@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NLog;
 
-namespace TelescopeControl
+namespace TestConfig
 {
     namespace Boxdorfer
     {

@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using NLog;
 
-namespace TelescopeControl
+namespace TestConfig
 {
     using Boxdorfer;
 

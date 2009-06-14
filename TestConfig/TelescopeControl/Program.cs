@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace TelescopeControl
+namespace TestConfig
 {
     static class Program
     {

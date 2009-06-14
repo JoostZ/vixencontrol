@@ -1,4 +1,4 @@
-namespace TelescopeControl
+namespace TestConfig
 {
     partial class SerialEditor
     {

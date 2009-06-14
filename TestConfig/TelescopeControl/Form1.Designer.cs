@@ -1,4 +1,4 @@
-namespace TelescopeControl
+namespace TestConfig
 {
     partial class Form1
     {
@@ -823,11 +823,11 @@ namespace TelescopeControl
             // bindingSource1
             // 
             this.bindingSource1.DataMember = "Ports";
-            this.bindingSource1.DataSource = typeof(TelescopeControl.Form1);
+            this.bindingSource1.DataSource = typeof(TestConfig.Form1);
             // 
             // form1BindingSource
             // 
-            this.form1BindingSource.DataSource = typeof(TelescopeControl.Form1);
+            this.form1BindingSource.DataSource = typeof(TestConfig.Form1);
             // 
             // Form1
             // 

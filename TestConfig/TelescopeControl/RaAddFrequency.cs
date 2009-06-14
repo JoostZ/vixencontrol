@@ -1,4 +1,4 @@
-﻿namespace TelescopeControl
+﻿namespace TestConfig
 {
     namespace Boxdorfer
     {

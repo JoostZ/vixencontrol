@@ -7,8 +7,8 @@
     <ProjectGuid>{D4B2C206-2CDE-4FFF-86B2-B019FCEFEFF2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TelescopeControl</RootNamespace>
-    <AssemblyName>TelescopeControl</AssemblyName>
+    <RootNamespace>TestConfig</RootNamespace>
+    <AssemblyName>TestConfig</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
