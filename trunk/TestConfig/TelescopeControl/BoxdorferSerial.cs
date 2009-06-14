@@ -5,7 +5,7 @@ using System.IO.Ports;
 using System.Windows.Forms;
 using NLog;
 
-namespace TelescopeControl
+namespace TestConfig
 {
     namespace Boxdorfer
     {

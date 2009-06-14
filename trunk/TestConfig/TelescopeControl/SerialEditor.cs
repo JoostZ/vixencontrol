@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
 
-namespace TelescopeControl
+namespace TestConfig
 {
     public partial class SerialEditor : Form
     {
