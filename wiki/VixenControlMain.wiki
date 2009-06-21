@@ -3,7 +3,7 @@
 = Introduction =
 
 Add your content here.
-
+http://vixencontrol.googlecode.com/svn/trunk/Images/telescoop.jpg
 
 = Details =
 
