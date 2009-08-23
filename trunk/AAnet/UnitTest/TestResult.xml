@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Users\Joost\Documents\Development\MyProjects\AAnet\UnitTest\UnitTest.csproj" total="7" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2009-08-16" time="12:04:03">
+  <environment nunit-version="2.5.2.9222" clr-version="2.0.50727.3074" os-version="Microsoft Windows NT 6.0.6001 Service Pack 1" platform="Win32NT" cwd="C:\Users\Joost\Documents\Development\MyProjects\AAnet\UnitTest\bin\Debug" machine-name="ANDELAIN" user="Joost" user-domain="andelain" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite name="C:\Users\Joost\Documents\Development\MyProjects\AAnet\UnitTest\UnitTest.csproj" executed="True" success="True" time="3.535" asserts="0">
+    <results>
+      <test-suite name="C:\Users\Joost\Documents\Development\MyProjects\AAnet\UnitTest\bin\Debug\UnitTest.dll" executed="True" success="True" time="3.521" asserts="0">
+        <results>
+          <test-suite name="UnitTest" executed="True" success="True" time="3.518" asserts="0">
+            <results>
+              <test-suite name="AstroTimeTest" executed="True" success="True" time="3.487" asserts="0">
+                <results>
+                  <test-case name="UnitTest.AstroTimeTest.DateProperty" executed="True" success="True" time="0.106" asserts="1" />
+                  <test-case name="UnitTest.AstroTimeTest.JDProperty" executed="True" success="True" time="0.016" asserts="1" />
+                  <test-case name="UnitTest.AstroTimeTest.TimeParser" executed="True" success="True" time="3.325" asserts="16" />
+                </results>
+              </test-suite>
+              <test-suite name="JDTest" executed="True" success="True" time="0.015" asserts="0">
+                <results>
+                  <test-case name="UnitTest.JDTest.Conversion" executed="True" success="True" time="0.001" asserts="1" />
+                  <test-case name="UnitTest.JDTest.ImplicitToDouble" executed="True" success="True" time="0.001" asserts="1" />
+                  <test-case name="UnitTest.JDTest.ReverseConvert" executed="True" success="True" time="0.002" asserts="1" />
+                  <test-case name="UnitTest.JDTest.Subtract" executed="True" success="True" time="0.002" asserts="1" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Users\Joost\Documents\Development\MyProjects\AAnet\AAnet\AAnet.csproj" total="0" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2009-08-16" time="12:07:47">
+  <environment nunit-version="2.5.2.9222" clr-version="2.0.50727.3074" os-version="Microsoft Windows NT 6.0.6001 Service Pack 1" platform="Win32NT" cwd="C:\Users\Joost\Documents\Development\MyProjects\AAnet\AAnet" machine-name="ANDELAIN" user="Joost" user-domain="andelain" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite name="C:\Users\Joost\Documents\Development\MyProjects\AAnet\AAnet\AAnet.csproj" executed="True" success="False" time="0.017" asserts="0">
+    <results>
+      <test-suite name="C:\Users\Joost\Documents\Development\MyProjects\AAnet\AAnet\bin\Debug\AAnet.dll" executed="False">
+        <reason>
+          <message><![CDATA[Has no TestFixtures]]></message>
+        </reason>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
