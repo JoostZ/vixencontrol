@@ -8,26 +8,23 @@ namespace AAnet
     /**
      * Helper class to manipulate and convert angles
      */
-    public class Angle
+    public struct Angle
     {
-        double _radians;
         double _degrees;
 
         /**
-         * Create an Angle object for 0 degrees
+         * @brief 
+         * Copy constructor
          */
-        public Angle()
-        {
-            _radians = 0;
-            _degrees = 0;
-        }
-
         public Angle(Angle angle)
         {
-            _radians = angle._radians;
             _degrees = angle._degrees;
         }
 
+        /**
+         * @brief
+         * The angle calue in degrees
+         */
         public double Degrees
         {
             get
@@ -37,26 +34,60 @@ namespace AAnet
             set
             {
                 _degrees = value;
-                _radians = DegreesToRad(_degrees);
             }
         }
 
+        /**
+         * @brief
+         * The angle value in radians
+         */
         public double Radians
         {
             get
             {
-                return _radians;
+                return DegreesToRad(_degrees);
             }
             set
             {
-                _radians = value;
-                _degrees = RadToDegrees(_radians);
+                _degrees = RadToDegrees(value);
             }
         }
 
+        /**
+         * @brief
+         * The minutes part of the angle
+         */
+        public int Minutes
+        {
+            get
+            {
+                double degrees = _degrees;
+
+                if (degrees < 0)
+                {
+                    degrees = -degrees;
+
+                }
+                double result = degrees - (int)(degrees);
+                result *= 60;
+                return (int)(result);
+            }
+        }
+
+        /**
+         * @brief
+         * The seconds part of the angle
+         */
         public double Seconds {
-            get {
-                double result = _degrees - (int)(_degrees);
+            get
+            {
+                double degrees = _degrees;
+
+                if (degrees < 0)
+                {
+                    degrees = -degrees;
+                }
+                double result = degrees - (int)(degrees);
                 result *= 60;
                 result -= (int)(result);
                 result *= 60;
@@ -64,7 +95,16 @@ namespace AAnet
             }
         }
 
-
+        /**
+         * @brief
+         * Create an Angle from the value given in degrees
+         * 
+         * @param degrees
+         * The value with which to initialize the angle
+         * 
+         * @return
+         * The constructed Angle
+         */
         static public Angle FromDegrees(double degrees)
         {
             Angle result = new Angle();
@@ -72,36 +112,138 @@ namespace AAnet
             return result;
         }
 
+        /**
+         * @brief
+         * Create an Angle from the value given in degrees, minutes and seconds
+         * 
+         * @param degree
+         * The degree part of the angle
+         * 
+         * @param minutes
+         * The minute part of the angle
+         * 
+         * @param seconds
+         * The seconds part of the angle
+         * 
+         * @return
+         * The constructed Angle
+         */
         static public Angle FromDegrees(int degree, int minutes, double seconds)
         {
+            int sign = 1;
+            if (degree < 0)
+            {
+                degree = -degree;
+            }
             Angle result = new Angle();
-            result.Degrees = degree + minutes / 60.0 + seconds / 3600;
+            result.Degrees = sign * (degree + minutes / 60.0 + seconds / 3600);
             return result;
         }
 
+        /**
+         * @brief
+         * Create an Angle from the value given in radians
+         * 
+         * @param radians
+         * The value with which to initialize the angle
+         * 
+         * @return
+         * The constructed Angle
+         */
+        static public Angle FromRadians(double radians)
+        {
+            Angle result = new Angle();
+            result.Radians = radians;
+            return result;
+        }
+
+        /**
+         * @brief
+         * Multiply an angle by a double value
+         * 
+         * @param value
+         * The value to multiply angle with
+         * 
+         * @param angle
+         * The angle to multiply with value
+         * 
+         * @return
+         * The product of angle and value
+         */
         static public Angle Multiply(double value, Angle angle)
         {
             Angle result = new Angle(angle);
             result._degrees *= value;
-            result._radians *= value;
             return result;
         }
 
+        /**
+         * @brief
+         * Multiply an angle by a double value
+         * 
+         * @param angle
+         * The angle to multiply with value
+         * 
+         * @param value
+         * The value to multiply angle with
+         * 
+         * @return
+         * The product of angle and value
+         */
         static public Angle Multiply(Angle angle, double value)
         {
             return Multiply(value, angle);
         }
 
+        /**
+         * @brief
+         * Multiply an angle by a double value
+         * 
+         * @param value
+         * The value to multiply angle with
+         * 
+         * @param angle
+         * The angle to multiply with value 
+         * 
+         * @return
+         * The product of angle and value
+         */
         static public Angle operator *(double value, Angle angle)
         {
             return Multiply(value, angle);
         }
 
+        /**
+         * @brief
+         * Multiply an angle by a double value
+         * 
+         * @param angle
+         * The angle to multiply with value
+         * 
+         * @param value
+         * The value to multiply angle with
+         * 
+         * @return
+         * The product of angle and value
+         */
         static public Angle operator *(Angle angle, double value)
         {
             return Multiply(value, angle);
         }
 
+        /**
+         * @brief
+         * Add two angles
+         * 
+         * @param a1
+         * The first of the two angles
+         * 
+         * @param
+         * The second of the two angles
+         * 
+         * @return
+         * The sum of the two angles
+         */
         static public Angle Addition(Angle a1, Angle a2)
         {
             Angle result = new Angle();
@@ -109,31 +251,79 @@ namespace AAnet
             return result;
         }
 
+        /**
+         * @brief
+         * Add two angles
+         * 
+         * @param a1
+         * The first of the two angles
+         * 
+         * @param
+         * The second of the two angles
+         * 
+         * @return
+         * The sum of the two angles
+         */
         static public Angle operator+(Angle a1, Angle a2)
         {
             return Addition(a1, a2);
         }
 
+        /**
+         * @brief
+         * Calculate the sine of an angle
+         * 
+         * @param a
+         * The angle from which to take the sine
+         * 
+         * @return
+         * The sine of a
+         */
         static public double Sin(Angle a)
         {
             return Math.Sin(a.Radians);
         }
 
+        /**
+         * @brief
+         * Calculate the cosine of an angle
+         * 
+         * @param a
+         * The angle from which to take the cosine
+         * 
+         * @return
+         * The cosine of a
+         */
         static public double Cos(Angle a)
         {
             return Math.Cos(a.Radians);
         }
 
-        public void AddSeconds(double seconds)
-        {
-            Degrees += seconds / 3600;
-        }
-
+        /**
+         * @brief
+         * Helper function to convert from radians to degrees
+         * 
+         * @param rad
+         * The radians to convert
+         * 
+         * @return
+         * The number of degrees corresponding to rad
+         */
         public double RadToDegrees(double rad)
         {
             return rad * 180.0 / Math.PI;
         }
 
+        /**
+         * @brief
+         * Helper function to convert from degrees to radians
+         * 
+         * @param degrees
+         * The degrees to convert
+         * 
+         * @return
+         * The number of radians corresponding to degrees
+         */
         public double DegreesToRad(double degrees)
         {
             return degrees * Math.PI / 180.0;
