@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Users\Joost\Documents\Development\MyProjects\VXAscom\AstroCoordinates\AstroCoordinates.csproj" total="6" errors="0" failures="1" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2009-09-09" time="08:04:43">
+  <environment nunit-version="2.5.2.9222" clr-version="2.0.50727.3074" os-version="Microsoft Windows NT 6.0.6001 Service Pack 1" platform="Win32NT" cwd="C:\Users\Joost\Documents\Development\MyProjects\VXAscom\AstroCoordinates" machine-name="ANDELAIN" user="Joost" user-domain="andelain" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite name="C:\Users\Joost\Documents\Development\MyProjects\VXAscom\AstroCoordinates\AstroCoordinates.csproj" executed="True" success="False" time="0.655" asserts="0">
+    <results>
+      <test-suite name="C:\Users\Joost\Documents\Development\MyProjects\VXAscom\AstroCoordinates\bin\Debug\AstroCoordinates.dll" executed="True" success="False" time="0.655" asserts="0">
+        <results>
+          <test-suite name="AstroCoordinates" executed="True" success="False" time="0.640" asserts="0">
+            <results>
+              <test-suite name="TestAngle" executed="True" success="True" time="0.234" asserts="0">
+                <results>
+                  <test-case name="AstroCoordinates.TestAngle.Add" executed="True" success="True" time="0.047" asserts="2" />
+                  <test-case name="AstroCoordinates.TestAngle.Creation" executed="True" success="True" time="0.000" asserts="4" />
+                </results>
+              </test-suite>
+              <test-suite name="TestCoordinate" executed="True" success="True" time="0.109" asserts="0">
+                <results>
+                  <test-case name="AstroCoordinates.TestCoordinate.Creation" executed="True" success="True" time="0.109" asserts="7" />
+                </results>
+              </test-suite>
+              <test-suite name="TestTransformation" executed="True" success="False" time="0.281" asserts="0">
+                <results>
+                  <test-case name="AstroCoordinates.TestTransformation.ApparentToTrue" executed="True" success="False" time="0.078" asserts="1">
+                    <failure>
+                      <message><![CDATA[  Expected: 0.27764742999999997d +/- 1E-08.0d
+  But was:  0.46174861677993367d
+]]></message>
+                      <stack-trace><![CDATA[at AstroCoordinates.TestTransformation.ApparentToTrue() in C:\Users\Joost\Documents\Development\MyProjects\VXAscom\AstroCoordinates\Transformation.cs:line 164
+]]></stack-trace>
+                    </failure>
+                  </test-case>
+                  <test-case name="AstroCoordinates.TestTransformation.Creation" executed="True" success="True" time="0.000" asserts="9" />
+                  <test-case name="AstroCoordinates.TestTransformation.Transform" executed="True" success="True" time="0.000" asserts="4" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

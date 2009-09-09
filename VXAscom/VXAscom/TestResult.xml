@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Users\Joost\Documents\Development\MyProjects\VXAscom\VXAscom\VXAscom.csproj" total="3" failures="0" not-run="0" date="2008-09-22" time="13:30:50">
+  <environment nunit-version="2.4.8.0" clr-version="2.0.50727.3053" os-version="Microsoft Windows NT 6.0.6001 Service Pack 1" platform="Win32NT" cwd="C:\Program Files\NUnit 2.4.8\bin" machine-name="ANDELAIN" user="Joost" user-domain="andelain" />
+  <culture-info current-culture="nl-NL" current-uiculture="en-US" />
+  <test-suite name="C:\Users\Joost\Documents\Development\MyProjects\VXAscom\VXAscom\VXAscom.csproj" success="True" time="0.140" asserts="0">
+    <results>
+      <test-suite name="C:\Users\Joost\Documents\Development\MyProjects\VXAscom\VXAscom\bin\Debug\VXAscom.dll" success="True" time="0.125" asserts="0">
+        <results>
+          <test-suite name="ASCOM" success="True" time="0.125" asserts="0">
+            <results>
+              <test-suite name="VXAscom" success="True" time="0.125" asserts="0">
+                <results>
+                  <test-suite name="TestLocalSiderialTime" success="True" time="0.109" asserts="0">
+                    <results>
+                      <test-case name="ASCOM.VXAscom.TestLocalSiderialTime.IsSingleton" executed="True" success="True" time="0.078" asserts="2" />
+                      <test-case name="ASCOM.VXAscom.TestLocalSiderialTime.TestGST" executed="True" success="True" time="0.016" asserts="3" />
+                      <test-case name="ASCOM.VXAscom.TestLocalSiderialTime.TestLAST" executed="True" success="True" time="0.000" asserts="3" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

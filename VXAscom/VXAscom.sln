@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VXAscom", "VXAscom\VXAscom.csproj", "{F3B9536C-11A8-4480-8D5C-AEFD37398B4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVxAscom", "TestVxAscom\TestVxAscom.csproj", "{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngleDisplay", "AngleDisplay\AngleDisplay.csproj", "{9401E22C-3397-456C-8233-8CFD137C4C75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroCoordinates", "AstroCoordinates\AstroCoordinates.csproj", "{9B187EC3-0EA9-4FFC-8407-D46A61630C53}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3B9536C-11A8-4480-8D5C-AEFD37398B4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3B9536C-11A8-4480-8D5C-AEFD37398B4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3B9536C-11A8-4480-8D5C-AEFD37398B4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3B9536C-11A8-4480-8D5C-AEFD37398B4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9401E22C-3397-456C-8233-8CFD137C4C75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9401E22C-3397-456C-8233-8CFD137C4C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9401E22C-3397-456C-8233-8CFD137C4C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9401E22C-3397-456C-8233-8CFD137C4C75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B187EC3-0EA9-4FFC-8407-D46A61630C53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B187EC3-0EA9-4FFC-8407-D46A61630C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B187EC3-0EA9-4FFC-8407-D46A61630C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B187EC3-0EA9-4FFC-8407-D46A61630C53}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
