@@ -299,6 +299,38 @@ namespace AAnet
             return Math.Cos(a.Radians);
         }
 
+        /// <summary>
+        /// Inverse sine
+        /// </summary>
+        /// <param name="argument">The argument to take the inverse sine from</param>
+        /// <returns>The reverse sine of the argument</returns>
+        static public Angle Asin(double argument)
+        {
+            return FromRadians(Math.Asin(argument));
+        }
+
+
+        /// <summary>
+        /// Inverse cosine
+        /// </summary>
+        /// <param name="argument">The argument to take the inverse cosine from</param>
+        /// <returns>The reverse cosine of the argument</returns>
+        static public Angle Acos(double argument)
+        {
+            return FromRadians(Math.Asin(argument));
+        }
+
+        /// <summary>
+        /// Returns the angle whose tangent is the quotient of two specified numbers 
+        /// </summary>
+        /// <param name="y">The y-coordinate of a point</param>
+        /// <param name="x">The x-coordinate of a point</param>
+        /// <returns>The angle for which the tangent is y / x</returns>
+        /// <remarks>See Math.Atan2 for more details</remarks>
+        static public Angle Atan2(double y, double x)
+        {
+            return FromRadians(Math.Atan2(y, x));
+        }
         /**
          * @brief
          * Helper function to convert from radians to degrees
