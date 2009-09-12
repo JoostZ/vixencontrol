@@ -1,39 +1,58 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using ASCOM.Helper;
 
 namespace ASCOM.VXAscom
 {
-    using Controller;
-
-    public class RaAxisControl :  AxisControl
+    namespace Axis
     {
+        using Controller;
 
-        public RaAxisControl(IControllerConnect aController)
-            : base(aController)
+        public class RaAxisControl : AxisControl
         {
-        }
 
-        protected override Int32 GetPosition()
-        {
-            return ReadInt(Controller.Registers.RaPosition);
-        }
-
-        protected override void SetPosition(int aPosition)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override int CBacklash
-        {
-            get
+            public RaAxisControl(IControllerConnect aController)
+                : base(aController)
             {
-                return ReadInt(Controller.Registers.RaBacklash);
+                // Initialize the commands for the RA status registers
+                StatusRegister = new System.Collections.Generic.Dictionary<AxisStatus, Registers> {
+                    {AxisStatus.Acceleration, Registers.RaAcceleration},
+                    {AxisStatus.AccelerationUpdate, Registers.RaAccUpdate},
+                    {AxisStatus.AccelerationLimit, Registers.RaLimit}
+                };
+
+                // Set the default values for the RA status registers
+                StatusValues = new Dictionary<AxisStatus, Int32> { 
+                    {AxisStatus.Acceleration, 2510},
+                    {AxisStatus.AccelerationUpdate, 20},
+                    {AxisStatus.AccelerationLimit, 20},
+                };
+
             }
-            set
+
+            protected override Int32 GetPosition()
             {
-                WriteInt(Controller.Registers.RaBacklash, value);
+                return ReadInt(Controller.Registers.RaPosition);
             }
+
+            protected override void SetPosition(int aPosition)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            protected override int CBacklash
+            {
+                get
+                {
+                    return ReadInt(Controller.Registers.RaBacklash);
+                }
+                set
+                {
+                    WriteInt(Controller.Registers.RaBacklash, value);
+                }
+            }
+
         }
     }
 }

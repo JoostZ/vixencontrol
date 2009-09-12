@@ -23,6 +23,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using System.Windows;
 using System.Runtime.InteropServices;
 
 using ASCOM;
@@ -67,7 +68,7 @@ namespace ASCOM.VXAscom
         private AxisRates[] m_AxisRates;
         private TrackingRates m_TrackingRates;
 
-        private AxisControl[] m_Axes;
+        private Axis.AxisControl[] m_Axes;
         private BoxdorferConnect Controller
         {
             get;
@@ -88,9 +89,9 @@ namespace ASCOM.VXAscom
 
             Controller = new BoxdorferConnect();
 
-            m_Axes = new AxisControl[2];
-            m_Axes[0] = new RaAxisControl(Controller);
-            m_Axes[1] = new DecAxisController(Controller);
+            m_Axes = new Axis.AxisControl[2];
+            m_Axes[0] = new Axis.RaAxisControl(Controller);
+            m_Axes[1] = new Axis.DecAxisController(Controller);
         }
 
         #region ASCOM Registration
@@ -319,8 +320,20 @@ namespace ASCOM.VXAscom
         public bool Connected
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Connected", false); }
-            set { throw new PropertyNotImplementedException("Connected", true); }
+            get {
+                return (Controller.Connection != null) && Controller.Connection.Connected;
+            }
+            set {
+                if (Controller.Connection == null)
+                {
+                    System.Windows.Forms.MessageBox.Show("No serial connection is setup");
+                    return;
+                }
+                else
+                {
+                    Controller.Connection.Connected = value;
+                }
+            }
         }
 
         public double Declination
@@ -456,7 +469,7 @@ namespace ASCOM.VXAscom
 
         public void SetupDialog()
         {
-            SetupDialogForm F = new SetupDialogForm();
+            SetupDialogForm F = new SetupDialogForm(m_Axes[0]);
             F.ShowDialog();
 
             if (F.Connection != null)

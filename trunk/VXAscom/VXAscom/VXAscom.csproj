@@ -70,6 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AxisControl.cs" />
+    <Compile Include="AxisControlDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AxisControlDisplay.Designer.cs">
+      <DependentUpon>AxisControlDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="BoxdorferConnect.cs" />
     <Compile Include="DecAxisController.cs" />
     <Compile Include="Driver.cs" />
@@ -91,6 +97,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AxisControlDisplay.resx">
+      <DependentUpon>AxisControlDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -102,6 +111,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\DataSources\ASCOM.VXAscom.Axis.AxisControl.datasource" />
+    <None Include="Properties\DataSources\ASCOM.VXAscom.Axis.AxisControl1.datasource" />
+    <None Include="Properties\DataSources\AxisControlDisplay.datasource" />
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>
