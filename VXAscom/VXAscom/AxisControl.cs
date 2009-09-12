@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 using NUnit.Framework;
 
@@ -10,127 +11,243 @@ using ASCOM.Helper;
 
 namespace ASCOM.VXAscom
 {
-    using Controller;
-
-    /**
-     * @brief
-     * Base class to control the micro controller for a single axis
-     */
-    public abstract class AxisControl
+    namespace Axis
     {
-        protected const int motorSteps = 96; ///< Number of steps for single rotation of the motor
-        protected const int wormGearing = 120; ///< Number of motor rotations for one wormwheel rotation
-        protected const int axisGearing = 144; ///< Number of wormwheel rotations for one axis rotation                              
-        protected const double kDegreesPerStep = 360.0 / (motorSteps * wormGearing * axisGearing);
+        using Controller;
 
-        protected IControllerConnect iController;
-
-        protected Angle iZeroPoint;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="aController">Access to the hardware controller</param>
-        public AxisControl(IControllerConnect aController)
+        public enum AxisStatus
         {
-            iController = aController;
-        }
+            Acceleration,
+            AccelerationUpdate,
+            AccelerationLimit,
+        };
+
+
+        class Status
+        {
+            public Dictionary<AxisStatus, Int32> StatusValues
+            {
+                get; set;
+            }
+        };
 
         /**
          * @brief
-         * The angle (in degrees) of the position of this angle.
-         * 
-         * The zero point of the axis is arbitrary. In fact, setting the
-         * Angle defines the zero point.
+         * Base class to control the micro controller for a single axis
          */
-        public Angle Angle
+        public abstract class AxisControl
         {
-            get
+     
+            public const double  SiderialTrackingSpeed = 360.0 / ((23 * 60 +56) * 60 + 56.0);     
+
+            protected const int motorSteps = 96; ///< Number of steps for single rotation of the motor
+            protected const int wormGearing = 120; ///< Number of motor rotations for one wormwheel rotation
+            protected const int axisGearing = 144; ///< Number of wormwheel rotations for one axis rotation                              
+            protected const double kDegreesPerStep = 360.0 / (motorSteps * wormGearing * axisGearing);
+
+            protected IControllerConnect iController;
+            protected Dictionary<AxisStatus, Registers> iAxisCommands;
+
+            protected Angle iZeroPoint;
+
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="aController">Access to the hardware controller</param>
+            public AxisControl(IControllerConnect aController)
             {
-                return Angle.FromDegrees(GetPosition() * kDegreesPerStep) - iZeroPoint;
+                iController = aController;
             }
-            set
+
+            /**
+             * @brief
+             * The angle (in degrees) of the position of this angle.
+             * 
+             * The zero point of the axis is arbitrary. In fact, setting the
+             * Angle defines the zero point.
+             */
+            public Angle Angle
             {
-                Angle currentAngle = Angle.FromDegrees(GetPosition() * kDegreesPerStep);
-                iZeroPoint = currentAngle - value;
+                get
+                {
+                    return Angle.FromDegrees(GetPosition() * kDegreesPerStep) - iZeroPoint;
+                }
+                set
+                {
+                    Angle currentAngle = Angle.FromDegrees(GetPosition() * kDegreesPerStep);
+                    iZeroPoint = currentAngle - value;
+                }
             }
+
+            /// <summary>
+            /// Get an integer from the sepcified register
+            /// </summary>
+            /// <param name="aRegister">The register to read.</param>
+            /// <returns>The read integer</returns>
+            protected Int32 ReadInt(Controller.Registers aRegister)
+            {
+                return iController.Read(aRegister);
+            }
+
+            protected void WriteInt(Controller.Registers aRegister, Int32 aValue)
+            {
+                iController.Write(aRegister, aValue);
+            }
+
+            public Int32 GetControllerStatus(AxisStatus aStatus)
+            {
+                Debug.Assert(StatusRegister.ContainsKey(aStatus));
+                Controller.Registers theRegister = StatusRegister[aStatus];
+                return ReadInt(theRegister);
+            }
+
+            public void SetControllerStatus(AxisStatus aStatus, Int32 aValue)
+            {
+                Debug.Assert(StatusRegister.ContainsKey(aStatus));
+                Controller.Registers theRegister = StatusRegister[aStatus];
+                WriteInt(theRegister, aValue);
+            }
+
+            public Int32 this[AxisStatus aStatus]
+            {
+                get
+                {
+                    return StatusValues[aStatus];
+                }
+                set
+                {
+                    if (StatusValues[aStatus] != value)
+                    {
+                        StatusValues[aStatus] = value;
+                        SetControllerStatus(AxisStatus.Acceleration, value);
+                    }
+                }
+            }
+
+            public double Acceleration
+            {
+                get
+                {
+                    return this[AxisStatus.Acceleration] / 100.0;
+                }
+                set
+                {
+                    this[AxisStatus.Acceleration] = (int)(value * 100.0);
+                }
+            }
+
+            public double AccUpdate
+            {
+                get
+                {
+                    return 0.1 * this[AxisStatus.AccelerationUpdate];
+                }
+                set
+                {
+                    this[AxisStatus.AccelerationUpdate] = (int)(value * 10);
+                }
+            }
+            public double AccLimit
+            {
+                get
+                {
+                    return this[AxisStatus.AccelerationLimit];
+                }
+                set
+                {
+                    this[AxisStatus.AccelerationLimit] = (int)(value);
+                }
+            }
+
+
+            /// <summary>
+            /// Get or Set if the axis is tracking
+            /// </summary>
+            public bool IsTracking
+            { get; set; }
+
+            /// <summary>
+            /// The rate, in degrees per second, used in tracking
+            /// </summary>
+            public double TrackingRate
+            { get; set; }
+
+            /// <summary>
+            /// Rotate around the axis to the specified target angle
+            /// </summary>
+            /// <param name="target">The angle to move to</param>
+            public void Goto(Angle target)
+            {
+            }
+
+            public virtual int Backlash
+            {
+                get;
+                set;
+            }
+
+            public void StartRotate()
+            {
+            }
+
+
+            /// <summary>
+            /// Get the current position from the controller
+            /// </summary>
+            /// <returns>The current position</returns>
+            /// <remarks>This an abstract function that must be implemented
+            /// by the actual AxisControl</remarks>
+            protected abstract Int32 GetPosition();
+
+            protected abstract void SetPosition(Int32 aPosition);
+
+            protected Dictionary<AxisStatus, Registers> StatusRegister
+            {
+                get;
+                set;
+            }
+
+            public Dictionary<AxisStatus, Int32> StatusValues
+            {
+                get; set;
+            }
+
+            public void LoadStatus()
+            {
+                foreach (AxisStatus stat in StatusRegister.Keys)
+                {
+                    StatusValues[stat] = ReadInt(StatusRegister[stat]);
+                }
+            }
+
+            public void StoreStatus()
+            {
+                foreach (AxisStatus stat in StatusValues.Keys)
+                {
+                    WriteInt(StatusRegister[stat], StatusValues[stat]);
+                }
+            }
+
+
+            protected abstract int CBacklash
+            {
+                get;
+                set;
+            }
+
         }
-
-        /// <summary>
-        /// Get an integer from the sepcified register
-        /// </summary>
-        /// <param name="aRegister">The register to read.</param>
-        /// <returns>The read integer</returns>
-        protected Int32 ReadInt(Controller.Registers aRegister)
-        {
-            return iController.Read(aRegister);
-        }
-
-        protected void WriteInt(Controller.Registers aRegister, Int32 aValue)
-        {
-            iController.Write(aRegister, aValue);
-        }
-
-
-        /// <summary>
-        /// Get or Set if the axis is tracking
-        /// </summary>
-        public bool IsTracking
-        { get; set; }
-
-        /// <summary>
-        /// The rate, in degrees per second, used in tracking
-        /// </summary>
-        public double TrackingRate
-        { get; set; }
-
-        /// <summary>
-        /// Rotate around the axis to the specified target angle
-        /// </summary>
-        /// <param name="target">The angle to move to</param>
-        public void Goto(Angle target)
-        {
-        }
-
-        public virtual int Backlash
-        {
-            get;
-            set;
-        }
-
-        public void StartRotate()
-        {
-        }
-
-
-        /// <summary>
-        /// Get the current position from the controller
-        /// </summary>
-        /// <returns>The current position</returns>
-        /// <remarks>This an abstract function that must be implemented
-        /// by the actual AxisControl</remarks>
-        protected abstract Int32 GetPosition();
-
-        protected abstract void SetPosition(Int32 aPosition);
-
-        protected abstract int CBacklash
-        {
-            get;
-            set;
-        }
-
-    }
 #if DEBUG
 
-    [TestFixture]
-    public class TestAxisControl
-    {
-        class NotifyHandler
+        [TestFixture]
+        public class TestAxisControl
         {
+            class NotifyHandler
+            {
+
+            }
+
 
         }
-
-
-    }
 #endif
+    }
 }

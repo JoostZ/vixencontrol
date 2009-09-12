@@ -47,7 +47,17 @@ namespace ASCOM.VXAscom
                     {Registers.RaTarget, new AccessCommands {  readCommand = 0xB2,
                                                                writeCommand = 0xB3}
                                                                },
+                                                               
+                    {Registers.RaAcceleration, new AccessCommands {  
+                                                                readCommand = 0xD5,
+                                                                writeCommand = 0xD6}
+                                                               },
 
+                    {Registers.RaAccUpdate, new AccessCommands {  
+                                                                readCommand = 0xDA,
+                                                                writeCommand = 0xDB}
+                                                                },
+                                                               
             };
 
             static private Dictionary<Commands, byte> commandMap = new Dictionary<Commands,byte> {

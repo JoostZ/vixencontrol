@@ -51,7 +51,7 @@ namespace ASCOM.VXAscom
                 PortSpeed.ps115200
             };
 
-        public SetupDialogForm()
+        public SetupDialogForm(Axis.AxisControl axis)
         {
             iLocation = ObservationLocation.Location;
             iLST = LocalSiderialTime.LST;
@@ -69,8 +69,6 @@ namespace ASCOM.VXAscom
             comboPorts.Items.AddRange(Ports);
             comboPorts.SelectedIndex = 0;
 
-            
-
             foreach (PortSpeed speed in baudList)
             {
                 int value = (int)speed;
@@ -78,6 +76,7 @@ namespace ASCOM.VXAscom
             }
             comboBaudRate.SelectedIndex = 3; // default is 9600 baud
 
+            axisControlDisplayRa.Axis = axis;
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
@@ -114,6 +113,7 @@ namespace ASCOM.VXAscom
             {
                 Connection = null;
                 comboBaudRate.Enabled = false;
+                btnConnect.Enabled = false;
                 return;
             }
 
@@ -124,6 +124,7 @@ namespace ASCOM.VXAscom
             string portName = comboPorts.SelectedItem.ToString().Remove(0, 3); //Removing the COM part
             Connection.Port = Convert.ToInt16(portName);
             comboBaudRate.Enabled = true;
+            btnConnect.Enabled = true;
         }
 
         private void comboBaudRate_SelectedIndexChanged(object sender, EventArgs e)
@@ -133,6 +134,11 @@ namespace ASCOM.VXAscom
                 int idx = comboBaudRate.SelectedIndex;
                 Connection.Speed = baudList[idx];
             }
+        }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            Connection.Connected = true;
         }
     }
 }
