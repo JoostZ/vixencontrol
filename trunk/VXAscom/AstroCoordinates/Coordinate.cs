@@ -9,7 +9,6 @@ namespace AstroCoordinates
 {
 #if DEBUG
     using NUnit.Framework;
-    using NUnit.Framework.SyntaxHelpers;
 #endif
 
     class Coordinate

@@ -32,13 +32,16 @@ using ASCOM.Interface;
 
 namespace ASCOM.VXAscom
 {
+    using Controller;
     //
     // Your driver's ID is ASCOM.VXAscom.Telescope
     //
     // The Guid attribute sets the CLSID for ASCOM.VXAscom.Telescope
     // The ClassInterface/None addribute prevents an empty interface called
     // _Telescope from being created and used as the [default] interface
-    //
+    /// <summary>
+    /// ASCOM telescope driver
+    /// </summary>
     [Guid("8a50875e-6eba-421f-b2b3-401fc4d22fd8")]
     [ClassInterface(ClassInterfaceType.None)]
     public class Telescope : ITelescope
@@ -64,17 +67,30 @@ namespace ASCOM.VXAscom
         private AxisRates[] m_AxisRates;
         private TrackingRates m_TrackingRates;
 
+        private AxisControl[] m_Axes;
+        private BoxdorferConnect Controller
+        {
+            get;
+            set;
+        }
+
         //
         // Constructor - Must be public for COM registration!
-        //
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Telescope()
         {
-            m_AxisRates = new AxisRates[3];
+            m_AxisRates = new AxisRates[2];
             m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
             m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
-            m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
             m_TrackingRates = new TrackingRates();
-            // TODO Implement your additional construction here
+
+            Controller = new BoxdorferConnect();
+
+            m_Axes = new AxisControl[2];
+            m_Axes[0] = new RaAxisControl(Controller);
+            m_Axes[1] = new DecAxisController(Controller);
         }
 
         #region ASCOM Registration
@@ -219,7 +235,7 @@ namespace ASCOM.VXAscom
         public bool CanSetPark
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetPark", false); }
+            get { return false; }
         }
 
         public bool CanSetPierSide
@@ -404,7 +420,7 @@ namespace ASCOM.VXAscom
         public string Name
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Name", false); }
+            get { return "Vixen Telescope Control"; }
         }
 
         public void Park()
@@ -442,6 +458,11 @@ namespace ASCOM.VXAscom
         {
             SetupDialogForm F = new SetupDialogForm();
             F.ShowDialog();
+
+            if (F.Connection != null)
+            {
+                Controller.Connection = F.Connection;
+            }
         }
 
         public PierSide SideOfPier
