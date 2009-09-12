@@ -8,7 +8,6 @@ using AAnet;
 namespace AstroCoordinates
 {
     using NUnit.Framework;
-    using NUnit.Framework.SyntaxHelpers;
 
     class Transformation
     {

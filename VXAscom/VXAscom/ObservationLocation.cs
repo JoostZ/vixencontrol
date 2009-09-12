@@ -6,7 +6,6 @@ using ASCOM.Helper;
 namespace ASCOM.VXAscom
 {
     using NUnit.Framework;
-    using NUnit.Framework.SyntaxHelpers;
 
     /**
      * @brief
