@@ -269,6 +269,30 @@ namespace AAnet
             return Addition(a1, a2);
         }
 
+        /// <summary>
+        /// Subtract two angles
+        /// </summary>
+        /// <param name="a1">The first of two angles</param>
+        /// <param name="a2">The second of the two angles</param>
+        /// <returns>The difference of the two angles</returns>
+        static public Angle Subtraction(Angle a1, Angle a2)
+        {
+            Angle result = new Angle();
+            result.Degrees = a1.Degrees - a2.Degrees;
+            return result;
+        }
+
+        /// <summary>
+        /// Subtract two angles
+        /// </summary>
+        /// <param name="a1">The first of two angles</param>
+        /// <param name="a2">The second of the two angles</param>
+        /// <returns>The difference of the two angles</returns>
+        static public Angle operator -(Angle a1, Angle a2)
+        {
+            return Subtraction(a1, a2);
+        }
+
         /**
          * @brief
          * Calculate the sine of an angle
