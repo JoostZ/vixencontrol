@@ -55,7 +55,7 @@
   <ItemGroup>
     <Reference Include="AAnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\AAnet\AAnet\bin\Debug\AAnet.dll</HintPath>
+      <HintPath>..\AAnet.dll</HintPath>
     </Reference>
     <Reference Include="ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -115,6 +115,7 @@
     <None Include="Properties\DataSources\ASCOM.VXAscom.Axis.AxisControl.datasource" />
     <None Include="Properties\DataSources\ASCOM.VXAscom.Axis.AxisControl1.datasource" />
     <None Include="Properties\DataSources\AxisControlDisplay.datasource" />
+    <None Include="Properties\DataSources\SetupDialogForm.datasource" />
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>

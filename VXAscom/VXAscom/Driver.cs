@@ -470,6 +470,7 @@ namespace ASCOM.VXAscom
         public void SetupDialog()
         {
             SetupDialogForm F = new SetupDialogForm(m_Axes[0]);
+            F.RaAxis = m_Axes[0];
             F.ShowDialog();
 
             if (F.Connection != null)

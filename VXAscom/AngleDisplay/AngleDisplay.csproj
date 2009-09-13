@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AAnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AAnet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -59,6 +63,12 @@
     <Compile Include="HemiAngleDisplay.Designer.cs">
       <DependentUpon>HemiAngleDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewAngleControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NewAngleControl.Designer.cs">
+      <DependentUpon>NewAngleControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,8 +78,12 @@
     <EmbeddedResource Include="HemiAngleDisplay.resx">
       <DependentUpon>HemiAngleDisplay.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="NewAngleControl.resx">
+      <DependentUpon>NewAngleControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\DataSources\AAnet.Angle.datasource" />
     <None Include="Properties\DataSources\AngleDisplay.datasource" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -86,7 +86,7 @@ namespace ASCOM.VXAscom
                 get
                 {
                     Angle theAngle = Angle;
-                    return String.Format("{0} {1:00}\' {2:00.00}", theAngle.Degrees, theAngle.Minutes, theAngle.Seconds);
+                    return String.Format("{0} {1:00}\' {2:00.00}", (int)theAngle.Deg, theAngle.Minutes, theAngle.Seconds);
                 }
             }
 
@@ -210,7 +210,8 @@ namespace ASCOM.VXAscom
             /// by the actual AxisControl</remarks>
             protected Int32 GetPosition()
             {
-                return GetControllerStatus(AxisStatus.Position);
+                return 324;
+                //return GetControllerStatus(AxisStatus.Position);
             }
 
             protected abstract void SetPosition(Int32 aPosition);

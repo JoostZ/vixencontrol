@@ -9,13 +9,14 @@ using System.Windows.Forms;
 namespace ASCOM.VXAscom
 {
     using Axis;
+
+    [DefaultBindingProperty("Axis")]
     public partial class AxisControlDisplay : UserControl
     {
         internal AxisControlDisplay()
         {
             InitializeComponent();
-
-            axisControlDisplayBindingSource.DataSource = this;
+            //axisControlBindingSource.DataSource = this.Axis;
         }
 
         AxisControl _axis;
@@ -30,7 +31,7 @@ namespace ASCOM.VXAscom
                 _axis = value;
                 if (value != null)
                 {
-                    //.DataBindings.Add("Text", _axis, "Acceleration");
+                    axisControlBindingSource.DataSource = this.Axis;
                 }
             }
         }

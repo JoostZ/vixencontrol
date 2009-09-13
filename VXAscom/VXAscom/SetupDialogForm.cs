@@ -51,6 +51,9 @@ namespace ASCOM.VXAscom
                 PortSpeed.ps115200
             };
 
+
+        public AAnet.Angle TestAngle { get; set; }
+
         public SetupDialogForm(Axis.AxisControl axis)
         {
             iLocation = ObservationLocation.Location;
@@ -76,7 +79,10 @@ namespace ASCOM.VXAscom
             }
             comboBaudRate.SelectedIndex = 3; // default is 9600 baud
 
-            axisControlDisplayRa.Axis = axis;
+
+            this.setupDialogFormBindingSource.DataSource = this;
+            this.TestAngle = AAnet.Angle.FromDegrees(24.12345);
+
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
@@ -89,6 +95,11 @@ namespace ASCOM.VXAscom
             Dispose();
         }
 
+        public Axis.AxisControl RaAxis
+        {
+            get;
+            set;
+        }
         private void BrowseToAscom(object sender, EventArgs e)
         {
             try
