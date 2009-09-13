@@ -17,11 +17,6 @@ namespace ASCOM.VXAscom
             {
             }
 
-            protected override Int32 GetPosition()
-            {
-                return ReadInt(Controller.Registers.RaPosition);
-            }
-
             protected override void SetPosition(int aPosition)
             {
                 throw new System.NotImplementedException();

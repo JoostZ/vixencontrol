@@ -140,5 +140,10 @@ namespace ASCOM.VXAscom
         {
             Connection.Connected = true;
         }
+
+        private void tmrAutoUpdate_Tick(object sender, EventArgs e)
+        {
+
+        }
     }
 }

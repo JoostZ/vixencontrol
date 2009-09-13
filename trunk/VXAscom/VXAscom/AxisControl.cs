@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Diagnostics;
 
@@ -20,6 +21,7 @@ namespace ASCOM.VXAscom
             Acceleration,
             AccelerationUpdate,
             AccelerationLimit,
+            Position,
         };
 
 
@@ -35,7 +37,7 @@ namespace ASCOM.VXAscom
          * @brief
          * Base class to control the micro controller for a single axis
          */
-        public abstract class AxisControl
+        public abstract class AxisControl : IUpdatable, INotifyPropertyChanged
         {
      
             public const double  SiderialTrackingSpeed = 360.0 / ((23 * 60 +56) * 60 + 56.0);     
@@ -76,6 +78,15 @@ namespace ASCOM.VXAscom
                 {
                     Angle currentAngle = Angle.FromDegrees(GetPosition() * kDegreesPerStep);
                     iZeroPoint = currentAngle - value;
+                }
+            }
+
+            public string AngleString
+            {
+                get
+                {
+                    Angle theAngle = Angle;
+                    return String.Format("{0} {1:00}\' {2:00.00}", theAngle.Degrees, theAngle.Minutes, theAngle.Seconds);
                 }
             }
 
@@ -197,7 +208,10 @@ namespace ASCOM.VXAscom
             /// <returns>The current position</returns>
             /// <remarks>This an abstract function that must be implemented
             /// by the actual AxisControl</remarks>
-            protected abstract Int32 GetPosition();
+            protected Int32 GetPosition()
+            {
+                return GetControllerStatus(AxisStatus.Position);
+            }
 
             protected abstract void SetPosition(Int32 aPosition);
 
@@ -235,6 +249,30 @@ namespace ASCOM.VXAscom
                 set;
             }
 
+
+            #region IUpdatable Members
+
+            public void Update()
+            {
+                // This call will trigger users to read the Angle
+                // which will be obtained from the controller
+                NotifyPropertyChanged("Angle");
+            }
+
+            #endregion
+
+            #region INotifyPropertyChanged Members
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            private void NotifyPropertyChanged(String info)
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(info));
+                }
+            }
+
+            #endregion
         }
 #if DEBUG
 

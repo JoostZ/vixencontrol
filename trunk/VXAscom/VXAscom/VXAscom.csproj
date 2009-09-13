@@ -80,6 +80,7 @@
     <Compile Include="DecAxisController.cs" />
     <Compile Include="Driver.cs" />
     <Compile Include="IControllerConnect.cs" />
+    <Compile Include="IUpdatable.cs" />
     <Compile Include="LocalSiderialTime.cs" />
     <Compile Include="ObservationLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
