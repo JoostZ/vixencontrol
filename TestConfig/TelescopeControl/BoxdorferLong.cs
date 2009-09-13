@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO.Ports;
-using NLog;
+//using NLog;
 
 namespace TestConfig
 {
@@ -15,7 +15,7 @@ namespace TestConfig
          */
         public class BoxdorferLong : IBoxdorferCommand, ISynchronizable
         {
-            private Logger iLogger = LogManager.GetCurrentClassLogger();
+            //private Logger iLogger = LogManager.GetCurrentClassLogger();
 
             public event EventHandler ValueChanged;
             private Int32 iValue;
@@ -38,7 +38,7 @@ namespace TestConfig
 
             public BoxdorferLong(byte aSendCommand, byte aReceiveCommand)
             {
-                iLogger.Debug(String.Format("BoxdorferLong send {0:X}, receive {1:X}", aSendCommand, aReceiveCommand));
+                //iLogger.Debug(String.Format("BoxdorferLong send {0:X}, receive {1:X}", aSendCommand, aReceiveCommand));
                 iSendCommand = aSendCommand;
                 iReceiveCommand = aReceiveCommand;
             }
@@ -47,7 +47,7 @@ namespace TestConfig
 
             public void Write(BoxdorferSerial theChannel)
             {
-                iLogger.Debug(String.Format("BoxdorferLong Write {0:X}", iSendCommand));
+                //iLogger.Debug(String.Format("BoxdorferLong Write {0:X}", iSendCommand));
                 if (theChannel != null)
                 {
                     isWriting = true;
@@ -57,7 +57,7 @@ namespace TestConfig
 
             public void Read(BoxdorferSerial theChannel)
             {
-                iLogger.Debug(String.Format("BoxdorferLong Read {0:X}", iReceiveCommand));
+                //iLogger.Debug(String.Format("BoxdorferLong Read {0:X}", iReceiveCommand));
                 if (theChannel != null)
                 {
                     isWriting = false;
@@ -85,7 +85,7 @@ namespace TestConfig
                         break;
                     }
                 }
-                iLogger.Debug(String.Format("BoxdorferLong HandleReceived {0:X}", theValue));
+                //iLogger.Debug(String.Format("BoxdorferLong HandleReceived {0:X}", theValue));
 
                 Value = theValue;
 

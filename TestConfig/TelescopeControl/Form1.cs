@@ -19,7 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.IO.Ports;
-using NLog;
+//using NLog;
 
 namespace TestConfig
 {
@@ -29,7 +29,7 @@ namespace TestConfig
     {
         private const string  Version = "1.400"; ///< The version of the program
                                                  ///
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        //private static Logger logger = LogManager.GetCurrentClassLogger();
 
         
         //private delegate void SetTextCallback(byte[] aByte);
@@ -161,7 +161,7 @@ namespace TestConfig
         public Form1()
         {
             InitializeComponent();
-            logger.Debug("Initializing Form1");
+            //logger.Debug("Initializing Form1");
             Ports = SerialPort.GetPortNames();
             comboPorts.Items.Add("Select a port");
             comboPorts.Items.AddRange(Ports);

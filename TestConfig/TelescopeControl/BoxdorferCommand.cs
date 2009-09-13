@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NLog;
+//using NLog;
 
 namespace TestConfig
 {
@@ -13,7 +13,7 @@ namespace TestConfig
          */
         public class BoxdorferCommand : IBoxdorferCommand
         {
-            private Logger iLogger = LogManager.GetCurrentClassLogger();
+            //private Logger iLogger = LogManager.GetCurrentClassLogger();
             private byte iCmd;
 
             /**
@@ -25,7 +25,7 @@ namespace TestConfig
              */
             public BoxdorferCommand(byte aCmd)
             {
-                iLogger.Debug(String.Format("Boxdorfer command {0:X}", aCmd));
+                //iLogger.Debug(String.Format("Boxdorfer command {0:X}", aCmd));
                 iCmd = aCmd;
             }
 
