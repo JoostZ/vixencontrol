@@ -22,9 +22,9 @@ namespace AAnet
         }
 
         /**
-         * @brief
-         * The angle calue in degrees
-         */
+      * @brief
+      * The angle value in degrees
+      */
         public double Degrees
         {
             get
@@ -36,6 +36,8 @@ namespace AAnet
                 _degrees = value;
             }
         }
+
+        
 
         /**
          * @brief
@@ -53,6 +55,17 @@ namespace AAnet
             }
         }
 
+        /**
+         * @brief
+         * The degrees part of the angle
+         */
+        public double Deg
+        {
+            get
+            {
+                return (int)_degrees;
+            }
+        }
         /**
          * @brief
          * The minutes part of the angle
