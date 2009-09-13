@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO.Ports;
 using System.Windows.Forms;
-using NLog;
+//using NLog;
 
 namespace TestConfig
 {
@@ -43,11 +43,11 @@ namespace TestConfig
 
             private Queue<IBoxdorferCommand> iCommandQueue = new Queue<IBoxdorferCommand>();
             private IBoxdorferCommand iCurrentCommand = null;
-            private Logger iLogger = LogManager.GetCurrentClassLogger();
+            //private Logger iLogger = LogManager.GetCurrentClassLogger();
 
             public BoxdorferSerial(SerialPort aPort, Form1 aForm)
             {
-                iLogger.Debug("Created BoxdorferSerial");
+                //iLogger.Debug("Created BoxdorferSerial");
                 iPort = aPort;
                 iForm = aForm;
             }

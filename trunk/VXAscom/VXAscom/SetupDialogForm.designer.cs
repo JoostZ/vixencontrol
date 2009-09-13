@@ -34,7 +34,6 @@ namespace ASCOM.VXAscom
             System.Windows.Forms.Label raAxisLabel;
             System.Windows.Forms.Label raAxisLabel1;
             System.Windows.Forms.Label raAxisLabel2;
-            System.Windows.Forms.Label raAxisLabel3;
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
@@ -43,6 +42,7 @@ namespace ASCOM.VXAscom
             this.raAxisAxisControlDisplay = new AxisControlDisplay();
             this.tabBasic = new System.Windows.Forms.TabPage();
             this.degreesTextBox = new System.Windows.Forms.TextBox();
+            this.setupDialogFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.testAngleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnConnect = new System.Windows.Forms.Button();
@@ -55,21 +55,19 @@ namespace ASCOM.VXAscom
             this.txtLST = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.setupDialogFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.axisControlBindingSource = new System.Windows.Forms.BindingSource(this.components);
             testAngleLabel = new System.Windows.Forms.Label();
             degreesLabel = new System.Windows.Forms.Label();
             raAxisLabel = new System.Windows.Forms.Label();
             raAxisLabel1 = new System.Windows.Forms.Label();
             raAxisLabel2 = new System.Windows.Forms.Label();
-            raAxisLabel3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.tabRaAxis.SuspendLayout();
             this.tabBasic.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axisControlBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -160,15 +158,12 @@ namespace ASCOM.VXAscom
             // tabRaAxis
             // 
             this.tabRaAxis.AutoScroll = true;
-            this.tabRaAxis.Controls.Add(raAxisLabel3);
             this.tabRaAxis.Controls.Add(this.raAxisAxisControlDisplay);
             this.tabRaAxis.Location = new System.Drawing.Point(4, 22);
             this.tabRaAxis.Name = "tabRaAxis";
-            this.tabRaAxis.Padding = new System.Windows.Forms.Padding(3);
             this.tabRaAxis.Size = new System.Drawing.Size(475, 310);
             this.tabRaAxis.TabIndex = 1;
             this.tabRaAxis.Text = "RA Axis";
-            this.tabRaAxis.UseVisualStyleBackColor = true;
             // 
             // tabBasic
             // 
@@ -194,6 +189,10 @@ namespace ASCOM.VXAscom
             this.degreesTextBox.Name = "degreesTextBox";
             this.degreesTextBox.Size = new System.Drawing.Size(100, 20);
             this.degreesTextBox.TabIndex = 7;
+            // 
+            // setupDialogFormBindingSource
+            // 
+            this.setupDialogFormBindingSource.DataSource = typeof(ASCOM.VXAscom.SetupDialogForm);
             // 
             // testAngleNewAngleControl
             // 
@@ -312,28 +311,15 @@ namespace ASCOM.VXAscom
             // 
             this.tabControl1.Controls.Add(this.tabBasic);
             this.tabControl1.Controls.Add(this.tabRaAxis);
-            this.tabControl1.Location = new System.Drawing.Point(3, 9);
+            this.tabControl1.Location = new System.Drawing.Point(3, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(483, 336);
             this.tabControl1.TabIndex = 5;
             // 
-            // setupDialogFormBindingSource
-            // 
-            this.setupDialogFormBindingSource.DataSource = typeof(ASCOM.VXAscom.SetupDialogForm);
-            // 
             // axisControlBindingSource
             // 
             this.axisControlBindingSource.DataSource = typeof(ASCOM.VXAscom.Axis.AxisControl);
-            // 
-            // raAxisLabel3
-            // 
-            raAxisLabel3.AutoSize = true;
-            raAxisLabel3.Location = new System.Drawing.Point(8, 9);
-            raAxisLabel3.Name = "raAxisLabel3";
-            raAxisLabel3.Size = new System.Drawing.Size(46, 13);
-            raAxisLabel3.TabIndex = 0;
-            raAxisLabel3.Text = "Ra Axis:";
             // 
             // raAxisAxisControlDisplay
             // 
@@ -342,7 +328,7 @@ namespace ASCOM.VXAscom
             this.raAxisAxisControlDisplay.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.raAxisAxisControlDisplay.Axis = null;
             this.raAxisAxisControlDisplay.DataBindings.Add(new System.Windows.Forms.Binding("Axis", this.setupDialogFormBindingSource, "RaAxis", true));
-            this.raAxisAxisControlDisplay.Location = new System.Drawing.Point(60, 9);
+            this.raAxisAxisControlDisplay.Location = new System.Drawing.Point(5, 3);
             this.raAxisAxisControlDisplay.Name = "raAxisAxisControlDisplay";
             this.raAxisAxisControlDisplay.Size = new System.Drawing.Size(237, 287);
             this.raAxisAxisControlDisplay.TabIndex = 1;
@@ -351,7 +337,7 @@ namespace ASCOM.VXAscom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 345);
+            this.ClientSize = new System.Drawing.Size(562, 348);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
@@ -368,12 +354,12 @@ namespace ASCOM.VXAscom
             this.tabRaAxis.PerformLayout();
             this.tabBasic.ResumeLayout(false);
             this.tabBasic.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axisControlBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
