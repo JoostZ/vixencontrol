@@ -29,31 +29,94 @@ namespace ASCOM.VXAscom
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.Label testAngleLabel;
+            System.Windows.Forms.Label degreesLabel;
+            System.Windows.Forms.Label raAxisLabel;
+            System.Windows.Forms.Label raAxisLabel1;
+            System.Windows.Forms.Label raAxisLabel2;
+            System.Windows.Forms.Label raAxisLabel3;
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.ctrlLon = new AngleDisplay.HemiAngleDisplay();
-            this.txtLST = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.picASCOM = new System.Windows.Forms.PictureBox();
+            this.tmrAutoUpdate = new System.Windows.Forms.Timer(this.components);
+            this.tabRaAxis = new System.Windows.Forms.TabPage();
+            this.raAxisAxisControlDisplay = new AxisControlDisplay();
             this.tabBasic = new System.Windows.Forms.TabPage();
+            this.degreesTextBox = new System.Windows.Forms.TextBox();
+            this.testAngleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnConnect = new System.Windows.Forms.Button();
             this.comboBaudRate = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.comboPorts = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.tabRaAxis = new System.Windows.Forms.TabPage();
-            this.axisControlDisplayRa = new AxisControlDisplay();
-            this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.tmrAutoUpdate = new System.Windows.Forms.Timer(this.components);
-            this.panel1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.ctrlLon = new AngleDisplay.HemiAngleDisplay();
+            this.txtLST = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.setupDialogFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.axisControlBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            testAngleLabel = new System.Windows.Forms.Label();
+            degreesLabel = new System.Windows.Forms.Label();
+            raAxisLabel = new System.Windows.Forms.Label();
+            raAxisLabel1 = new System.Windows.Forms.Label();
+            raAxisLabel2 = new System.Windows.Forms.Label();
+            raAxisLabel3 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
+            this.tabRaAxis.SuspendLayout();
             this.tabBasic.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.tabRaAxis.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axisControlBindingSource)).BeginInit();
             this.SuspendLayout();
+            // 
+            // testAngleLabel
+            // 
+            testAngleLabel.AutoSize = true;
+            testAngleLabel.Location = new System.Drawing.Point(208, 125);
+            testAngleLabel.Name = "testAngleLabel";
+            testAngleLabel.Size = new System.Drawing.Size(61, 13);
+            testAngleLabel.TabIndex = 5;
+            testAngleLabel.Text = "Test Angle:";
+            // 
+            // degreesLabel
+            // 
+            degreesLabel.AutoSize = true;
+            degreesLabel.Location = new System.Drawing.Point(286, 212);
+            degreesLabel.Name = "degreesLabel";
+            degreesLabel.Size = new System.Drawing.Size(50, 13);
+            degreesLabel.TabIndex = 6;
+            degreesLabel.Text = "Degrees:";
+            // 
+            // raAxisLabel
+            // 
+            raAxisLabel.AutoSize = true;
+            raAxisLabel.Location = new System.Drawing.Point(5, 7);
+            raAxisLabel.Name = "raAxisLabel";
+            raAxisLabel.Size = new System.Drawing.Size(46, 13);
+            raAxisLabel.TabIndex = 0;
+            raAxisLabel.Text = "Ra Axis:";
+            // 
+            // raAxisLabel1
+            // 
+            raAxisLabel1.AutoSize = true;
+            raAxisLabel1.Location = new System.Drawing.Point(76, 7);
+            raAxisLabel1.Name = "raAxisLabel1";
+            raAxisLabel1.Size = new System.Drawing.Size(46, 13);
+            raAxisLabel1.TabIndex = 1;
+            raAxisLabel1.Text = "Ra Axis:";
+            // 
+            // raAxisLabel2
+            // 
+            raAxisLabel2.AutoSize = true;
+            raAxisLabel2.Location = new System.Drawing.Point(74, 19);
+            raAxisLabel2.Name = "raAxisLabel2";
+            raAxisLabel2.Size = new System.Drawing.Size(46, 13);
+            raAxisLabel2.TabIndex = 0;
+            raAxisLabel2.Text = "Ra Axis:";
             // 
             // cmdOK
             // 
@@ -77,69 +140,70 @@ namespace ASCOM.VXAscom
             this.cmdCancel.UseVisualStyleBackColor = true;
             this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
-            // panel1
+            // picASCOM
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.panel1.Controls.Add(this.ctrlLon);
-            this.panel1.Controls.Add(this.txtLST);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.panel1.Location = new System.Drawing.Point(6, 6);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(193, 218);
-            this.panel1.TabIndex = 4;
+            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picASCOM.Image = global::ASCOM.VXAscom.Properties.Resources.ASCOM;
+            this.picASCOM.Location = new System.Drawing.Point(503, 12);
+            this.picASCOM.Name = "picASCOM";
+            this.picASCOM.Size = new System.Drawing.Size(48, 56);
+            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picASCOM.TabIndex = 3;
+            this.picASCOM.TabStop = false;
+            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
+            this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
-            // ctrlLon
+            // tmrAutoUpdate
             // 
-            this.ctrlLon.AutoSize = true;
-            this.ctrlLon.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ctrlLon.ForeColor = System.Drawing.Color.Red;
-            this.ctrlLon.Label = "Lon";
-            this.ctrlLon.Location = new System.Drawing.Point(3, 37);
-            this.ctrlLon.Name = "ctrlLon";
-            this.ctrlLon.Size = new System.Drawing.Size(182, 26);
-            this.ctrlLon.TabIndex = 2;
-            this.ctrlLon.Value = 0;
+            this.tmrAutoUpdate.Tick += new System.EventHandler(this.tmrAutoUpdate_Tick);
             // 
-            // txtLST
+            // tabRaAxis
             // 
-            this.txtLST.Location = new System.Drawing.Point(36, 11);
-            this.txtLST.Name = "txtLST";
-            this.txtLST.Size = new System.Drawing.Size(51, 20);
-            this.txtLST.TabIndex = 1;
-            this.txtLST.Text = "07:21:12";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(3, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(27, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "LST";
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabBasic);
-            this.tabControl1.Controls.Add(this.tabRaAxis);
-            this.tabControl1.Location = new System.Drawing.Point(3, 9);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(483, 305);
-            this.tabControl1.TabIndex = 5;
+            this.tabRaAxis.AutoScroll = true;
+            this.tabRaAxis.Controls.Add(raAxisLabel3);
+            this.tabRaAxis.Controls.Add(this.raAxisAxisControlDisplay);
+            this.tabRaAxis.Location = new System.Drawing.Point(4, 22);
+            this.tabRaAxis.Name = "tabRaAxis";
+            this.tabRaAxis.Padding = new System.Windows.Forms.Padding(3);
+            this.tabRaAxis.Size = new System.Drawing.Size(475, 310);
+            this.tabRaAxis.TabIndex = 1;
+            this.tabRaAxis.Text = "RA Axis";
+            this.tabRaAxis.UseVisualStyleBackColor = true;
             // 
             // tabBasic
             // 
+            this.tabBasic.AutoScroll = true;
+            this.tabBasic.Controls.Add(degreesLabel);
+            this.tabBasic.Controls.Add(this.degreesTextBox);
+            this.tabBasic.Controls.Add(testAngleLabel);
+            this.tabBasic.Controls.Add(this.testAngleNewAngleControl);
             this.tabBasic.Controls.Add(this.groupBox1);
             this.tabBasic.Controls.Add(this.panel1);
             this.tabBasic.Location = new System.Drawing.Point(4, 22);
             this.tabBasic.Name = "tabBasic";
             this.tabBasic.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBasic.Size = new System.Drawing.Size(475, 279);
+            this.tabBasic.Size = new System.Drawing.Size(475, 310);
             this.tabBasic.TabIndex = 0;
             this.tabBasic.Text = "Basic";
             this.tabBasic.UseVisualStyleBackColor = true;
+            // 
+            // degreesTextBox
+            // 
+            this.degreesTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.setupDialogFormBindingSource, "TestAngle.Degrees", true));
+            this.degreesTextBox.Location = new System.Drawing.Point(342, 209);
+            this.degreesTextBox.Name = "degreesTextBox";
+            this.degreesTextBox.Size = new System.Drawing.Size(100, 20);
+            this.degreesTextBox.TabIndex = 7;
+            // 
+            // testAngleNewAngleControl
+            // 
+            this.testAngleNewAngleControl.AutoSize = true;
+            this.testAngleNewAngleControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.testAngleNewAngleControl.DataBindings.Add(new System.Windows.Forms.Binding("Angle", this.setupDialogFormBindingSource, "TestAngle", true));
+            this.testAngleNewAngleControl.Location = new System.Drawing.Point(275, 125);
+            this.testAngleNewAngleControl.Name = "testAngleNewAngleControl";
+            this.testAngleNewAngleControl.Size = new System.Drawing.Size(116, 26);
+            this.testAngleNewAngleControl.TabIndex = 6;
             // 
             // groupBox1
             // 
@@ -202,47 +266,92 @@ namespace ASCOM.VXAscom
             this.label2.TabIndex = 1;
             this.label2.Text = "Port";
             // 
-            // tabRaAxis
+            // panel1
             // 
-            this.tabRaAxis.Controls.Add(this.axisControlDisplayRa);
-            this.tabRaAxis.Location = new System.Drawing.Point(4, 22);
-            this.tabRaAxis.Name = "tabRaAxis";
-            this.tabRaAxis.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRaAxis.Size = new System.Drawing.Size(475, 279);
-            this.tabRaAxis.TabIndex = 1;
-            this.tabRaAxis.Text = "RA Axis";
-            this.tabRaAxis.UseVisualStyleBackColor = true;
+            this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panel1.Controls.Add(this.ctrlLon);
+            this.panel1.Controls.Add(this.txtLST);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.panel1.Location = new System.Drawing.Point(6, 6);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(193, 218);
+            this.panel1.TabIndex = 4;
             // 
-            // axisControlDisplayRa
+            // ctrlLon
             // 
-            this.axisControlDisplayRa.Axis = null;
-            this.axisControlDisplayRa.Location = new System.Drawing.Point(0, 6);
-            this.axisControlDisplayRa.Name = "axisControlDisplayRa";
-            this.axisControlDisplayRa.Size = new System.Drawing.Size(451, 234);
-            this.axisControlDisplayRa.TabIndex = 0;
+            this.ctrlLon.AutoSize = true;
+            this.ctrlLon.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ctrlLon.ForeColor = System.Drawing.Color.Red;
+            this.ctrlLon.Label = "Lon";
+            this.ctrlLon.Location = new System.Drawing.Point(3, 37);
+            this.ctrlLon.Name = "ctrlLon";
+            this.ctrlLon.Size = new System.Drawing.Size(182, 26);
+            this.ctrlLon.TabIndex = 2;
+            this.ctrlLon.Value = 0;
             // 
-            // picASCOM
+            // txtLST
             // 
-            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picASCOM.Image = global::ASCOM.VXAscom.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(503, 12);
-            this.picASCOM.Name = "picASCOM";
-            this.picASCOM.Size = new System.Drawing.Size(48, 56);
-            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picASCOM.TabIndex = 3;
-            this.picASCOM.TabStop = false;
-            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
-            this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
+            this.txtLST.Location = new System.Drawing.Point(36, 11);
+            this.txtLST.Name = "txtLST";
+            this.txtLST.Size = new System.Drawing.Size(51, 20);
+            this.txtLST.TabIndex = 1;
+            this.txtLST.Text = "07:21:12";
             // 
-            // tmrAutoUpdate
+            // label1
             // 
-            this.tmrAutoUpdate.Tick += new System.EventHandler(this.tmrAutoUpdate_Tick);
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(3, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(27, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "LST";
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabBasic);
+            this.tabControl1.Controls.Add(this.tabRaAxis);
+            this.tabControl1.Location = new System.Drawing.Point(3, 9);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(483, 336);
+            this.tabControl1.TabIndex = 5;
+            // 
+            // setupDialogFormBindingSource
+            // 
+            this.setupDialogFormBindingSource.DataSource = typeof(ASCOM.VXAscom.SetupDialogForm);
+            // 
+            // axisControlBindingSource
+            // 
+            this.axisControlBindingSource.DataSource = typeof(ASCOM.VXAscom.Axis.AxisControl);
+            // 
+            // raAxisLabel3
+            // 
+            raAxisLabel3.AutoSize = true;
+            raAxisLabel3.Location = new System.Drawing.Point(8, 9);
+            raAxisLabel3.Name = "raAxisLabel3";
+            raAxisLabel3.Size = new System.Drawing.Size(46, 13);
+            raAxisLabel3.TabIndex = 0;
+            raAxisLabel3.Text = "Ra Axis:";
+            // 
+            // raAxisAxisControlDisplay
+            // 
+            this.raAxisAxisControlDisplay.AutoScroll = true;
+            this.raAxisAxisControlDisplay.AutoSize = true;
+            this.raAxisAxisControlDisplay.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.raAxisAxisControlDisplay.Axis = null;
+            this.raAxisAxisControlDisplay.DataBindings.Add(new System.Windows.Forms.Binding("Axis", this.setupDialogFormBindingSource, "RaAxis", true));
+            this.raAxisAxisControlDisplay.Location = new System.Drawing.Point(60, 9);
+            this.raAxisAxisControlDisplay.Name = "raAxisAxisControlDisplay";
+            this.raAxisAxisControlDisplay.Size = new System.Drawing.Size(237, 287);
+            this.raAxisAxisControlDisplay.TabIndex = 1;
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(565, 311);
+            this.ClientSize = new System.Drawing.Size(562, 345);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
@@ -254,14 +363,18 @@ namespace ASCOM.VXAscom
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VXAscom Setup";
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
+            this.tabRaAxis.ResumeLayout(false);
+            this.tabRaAxis.PerformLayout();
+            this.tabBasic.ResumeLayout(false);
+            this.tabBasic.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            this.tabBasic.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.tabRaAxis.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axisControlBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -272,20 +385,24 @@ namespace ASCOM.VXAscom
         private System.Windows.Forms.Button cmdOK;
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.PictureBox picASCOM;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtLST;
-        private AngleDisplay.HemiAngleDisplay ctrlLon;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.Timer tmrAutoUpdate;
+        private System.Windows.Forms.BindingSource axisControlBindingSource;
+        private System.Windows.Forms.BindingSource setupDialogFormBindingSource;
+        private System.Windows.Forms.TabPage tabRaAxis;
         private System.Windows.Forms.TabPage tabBasic;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.ComboBox comboBaudRate;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboPorts;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TabPage tabRaAxis;
-        private AxisControlDisplay axisControlDisplayRa;
-        private System.Windows.Forms.Button btnConnect;
-        private System.Windows.Forms.Timer tmrAutoUpdate;
+        private System.Windows.Forms.Panel panel1;
+        private AngleDisplay.HemiAngleDisplay ctrlLon;
+        private System.Windows.Forms.TextBox txtLST;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TabControl tabControl1;
+        private AngleDisplay.NewAngleControl testAngleNewAngleControl;
+        private System.Windows.Forms.TextBox degreesTextBox;
+        private AxisControlDisplay raAxisAxisControlDisplay;
     }
 }
