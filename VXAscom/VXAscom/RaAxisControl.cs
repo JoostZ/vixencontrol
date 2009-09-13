@@ -19,7 +19,8 @@ namespace ASCOM.VXAscom
                 StatusRegister = new System.Collections.Generic.Dictionary<AxisStatus, Registers> {
                     {AxisStatus.Acceleration, Registers.RaAcceleration},
                     {AxisStatus.AccelerationUpdate, Registers.RaAccUpdate},
-                    {AxisStatus.AccelerationLimit, Registers.RaLimit}
+                    {AxisStatus.AccelerationLimit, Registers.RaLimit},
+                    {AxisStatus.Position, Registers.RaPosition}
                 };
 
                 // Set the default values for the RA status registers
@@ -29,11 +30,6 @@ namespace ASCOM.VXAscom
                     {AxisStatus.AccelerationLimit, 20},
                 };
 
-            }
-
-            protected override Int32 GetPosition()
-            {
-                return ReadInt(Controller.Registers.RaPosition);
             }
 
             protected override void SetPosition(int aPosition)

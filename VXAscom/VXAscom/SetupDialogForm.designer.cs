@@ -28,6 +28,7 @@ namespace ASCOM.VXAscom
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -37,6 +38,7 @@ namespace ASCOM.VXAscom
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabBasic = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnConnect = new System.Windows.Forms.Button();
             this.comboBaudRate = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.comboPorts = new System.Windows.Forms.ComboBox();
@@ -44,7 +46,7 @@ namespace ASCOM.VXAscom
             this.tabRaAxis = new System.Windows.Forms.TabPage();
             this.axisControlDisplayRa = new AxisControlDisplay();
             this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.btnConnect = new System.Windows.Forms.Button();
+            this.tmrAutoUpdate = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabBasic.SuspendLayout();
@@ -153,6 +155,17 @@ namespace ASCOM.VXAscom
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Serial Connection";
             // 
+            // btnConnect
+            // 
+            this.btnConnect.Enabled = false;
+            this.btnConnect.Location = new System.Drawing.Point(17, 75);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect.TabIndex = 4;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
             // comboBaudRate
             // 
             this.comboBaudRate.FormattingEnabled = true;
@@ -221,16 +234,9 @@ namespace ASCOM.VXAscom
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             // 
-            // btnConnect
+            // tmrAutoUpdate
             // 
-            this.btnConnect.Enabled = false;
-            this.btnConnect.Location = new System.Drawing.Point(17, 75);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
-            this.btnConnect.TabIndex = 4;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            this.tmrAutoUpdate.Tick += new System.EventHandler(this.tmrAutoUpdate_Tick);
             // 
             // SetupDialogForm
             // 
@@ -280,5 +286,6 @@ namespace ASCOM.VXAscom
         private System.Windows.Forms.TabPage tabRaAxis;
         private AxisControlDisplay axisControlDisplayRa;
         private System.Windows.Forms.Button btnConnect;
+        private System.Windows.Forms.Timer tmrAutoUpdate;
     }
 }
