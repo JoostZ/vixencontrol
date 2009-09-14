@@ -8,19 +8,18 @@ using System.Windows.Forms;
 
 namespace ASCOM.VXAscom
 {
-    using Axis;
+    //using Axis;
 
     [DefaultBindingProperty("Axis")]
     public partial class AxisControlDisplay : UserControl
     {
-        internal AxisControlDisplay()
+        public AxisControlDisplay()
         {
             InitializeComponent();
-            //axisControlBindingSource.DataSource = this.Axis;
         }
 
-        AxisControl _axis;
-        public AxisControl Axis
+        Axis.AxisControl _axis;
+        public Axis.AxisControl Axis
         {
             get
             {
@@ -29,12 +28,11 @@ namespace ASCOM.VXAscom
             set
             {
                 _axis = value;
-                if (value != null)
+                if (value != null && !this.DesignMode)
                 {
-                    axisControlBindingSource.DataSource = this.Axis;
+                    axisControlDisplayBindingSource.DataSource = this;
                 }
             }
         }
-
     }
 }

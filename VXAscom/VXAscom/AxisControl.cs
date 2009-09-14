@@ -39,6 +39,7 @@ namespace ASCOM.VXAscom
          */
         public abstract class AxisControl : IUpdatable, INotifyPropertyChanged
         {
+            Int32 tstAngle = 0;
      
             public const double  SiderialTrackingSpeed = 360.0 / ((23 * 60 +56) * 60 + 56.0);     
 
@@ -50,7 +51,7 @@ namespace ASCOM.VXAscom
             protected IControllerConnect iController;
             protected Dictionary<AxisStatus, Registers> iAxisCommands;
 
-            protected Angle iZeroPoint;
+            protected Angle iZeroPoint = Angle.FromDegrees(12.12345);
 
             /// <summary>
             /// Constructor
@@ -210,7 +211,7 @@ namespace ASCOM.VXAscom
             /// by the actual AxisControl</remarks>
             protected Int32 GetPosition()
             {
-                return 324;
+                return tstAngle;
                 //return GetControllerStatus(AxisStatus.Position);
             }
 
@@ -255,6 +256,7 @@ namespace ASCOM.VXAscom
 
             public void Update()
             {
+                tstAngle += 1024;
                 // This call will trigger users to read the Angle
                 // which will be obtained from the controller
                 NotifyPropertyChanged("Angle");
