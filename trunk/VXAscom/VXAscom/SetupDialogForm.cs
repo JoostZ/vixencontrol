@@ -18,6 +18,8 @@ namespace ASCOM.VXAscom
         private ObservationLocation iLocation;
         private LocalSiderialTime iLST;
 
+        private List<IUpdatable> _updateList = new List<IUpdatable>();
+
         /// <summary>
         /// List of serial ports available on the system
         /// </summary>
@@ -60,6 +62,8 @@ namespace ASCOM.VXAscom
             iLST = LocalSiderialTime.LST;
             iLocation.Longitude = -4.12345;
 
+            RaAxis = axis;
+
             InitializeComponent();
             txtLST.DataBindings.Add("Text", iLST, "LAST_String", false, System.Windows.Forms.DataSourceUpdateMode.Never, null, "T");
             ctrlLon.DataBindings.Add("Value", iLocation, "Longitude", false, System.Windows.Forms.DataSourceUpdateMode.Never);
@@ -95,10 +99,21 @@ namespace ASCOM.VXAscom
             Dispose();
         }
 
+        Axis.AxisControl _raAxis;
         public Axis.AxisControl RaAxis
         {
-            get;
-            set;
+            get
+            {
+                return _raAxis;
+            }
+            set
+            {
+                _raAxis = value;
+                if (_updateList.IndexOf(_raAxis) == -1)
+                {
+                    _updateList.Add(_raAxis);
+                }
+            }
         }
         private void BrowseToAscom(object sender, EventArgs e)
         {
@@ -153,6 +168,29 @@ namespace ASCOM.VXAscom
         }
 
         private void tmrAutoUpdate_Tick(object sender, EventArgs e)
+        {
+            foreach (IUpdatable item in _updateList)
+            {
+                item.Update();
+            }
+
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            foreach (IUpdatable item in _updateList)
+            {
+                item.Update();
+            }
+        }
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            axisControlDisplayBindingSource.DataSource = RaAxis;
+
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
