@@ -16,7 +16,7 @@ namespace ASCOM.VXAscom
     public partial class SetupDialogForm : Form
     {
         private ObservationLocation iLocation;
-        private LocalSiderialTime iLST;
+        //private LocalSiderialTime iLST;
 
         private List<IUpdatable> _updateList = new List<IUpdatable>();
 
@@ -53,19 +53,28 @@ namespace ASCOM.VXAscom
                 PortSpeed.ps115200
             };
 
+        public LocalSiderialTime LST
+        {
+            get;
+            set;
+        }
 
         public AAnet.Angle TestAngle { get; set; }
+        public SetupDialogForm(Telescope aTelescope)
+        {
+        }
 
         public SetupDialogForm(Axis.AxisControl axis)
         {
             iLocation = ObservationLocation.Location;
-            iLST = LocalSiderialTime.LST;
+            LST = LocalSiderialTime.LST;
+            _updateList.Add(LST);
             iLocation.Longitude = -4.12345;
 
             RaAxis = axis;
 
             InitializeComponent();
-            txtLST.DataBindings.Add("Text", iLST, "LAST_String", false, System.Windows.Forms.DataSourceUpdateMode.Never, null, "T");
+            //txtLST.DataBindings.Add("Text", iLST, "LAST_String", false, System.Windows.Forms.DataSourceUpdateMode.Never, null, "T");
             ctrlLon.DataBindings.Add("Value", iLocation, "Longitude", false, System.Windows.Forms.DataSourceUpdateMode.Never);
 
             Connection = null;

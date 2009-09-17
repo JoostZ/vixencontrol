@@ -19,7 +19,7 @@ namespace ASCOM.VXAscom
      * When later the current LST is needed, call Update() which will use the difference
      * in time with respect to the object creation time to update the LST.
      */
-    public class LocalSiderialTime : INotifyPropertyChanged
+    public class LocalSiderialTime : INotifyPropertyChanged, IUpdatable
     {
         private ObservationLocation iLocation;
         internal DateTime iBaseUTC;
@@ -66,6 +66,8 @@ namespace ASCOM.VXAscom
             // Calculate the difference between the actual time and our base time
             TimeSpan dt = iLocation.UTC.Subtract(iBaseUTC);
             iTimeOffset = dt.TotalHours;
+            NotifyPropertyChanged("LAST");
+            NotifyPropertyChanged("LAST_String");
         }
 
         /**
