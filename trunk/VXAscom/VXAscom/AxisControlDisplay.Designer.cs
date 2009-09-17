@@ -32,31 +32,29 @@
             System.Windows.Forms.Label accelerationLabel;
             System.Windows.Forms.Label accLimitLabel;
             System.Windows.Forms.Label accUpdateLabel;
-            System.Windows.Forms.Label angleLabel;
             System.Windows.Forms.Label backlashLabel;
             System.Windows.Forms.Label isTrackingLabel;
             System.Windows.Forms.Label trackingRateLabel;
-            this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.accelerationTextBox = new System.Windows.Forms.TextBox();
             this.accLimitTextBox = new System.Windows.Forms.TextBox();
             this.accUpdateTextBox = new System.Windows.Forms.TextBox();
-            this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.backlashTextBox = new System.Windows.Forms.TextBox();
             this.isTrackingCheckBox = new System.Windows.Forms.CheckBox();
             this.trackingRateTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
+            this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             accelerationLabel = new System.Windows.Forms.Label();
             accLimitLabel = new System.Windows.Forms.Label();
             accUpdateLabel = new System.Windows.Forms.Label();
-            angleLabel = new System.Windows.Forms.Label();
             backlashLabel = new System.Windows.Forms.Label();
             isTrackingLabel = new System.Windows.Forms.Label();
             trackingRateLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // accelerationLabel
@@ -86,15 +84,6 @@
             accUpdateLabel.TabIndex = 5;
             accUpdateLabel.Text = "Acc Update:";
             // 
-            // angleLabel
-            // 
-            angleLabel.AutoSize = true;
-            angleLabel.Location = new System.Drawing.Point(28, 122);
-            angleLabel.Name = "angleLabel";
-            angleLabel.Size = new System.Drawing.Size(37, 13);
-            angleLabel.TabIndex = 7;
-            angleLabel.Text = "Angle:";
-            // 
             // backlashLabel
             // 
             backlashLabel.AutoSize = true;
@@ -122,10 +111,6 @@
             trackingRateLabel.TabIndex = 15;
             trackingRateLabel.Text = "Tracking Rate:";
             // 
-            // axisControlDisplayBindingSource
-            // 
-            this.axisControlDisplayBindingSource.DataSource = typeof(ASCOM.VXAscom.AxisControlDisplay);
-            // 
             // accelerationTextBox
             // 
             this.accelerationTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "Axis.Acceleration", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, null, "N2"));
@@ -149,16 +134,6 @@
             this.accUpdateTextBox.Name = "accUpdateTextBox";
             this.accUpdateTextBox.Size = new System.Drawing.Size(55, 20);
             this.accUpdateTextBox.TabIndex = 6;
-            // 
-            // angleNewAngleControl
-            // 
-            this.angleNewAngleControl.AutoSize = true;
-            this.angleNewAngleControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.angleNewAngleControl.DataBindings.Add(new System.Windows.Forms.Binding("Angle", this.axisControlDisplayBindingSource, "Axis.Angle", true));
-            this.angleNewAngleControl.Location = new System.Drawing.Point(112, 122);
-            this.angleNewAngleControl.Name = "angleNewAngleControl";
-            this.angleNewAngleControl.Size = new System.Drawing.Size(116, 26);
-            this.angleNewAngleControl.TabIndex = 8;
             // 
             // backlashTextBox
             // 
@@ -206,14 +181,14 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Acceleration";
             // 
-            // label1
+            // label3
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(154, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Tracking/sec";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(154, 74);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(32, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "msec";
             // 
             // label2
             // 
@@ -224,14 +199,29 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "Tracking";
             // 
-            // label3
+            // label1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(154, 74);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(32, 13);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "msec";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(154, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Tracking/sec";
+            // 
+            // angleNewAngleControl
+            // 
+            this.angleNewAngleControl.AutoSize = true;
+            this.angleNewAngleControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.angleNewAngleControl.DataBindings.Add(new System.Windows.Forms.Binding("Angle", this.axisControlDisplayBindingSource, "Axis.Angle", true));
+            this.angleNewAngleControl.Label = "Position";
+            this.angleNewAngleControl.Location = new System.Drawing.Point(3, 116);
+            this.angleNewAngleControl.Name = "angleNewAngleControl";
+            this.angleNewAngleControl.Size = new System.Drawing.Size(172, 32);
+            this.angleNewAngleControl.TabIndex = 8;
+            // 
+            // axisControlDisplayBindingSource
+            // 
+            this.axisControlDisplayBindingSource.DataSource = typeof(ASCOM.VXAscom.AxisControlDisplay);
             // 
             // AxisControlDisplay
             // 
@@ -239,8 +229,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(angleLabel);
             this.Controls.Add(this.angleNewAngleControl);
             this.Controls.Add(backlashLabel);
             this.Controls.Add(this.backlashTextBox);
@@ -248,11 +236,12 @@
             this.Controls.Add(this.isTrackingCheckBox);
             this.Controls.Add(trackingRateLabel);
             this.Controls.Add(this.trackingRateTextBox);
+            this.Controls.Add(this.groupBox1);
             this.Name = "AxisControlDisplay";
             this.Size = new System.Drawing.Size(237, 233);
-            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

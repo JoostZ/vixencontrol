@@ -31,5 +31,22 @@ namespace AngleDisplay
                 angleBindingSource.DataSource = this.Angle;
             }
         }
+
+        [
+        Category("Appearance"),
+        Description("The label shown at the left of the control")
+        ]
+        public String Label
+        {
+            get
+            {
+                return lblName.Text;
+            }
+            set
+            {
+                lblName.Text
+                    = value;
+            }
+        }
     }
 }
