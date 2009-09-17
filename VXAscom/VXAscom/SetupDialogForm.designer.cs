@@ -34,14 +34,18 @@ namespace ASCOM.VXAscom
             System.Windows.Forms.Label raAxisLabel2;
             System.Windows.Forms.Label testAngleLabel;
             System.Windows.Forms.Label degreesLabel;
+            System.Windows.Forms.Label lAST_StringLabel;
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.tmrAutoUpdate = new System.Windows.Forms.Timer(this.components);
             this.tabBasic = new System.Windows.Forms.TabPage();
+            this.lAST_StringTextBox = new System.Windows.Forms.TextBox();
+            this.setupDialogFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.degreesTextBox = new System.Windows.Forms.TextBox();
-            this.setupDialogFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.testAngleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnConnect = new System.Windows.Forms.Button();
@@ -51,28 +55,25 @@ namespace ASCOM.VXAscom
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ctrlLon = new AngleDisplay.HemiAngleDisplay();
-            this.txtLST = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabRaAxis = new System.Windows.Forms.TabPage();
             this.raAxisControlDisplay = new ASCOM.VXAscom.AxisControlDisplay();
             this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
             raAxisLabel = new System.Windows.Forms.Label();
             raAxisLabel1 = new System.Windows.Forms.Label();
             raAxisLabel2 = new System.Windows.Forms.Label();
             testAngleLabel = new System.Windows.Forms.Label();
             degreesLabel = new System.Windows.Forms.Label();
+            lAST_StringLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.tabBasic.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabRaAxis.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).BeginInit();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // raAxisLabel
@@ -119,6 +120,16 @@ namespace ASCOM.VXAscom
             degreesLabel.Size = new System.Drawing.Size(50, 13);
             degreesLabel.TabIndex = 6;
             degreesLabel.Text = "Degrees:";
+            // 
+            // lAST_StringLabel
+            // 
+            lAST_StringLabel.AutoSize = true;
+            lAST_StringLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            lAST_StringLabel.Location = new System.Drawing.Point(12, 11);
+            lAST_StringLabel.Name = "lAST_StringLabel";
+            lAST_StringLabel.Size = new System.Drawing.Size(34, 13);
+            lAST_StringLabel.TabIndex = 9;
+            lAST_StringLabel.Text = "LAST";
             // 
             // cmdOK
             // 
@@ -179,6 +190,41 @@ namespace ASCOM.VXAscom
             this.tabBasic.Text = "Basic";
             this.tabBasic.UseVisualStyleBackColor = true;
             // 
+            // lAST_StringTextBox
+            // 
+            this.lAST_StringTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.setupDialogFormBindingSource, "LST.LAST_String", true));
+            this.lAST_StringTextBox.Location = new System.Drawing.Point(52, 8);
+            this.lAST_StringTextBox.Name = "lAST_StringTextBox";
+            this.lAST_StringTextBox.ReadOnly = true;
+            this.lAST_StringTextBox.Size = new System.Drawing.Size(80, 20);
+            this.lAST_StringTextBox.TabIndex = 10;
+            // 
+            // setupDialogFormBindingSource
+            // 
+            this.setupDialogFormBindingSource.DataSource = typeof(ASCOM.VXAscom.SetupDialogForm);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.angleNewAngleControl);
+            this.groupBox2.Location = new System.Drawing.Point(6, 110);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(193, 100);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Position";
+            // 
+            // angleNewAngleControl
+            // 
+            this.angleNewAngleControl.AutoSize = true;
+            this.angleNewAngleControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.angleNewAngleControl.DataBindings.Add(new System.Windows.Forms.Binding("Angle", this.setupDialogFormBindingSource, "RaAxis.Angle", true));
+            this.angleNewAngleControl.Label = "RA:";
+            this.angleNewAngleControl.Location = new System.Drawing.Point(6, 16);
+            this.angleNewAngleControl.Margin = new System.Windows.Forms.Padding(0);
+            this.angleNewAngleControl.Name = "angleNewAngleControl";
+            this.angleNewAngleControl.Size = new System.Drawing.Size(126, 20);
+            this.angleNewAngleControl.TabIndex = 1;
+            // 
             // btnUpdate
             // 
             this.btnUpdate.Location = new System.Drawing.Point(367, 249);
@@ -196,10 +242,6 @@ namespace ASCOM.VXAscom
             this.degreesTextBox.Name = "degreesTextBox";
             this.degreesTextBox.Size = new System.Drawing.Size(100, 20);
             this.degreesTextBox.TabIndex = 7;
-            // 
-            // setupDialogFormBindingSource
-            // 
-            this.setupDialogFormBindingSource.DataSource = typeof(ASCOM.VXAscom.SetupDialogForm);
             // 
             // testAngleNewAngleControl
             // 
@@ -276,10 +318,10 @@ namespace ASCOM.VXAscom
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(lAST_StringLabel);
             this.panel1.Controls.Add(this.ctrlLon);
-            this.panel1.Controls.Add(this.txtLST);
-            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.lAST_StringTextBox);
             this.panel1.ForeColor = System.Drawing.SystemColors.Highlight;
             this.panel1.Location = new System.Drawing.Point(6, 6);
             this.panel1.Name = "panel1";
@@ -297,24 +339,6 @@ namespace ASCOM.VXAscom
             this.ctrlLon.Size = new System.Drawing.Size(182, 26);
             this.ctrlLon.TabIndex = 2;
             this.ctrlLon.Value = 0;
-            // 
-            // txtLST
-            // 
-            this.txtLST.Location = new System.Drawing.Point(36, 11);
-            this.txtLST.Name = "txtLST";
-            this.txtLST.Size = new System.Drawing.Size(51, 20);
-            this.txtLST.TabIndex = 1;
-            this.txtLST.Text = "07:21:12";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(3, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(27, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "LST";
             // 
             // tabControl1
             // 
@@ -351,28 +375,6 @@ namespace ASCOM.VXAscom
             // 
             this.axisControlDisplayBindingSource.DataSource = typeof(ASCOM.VXAscom.AxisControlDisplay);
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.angleNewAngleControl);
-            this.groupBox2.Location = new System.Drawing.Point(6, 110);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(193, 100);
-            this.groupBox2.TabIndex = 9;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Position";
-            // 
-            // angleNewAngleControl
-            // 
-            this.angleNewAngleControl.AutoSize = true;
-            this.angleNewAngleControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.angleNewAngleControl.DataBindings.Add(new System.Windows.Forms.Binding("Angle", this.setupDialogFormBindingSource, "RaAxis.Angle", true));
-            this.angleNewAngleControl.Label = "RA:";
-            this.angleNewAngleControl.Location = new System.Drawing.Point(6, 16);
-            this.angleNewAngleControl.Margin = new System.Windows.Forms.Padding(0);
-            this.angleNewAngleControl.Name = "angleNewAngleControl";
-            this.angleNewAngleControl.Size = new System.Drawing.Size(126, 20);
-            this.angleNewAngleControl.TabIndex = 1;
-            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -395,6 +397,8 @@ namespace ASCOM.VXAscom
             this.tabBasic.ResumeLayout(false);
             this.tabBasic.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -403,8 +407,6 @@ namespace ASCOM.VXAscom
             this.tabRaAxis.ResumeLayout(false);
             this.tabRaAxis.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -429,13 +431,12 @@ namespace ASCOM.VXAscom
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
         private AngleDisplay.HemiAngleDisplay ctrlLon;
-        private System.Windows.Forms.TextBox txtLST;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabRaAxis;
         private System.Windows.Forms.BindingSource axisControlDisplayBindingSource;
         private AxisControlDisplay raAxisControlDisplay;
         private System.Windows.Forms.GroupBox groupBox2;
         private AngleDisplay.NewAngleControl angleNewAngleControl;
+        private System.Windows.Forms.TextBox lAST_StringTextBox;
     }
 }
