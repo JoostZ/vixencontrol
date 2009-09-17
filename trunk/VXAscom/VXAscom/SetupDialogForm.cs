@@ -187,12 +187,19 @@ namespace ASCOM.VXAscom
         private void SetupDialogForm_Load(object sender, EventArgs e)
         {
             axisControlDisplayBindingSource.DataSource = RaAxis;
+            tmrAutoUpdate.Start();
 
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void SetupDialogForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            tmrAutoUpdate.Stop();
+            tmrAutoUpdate.Dispose();
         }
     }
 }
