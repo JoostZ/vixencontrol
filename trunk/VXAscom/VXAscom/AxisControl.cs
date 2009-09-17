@@ -171,12 +171,22 @@ namespace ASCOM.VXAscom
                 }
             }
 
-
+            private bool _tracking;
             /// <summary>
             /// Get or Set if the axis is tracking
             /// </summary>
             public bool IsTracking
-            { get; set; }
+            {
+                get
+                {
+                    return _tracking;
+                }
+                set
+                {
+                    _tracking = value;
+                    NotifyPropertyChanged("Tracking");
+                }
+            }
 
             /// <summary>
             /// The rate, in degrees per second, used in tracking

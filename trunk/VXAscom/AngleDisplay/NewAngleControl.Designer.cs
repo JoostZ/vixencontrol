@@ -67,7 +67,7 @@
             // 
             // secondsTextBox
             // 
-            this.secondsTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.angleBindingSource, "Seconds", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, null, "N2"));
+            this.secondsTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.angleBindingSource, "Seconds", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, null, "00.00"));
             this.secondsTextBox.Location = new System.Drawing.Point(87, 0);
             this.secondsTextBox.Margin = new System.Windows.Forms.Padding(0);
             this.secondsTextBox.Name = "secondsTextBox";
