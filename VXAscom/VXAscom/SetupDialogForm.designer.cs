@@ -41,7 +41,6 @@ namespace ASCOM.VXAscom
             this.tabBasic = new System.Windows.Forms.TabPage();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.degreesTextBox = new System.Windows.Forms.TextBox();
-            this.setupDialogFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.testAngleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnConnect = new System.Windows.Forms.Button();
@@ -55,6 +54,7 @@ namespace ASCOM.VXAscom
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabRaAxis = new System.Windows.Forms.TabPage();
+            this.setupDialogFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.raAxisControlDisplay = new ASCOM.VXAscom.AxisControlDisplay();
             this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             raAxisLabel = new System.Windows.Forms.Label();
@@ -64,11 +64,11 @@ namespace ASCOM.VXAscom
             degreesLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.tabBasic.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabRaAxis.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -154,6 +154,7 @@ namespace ASCOM.VXAscom
             // 
             // tmrAutoUpdate
             // 
+            this.tmrAutoUpdate.Interval = 1000;
             this.tmrAutoUpdate.Tick += new System.EventHandler(this.tmrAutoUpdate_Tick);
             // 
             // tabBasic
@@ -191,10 +192,6 @@ namespace ASCOM.VXAscom
             this.degreesTextBox.Name = "degreesTextBox";
             this.degreesTextBox.Size = new System.Drawing.Size(100, 20);
             this.degreesTextBox.TabIndex = 7;
-            // 
-            // setupDialogFormBindingSource
-            // 
-            this.setupDialogFormBindingSource.DataSource = typeof(ASCOM.VXAscom.SetupDialogForm);
             // 
             // testAngleNewAngleControl
             // 
@@ -329,6 +326,10 @@ namespace ASCOM.VXAscom
             this.tabRaAxis.TabIndex = 1;
             this.tabRaAxis.Text = "RA Axis";
             // 
+            // setupDialogFormBindingSource
+            // 
+            this.setupDialogFormBindingSource.DataSource = typeof(ASCOM.VXAscom.SetupDialogForm);
+            // 
             // raAxisControlDisplay
             // 
             this.raAxisControlDisplay.AutoSize = true;
@@ -361,10 +362,10 @@ namespace ASCOM.VXAscom
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VXAscom Setup";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetupDialogForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.tabBasic.ResumeLayout(false);
             this.tabBasic.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -372,6 +373,7 @@ namespace ASCOM.VXAscom
             this.tabControl1.ResumeLayout(false);
             this.tabRaAxis.ResumeLayout(false);
             this.tabRaAxis.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.setupDialogFormBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
