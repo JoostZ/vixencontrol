@@ -75,6 +75,10 @@ namespace ASCOM.VXAscom
             set;
         }
 
+        public Axis.AxisControl RaAxis { get; set; }
+
+        
+
         //
         // Constructor - Must be public for COM registration!
         /// <summary>
@@ -92,6 +96,7 @@ namespace ASCOM.VXAscom
             m_Axes = new Axis.AxisControl[2];
             m_Axes[0] = new Axis.RaAxisControl(Controller);
             m_Axes[1] = new Axis.DecAxisController(Controller);
+            RaAxis = m_Axes[0];
         }
 
         #region ASCOM Registration
@@ -469,7 +474,7 @@ namespace ASCOM.VXAscom
 
         public void SetupDialog()
         {
-            SetupDialogForm F = new SetupDialogForm(m_Axes[0]);
+            SetupDialogForm F = new SetupDialogForm(this);
             F.RaAxis = m_Axes[0];
             F.ShowDialog();
 
@@ -596,9 +601,14 @@ namespace ASCOM.VXAscom
 
         public bool Tracking
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("Tracking", false); }
-            set { throw new PropertyNotImplementedException("Tracking", true); }
+            get
+            {
+                return RaAxis.IsTracking;
+            }
+            set
+            {
+                RaAxis.IsTracking = value;
+            }
         }
 
         public DriveRates TrackingRate

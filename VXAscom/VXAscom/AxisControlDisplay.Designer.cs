@@ -33,7 +33,6 @@
             System.Windows.Forms.Label accLimitLabel;
             System.Windows.Forms.Label accUpdateLabel;
             System.Windows.Forms.Label backlashLabel;
-            System.Windows.Forms.Label isTrackingLabel;
             System.Windows.Forms.Label trackingRateLabel;
             this.accelerationTextBox = new System.Windows.Forms.TextBox();
             this.accLimitTextBox = new System.Windows.Forms.TextBox();
@@ -46,12 +45,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
+            this.label4 = new System.Windows.Forms.Label();
             this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             accelerationLabel = new System.Windows.Forms.Label();
             accLimitLabel = new System.Windows.Forms.Label();
             accUpdateLabel = new System.Windows.Forms.Label();
             backlashLabel = new System.Windows.Forms.Label();
-            isTrackingLabel = new System.Windows.Forms.Label();
             trackingRateLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).BeginInit();
@@ -92,15 +91,6 @@
             backlashLabel.Size = new System.Drawing.Size(54, 13);
             backlashLabel.TabIndex = 11;
             backlashLabel.Text = "Backlash:";
-            // 
-            // isTrackingLabel
-            // 
-            isTrackingLabel.AutoSize = true;
-            isTrackingLabel.Location = new System.Drawing.Point(28, 185);
-            isTrackingLabel.Name = "isTrackingLabel";
-            isTrackingLabel.Size = new System.Drawing.Size(63, 13);
-            isTrackingLabel.TabIndex = 13;
-            isTrackingLabel.Text = "Is Tracking:";
             // 
             // trackingRateLabel
             // 
@@ -146,11 +136,11 @@
             // isTrackingCheckBox
             // 
             this.isTrackingCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.axisControlDisplayBindingSource, "Axis.IsTracking", true));
-            this.isTrackingCheckBox.Location = new System.Drawing.Point(112, 180);
+            this.isTrackingCheckBox.Enabled = false;
+            this.isTrackingCheckBox.Location = new System.Drawing.Point(211, 112);
             this.isTrackingCheckBox.Name = "isTrackingCheckBox";
-            this.isTrackingCheckBox.Size = new System.Drawing.Size(116, 24);
+            this.isTrackingCheckBox.Size = new System.Drawing.Size(17, 24);
             this.isTrackingCheckBox.TabIndex = 14;
-            this.isTrackingCheckBox.Text = "checkBox1";
             this.isTrackingCheckBox.UseVisualStyleBackColor = true;
             // 
             // trackingRateTextBox
@@ -215,9 +205,19 @@
             this.angleNewAngleControl.DataBindings.Add(new System.Windows.Forms.Binding("Angle", this.axisControlDisplayBindingSource, "Axis.Angle", true));
             this.angleNewAngleControl.Label = "Position";
             this.angleNewAngleControl.Location = new System.Drawing.Point(3, 116);
+            this.angleNewAngleControl.Margin = new System.Windows.Forms.Padding(0);
             this.angleNewAngleControl.Name = "angleNewAngleControl";
-            this.angleNewAngleControl.Size = new System.Drawing.Size(172, 32);
+            this.angleNewAngleControl.Size = new System.Drawing.Size(145, 20);
             this.angleNewAngleControl.TabIndex = 8;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(151, 117);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(49, 13);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Tracking";
             // 
             // axisControlDisplayBindingSource
             // 
@@ -229,10 +229,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.angleNewAngleControl);
             this.Controls.Add(backlashLabel);
             this.Controls.Add(this.backlashTextBox);
-            this.Controls.Add(isTrackingLabel);
             this.Controls.Add(this.isTrackingCheckBox);
             this.Controls.Add(trackingRateLabel);
             this.Controls.Add(this.trackingRateTextBox);
@@ -261,6 +261,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
 
     }
 }
