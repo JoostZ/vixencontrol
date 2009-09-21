@@ -17,10 +17,6 @@ namespace ASCOM.VXAscom
             {
             }
 
-            protected override void SetPosition(int aPosition)
-            {
-                throw new System.NotImplementedException();
-            }
 
             protected override int CBacklash
             {

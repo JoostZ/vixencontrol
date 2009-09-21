@@ -44,8 +44,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.label4 = new System.Windows.Forms.Label();
+            this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             accelerationLabel = new System.Windows.Forms.Label();
             accLimitLabel = new System.Windows.Forms.Label();
@@ -198,6 +198,15 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "Tracking/sec";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(157, 117);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(49, 13);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Tracking";
+            // 
             // angleNewAngleControl
             // 
             this.angleNewAngleControl.AutoSize = true;
@@ -209,15 +218,6 @@
             this.angleNewAngleControl.Name = "angleNewAngleControl";
             this.angleNewAngleControl.Size = new System.Drawing.Size(145, 20);
             this.angleNewAngleControl.TabIndex = 8;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(151, 117);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(49, 13);
-            this.label4.TabIndex = 18;
-            this.label4.Text = "Tracking";
             // 
             // axisControlDisplayBindingSource
             // 

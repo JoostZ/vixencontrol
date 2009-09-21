@@ -21,15 +21,24 @@ namespace ASCOM.VXAscom
             RaPosition,     //!< Current position of RA axis
             RaTarget,       //!< Target position of the RA axis
             RaBacklash,     //!< Number of pulses to correct for backlash of the RA axis
-            RaLimit,        //!< Below this limit no ramping takes place
+            RaAccLimit,        //!< Below this limit no ramping takes place
             RaAcceleration, //!< Acceleration in tracking/sec for the RA axis
             RaAccUpdate,    //!< Acceleration update interval in msec for the RA axis
+         
         }
 
         public enum Commands
         {
             RaGotoStart,        //!< Start GoTo for the RA axis
             RaGotoStop,         //!< Stop GoTo for the RA axis
+            RaTrackingOn,       //!< Swith Tracking in RA direction on
+            RaTrackingOff,      //!< Swith Tracking in RA direction off
+            RaFastOn,
+            RaFastOff,
+            RaLeftOn,
+            RaLeftOff,
+            RaRightOn,
+            RaRightOff
         }
 
         /// <summary>
@@ -57,6 +66,8 @@ namespace ASCOM.VXAscom
             /// </summary>
             /// <param name="aCommand">The command to write</param>
             void Command(Commands aCommand);
+
+            bool Connected { get; }
         }
     }
 }

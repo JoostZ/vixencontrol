@@ -61,6 +61,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\Common Files\ASCOM\.net\ASCOM.Exceptions.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework, Version=2.5.2.9222, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -112,6 +113,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\DataSources\ASCOM.VXAscom.Axis.AxisControl.datasource" />
     <None Include="Properties\DataSources\ASCOM.VXAscom.Axis.AxisControl1.datasource" />
     <None Include="Properties\DataSources\ASCOM.VXAscom.Axis.Status.datasource" />

@@ -31,6 +31,8 @@ using ASCOM.Helper;
 using ASCOM.Helper2;
 using ASCOM.Interface;
 
+using NLog;
+
 namespace ASCOM.VXAscom
 {
     using Controller;
@@ -54,6 +56,8 @@ namespace ASCOM.VXAscom
         // TODO Change the descriptive string for your driver then remove this line
         private static string s_csDriverDescription = "Vixen Telescope Mount";
 
+        private static string s_SerialSubKey = "Serial";
+
         public static string ProgId
         {
             get
@@ -69,7 +73,7 @@ namespace ASCOM.VXAscom
         private TrackingRates m_TrackingRates;
 
         private Axis.AxisControl[] m_Axes;
-        private BoxdorferConnect Controller
+        internal BoxdorferConnect Controller
         {
             get;
             set;
@@ -77,7 +81,8 @@ namespace ASCOM.VXAscom
 
         public Axis.AxisControl RaAxis { get; set; }
 
-        
+        private Helper.Profile _profile = new Profile();
+        private Logger TheLogger { get; set; }
 
         //
         // Constructor - Must be public for COM registration!
@@ -86,12 +91,31 @@ namespace ASCOM.VXAscom
         /// </summary>
         public Telescope()
         {
+            TheLogger = LogManager.GetCurrentClassLogger();
+            TheLogger.Debug("Creating Telescope");
             m_AxisRates = new AxisRates[2];
             m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
             m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
             m_TrackingRates = new TrackingRates();
 
-            Controller = new BoxdorferConnect();
+
+            Serial theSerial = null;
+
+            if (_profile.IsRegistered(s_csDriverID))
+            {
+                _profile.CreateSubKey(s_csDriverID, s_SerialSubKey);
+                string portname = _profile.GetValue(s_csDriverID, "Port", s_SerialSubKey);
+                string baudRate = _profile.GetValue(s_csDriverID, "Baud", s_SerialSubKey);
+
+                if (portname.Length != 0 && baudRate.Length != 0)
+                {
+                    theSerial = new Serial();
+                    theSerial.Port = Convert.ToInt16(portname);
+                    theSerial.Speed = (ASCOM.Helper.PortSpeed)Convert.ToInt16(baudRate);
+                }
+            }
+            TheLogger.Debug("Serial = {0}", theSerial);
+            Controller = new BoxdorferConnect(theSerial);
 
             m_Axes = new Axis.AxisControl[2];
             m_Axes[0] = new Axis.RaAxisControl(Controller);
@@ -222,8 +246,7 @@ namespace ASCOM.VXAscom
 
         public bool CanPulseGuide
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanPulseGuide", false); }
+            get { return true; }
         }
 
         public bool CanSetDeclinationRate
@@ -300,8 +323,7 @@ namespace ASCOM.VXAscom
 
         public bool CanUnpark
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanUnpark", false); }
+            get { return false; }
         }
 
         public void CommandBlind(string Command, bool Raw)
@@ -449,8 +471,27 @@ namespace ASCOM.VXAscom
 
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("PulseGuide");
+            Axis.AxisControl theAxis = null;
+            bool toRight = false;
+
+            if (Direction == GuideDirections.guideEast || Direction == GuideDirections.guideWest)
+            {
+                theAxis = RaAxis;
+            }
+            else
+            {
+                theAxis = null;
+            }
+
+            if (Direction == GuideDirections.guideWest || Direction == GuideDirections.guideSouth)
+            {
+                toRight = true;
+            }
+
+            if (theAxis != null)
+            {
+                theAxis.Pulse(toRight, Duration);
+            }
         }
 
         public double RightAscension
@@ -476,11 +517,20 @@ namespace ASCOM.VXAscom
         {
             SetupDialogForm F = new SetupDialogForm(this);
             F.RaAxis = m_Axes[0];
-            F.ShowDialog();
-
-            if (F.Connection != null)
+            if (F.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Controller.Connection = F.Connection;
+                RegUnregASCOM(true);
+                if (F.Connection == null)
+                {
+                    _profile.DeleteSubKey(s_csDriverID, s_SerialSubKey);
+                }
+                else
+                {
+                    _profile.CreateSubKey(s_csDriverID, s_SerialSubKey);
+                    _profile.WriteValue(s_csDriverID, "Port", F.Connection.Port.ToString(), s_SerialSubKey);
+                    _profile.WriteValue(s_csDriverID, "Baud", ((Int16)F.Connection.Speed).ToString(), s_SerialSubKey);
+                }
+
             }
         }
 
@@ -637,6 +687,7 @@ namespace ASCOM.VXAscom
         }
 
         #endregion
+
     }
 
     //
