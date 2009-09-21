@@ -15,6 +15,8 @@ namespace ASCOM.VXAscom
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private ObservationLocation iLocation;
 
         private List<IUpdatable> _updateList = new List<IUpdatable>();
@@ -86,20 +88,37 @@ namespace ASCOM.VXAscom
             //txtLST.DataBindings.Add("Text", iLST, "LAST_String", false, System.Windows.Forms.DataSourceUpdateMode.Never, null, "T");
             ctrlLon.DataBindings.Add("Value", iLocation, "Longitude", false, System.Windows.Forms.DataSourceUpdateMode.Never);
 
-            Connection = null;
+            Connection = Driver.Controller.Connection;
 
             // Create a list of serial ports on the system
             Ports = SerialPort.GetPortNames();
             comboPorts.Items.Add("Select a port");
             comboPorts.Items.AddRange(Ports);
-            comboPorts.SelectedIndex = 0;
+            if (Connection != null)
+            {
+                string portName = String.Format("COM{0}", Connection.Port);
+                comboPorts.SelectedItem = portName;
+            }
+            else
+            {
+                comboPorts.SelectedIndex = 0;
+            }
 
             foreach (PortSpeed speed in baudList)
             {
                 int value = (int)speed;
                 comboBaudRate.Items.Add(value.ToString());
             }
-            comboBaudRate.SelectedIndex = 3; // default is 9600 baud
+
+            if (Connection != null)
+            {
+                string selectedItem = ((Int16)Connection.Speed).ToString();
+                comboBaudRate.SelectedItem = selectedItem;
+            }
+            else
+            {
+                comboBaudRate.SelectedIndex = 3; // default is 9600 baud
+            }
 
 
             this.setupDialogFormBindingSource.DataSource = this;
@@ -109,7 +128,7 @@ namespace ASCOM.VXAscom
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
-            Dispose();
+            ;
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -150,6 +169,14 @@ namespace ASCOM.VXAscom
             }
         }
 
+        public bool HasConnection
+        {
+            get
+            {
+                return Connection != null;
+            }
+        }
+
         private void comboPorts_SelectedIndexChanged(object sender, EventArgs e)
         {
             int idx = comboPorts.SelectedIndex;
@@ -164,6 +191,7 @@ namespace ASCOM.VXAscom
             if (Connection == null)
             {
                 Connection = new Serial();
+                Driver.Controller.Connection = Connection;
             }
             string portName = comboPorts.SelectedItem.ToString().Remove(0, 3); //Removing the COM part
             Connection.Port = Convert.ToInt16(portName);
@@ -183,6 +211,8 @@ namespace ASCOM.VXAscom
         private void btnConnect_Click(object sender, EventArgs e)
         {
             Connection.Connected = true;
+            Driver.Controller.Connection = Connection;
+            Tracking = false;
         }
 
         private void tmrAutoUpdate_Tick(object sender, EventArgs e)
@@ -218,6 +248,11 @@ namespace ASCOM.VXAscom
         {
             tmrAutoUpdate.Stop();
             tmrAutoUpdate.Dispose();
+        }
+
+        private void btnLoadAll_Click(object sender, EventArgs e)
+        {
+            RaAxis.LoadStatus();
         }
     }
 }

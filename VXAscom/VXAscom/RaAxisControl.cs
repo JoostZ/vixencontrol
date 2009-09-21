@@ -19,22 +19,28 @@ namespace ASCOM.VXAscom
                 StatusRegister = new System.Collections.Generic.Dictionary<AxisStatus, Registers> {
                     {AxisStatus.Acceleration, Registers.RaAcceleration},
                     {AxisStatus.AccelerationUpdate, Registers.RaAccUpdate},
-                    {AxisStatus.AccelerationLimit, Registers.RaLimit},
+                    {AxisStatus.AccelerationLimit, Registers.RaAccLimit},
                     {AxisStatus.Position, Registers.RaPosition}
                 };
 
                 // Set the default values for the RA status registers
                 StatusValues = new Dictionary<AxisStatus, Int32> { 
-                    {AxisStatus.Acceleration, 2510},
-                    {AxisStatus.AccelerationUpdate, 20},
-                    {AxisStatus.AccelerationLimit, 20},
+                    {AxisStatus.Acceleration, 2410},
+                    {AxisStatus.AccelerationUpdate, 25},
+                    {AxisStatus.AccelerationLimit, 15},
                 };
 
-            }
+                CommandRegister = new Dictionary<AxisCommands, Commands> {
+                    {AxisCommands.TrackingOn, Commands.RaTrackingOn},
+                    {AxisCommands.TrackingOff, Commands.RaTrackingOff},
+                    {AxisCommands.FastOn, Commands.RaFastOn},
+                    {AxisCommands.FastOff, Commands.RaFastOff},
+                    {AxisCommands.LeftOn, Commands.RaLeftOn},
+                    {AxisCommands.LeftOff, Commands.RaLeftOff},
+                    {AxisCommands.RightOn, Commands.RaRightOn},
+                    {AxisCommands.RightOff, Commands.RaRightOff},
+                };
 
-            protected override void SetPosition(int aPosition)
-            {
-                throw new System.NotImplementedException();
             }
 
             protected override int CBacklash

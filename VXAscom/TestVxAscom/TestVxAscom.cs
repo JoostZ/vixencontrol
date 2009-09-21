@@ -1,20 +1,36 @@
 using System;
 using ASCOM.Interface;
 using ASCOM.Helper;
+using ASCOM.DriverAccess;
 
+using NLog;
 
 namespace ASCOM
 {
 	class ClientTest
 	{
+        //private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         static void Main(string[] args)
         {
-
-            //Helper.Util U = new Helper.Util();
+            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
             Console.WriteLine("\r\nTelescope:");
-            ITelescope T = new VXAscom.Telescope();
-            T.SetupDialog();
+            logger.Debug("Starting application");
+            Telescope T;
+
+            string ProgId = Telescope.Choose("");
+            if (ProgId != "")
+            {
+
+
+                T = new Telescope(ProgId);
+
+
+                //VXAscom.SetupDialogForm F = new VXAscom.SetupDialogForm();
+                //T.SetupDialog();
+                Console.WriteLine(" {0}", T.Connected);
+                T.Connected = true;
+            }
             //Console.WriteLine("  Current LST = " + T.SiderealTime);
             //IAxisRates AxR = T.AxisRates(TelescopeAxes.axisPrimary);
             //Console.WriteLine("  " + AxR.Count + " rates");

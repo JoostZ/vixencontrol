@@ -39,8 +39,9 @@ namespace ASCOM.VXAscom
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.tmrAutoUpdate = new System.Windows.Forms.Timer(this.components);
             this.tabBasic = new System.Windows.Forms.TabPage();
-            this.lAST_StringTextBox = new System.Windows.Forms.TextBox();
+            this.trackingCheckBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.trackingCheckBox = new System.Windows.Forms.CheckBox();
             this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnConnect = new System.Windows.Forms.Button();
@@ -50,13 +51,13 @@ namespace ASCOM.VXAscom
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ctrlLon = new AngleDisplay.HemiAngleDisplay();
+            this.lAST_StringTextBox = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabRaAxis = new System.Windows.Forms.TabPage();
-            this.trackingCheckBox = new System.Windows.Forms.CheckBox();
+            this.btnLoadAll = new System.Windows.Forms.Button();
             this.setupDialogFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.raAxisControlDisplay = new ASCOM.VXAscom.AxisControlDisplay();
             this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.trackingCheckBox1 = new System.Windows.Forms.CheckBox();
             raAxisLabel = new System.Windows.Forms.Label();
             raAxisLabel1 = new System.Windows.Forms.Label();
             raAxisLabel2 = new System.Windows.Forms.Label();
@@ -110,6 +111,15 @@ namespace ASCOM.VXAscom
             lAST_StringLabel.TabIndex = 9;
             lAST_StringLabel.Text = "LAST";
             // 
+            // trackingLabel
+            // 
+            trackingLabel.AutoSize = true;
+            trackingLabel.Location = new System.Drawing.Point(45, 277);
+            trackingLabel.Name = "trackingLabel";
+            trackingLabel.Size = new System.Drawing.Size(52, 13);
+            trackingLabel.TabIndex = 9;
+            trackingLabel.Text = "Tracking:";
+            // 
             // cmdOK
             // 
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -154,6 +164,7 @@ namespace ASCOM.VXAscom
             // 
             this.tabBasic.AutoScroll = true;
             this.tabBasic.BackColor = System.Drawing.SystemColors.Control;
+            this.tabBasic.Controls.Add(this.btnLoadAll);
             this.tabBasic.Controls.Add(trackingLabel);
             this.tabBasic.Controls.Add(this.trackingCheckBox1);
             this.tabBasic.Controls.Add(this.groupBox2);
@@ -166,14 +177,15 @@ namespace ASCOM.VXAscom
             this.tabBasic.TabIndex = 0;
             this.tabBasic.Text = "Basic";
             // 
-            // lAST_StringTextBox
+            // trackingCheckBox1
             // 
-            this.lAST_StringTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.setupDialogFormBindingSource, "LST.LAST_String", true));
-            this.lAST_StringTextBox.Location = new System.Drawing.Point(52, 8);
-            this.lAST_StringTextBox.Name = "lAST_StringTextBox";
-            this.lAST_StringTextBox.ReadOnly = true;
-            this.lAST_StringTextBox.Size = new System.Drawing.Size(59, 20);
-            this.lAST_StringTextBox.TabIndex = 10;
+            this.trackingCheckBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.setupDialogFormBindingSource, "Tracking", true));
+            this.trackingCheckBox1.Location = new System.Drawing.Point(103, 272);
+            this.trackingCheckBox1.Name = "trackingCheckBox1";
+            this.trackingCheckBox1.Size = new System.Drawing.Size(104, 24);
+            this.trackingCheckBox1.TabIndex = 10;
+            this.trackingCheckBox1.Text = "checkBox1";
+            this.trackingCheckBox1.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -185,6 +197,16 @@ namespace ASCOM.VXAscom
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Position";
+            // 
+            // trackingCheckBox
+            // 
+            this.trackingCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.setupDialogFormBindingSource, "Tracking", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.trackingCheckBox.Location = new System.Drawing.Point(15, 97);
+            this.trackingCheckBox.Name = "trackingCheckBox";
+            this.trackingCheckBox.Size = new System.Drawing.Size(69, 24);
+            this.trackingCheckBox.TabIndex = 2;
+            this.trackingCheckBox.Text = "Tracking";
+            this.trackingCheckBox.UseVisualStyleBackColor = true;
             // 
             // angleNewAngleControl
             // 
@@ -283,6 +305,15 @@ namespace ASCOM.VXAscom
             this.ctrlLon.TabIndex = 2;
             this.ctrlLon.Value = 0;
             // 
+            // lAST_StringTextBox
+            // 
+            this.lAST_StringTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.setupDialogFormBindingSource, "LST.LAST_String", true));
+            this.lAST_StringTextBox.Location = new System.Drawing.Point(52, 8);
+            this.lAST_StringTextBox.Name = "lAST_StringTextBox";
+            this.lAST_StringTextBox.ReadOnly = true;
+            this.lAST_StringTextBox.Size = new System.Drawing.Size(59, 20);
+            this.lAST_StringTextBox.TabIndex = 10;
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabBasic);
@@ -303,15 +334,16 @@ namespace ASCOM.VXAscom
             this.tabRaAxis.TabIndex = 1;
             this.tabRaAxis.Text = "RA Axis";
             // 
-            // trackingCheckBox
+            // btnLoadAll
             // 
-            this.trackingCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.setupDialogFormBindingSource, "Tracking", true));
-            this.trackingCheckBox.Location = new System.Drawing.Point(15, 97);
-            this.trackingCheckBox.Name = "trackingCheckBox";
-            this.trackingCheckBox.Size = new System.Drawing.Size(69, 24);
-            this.trackingCheckBox.TabIndex = 2;
-            this.trackingCheckBox.Text = "Tracking";
-            this.trackingCheckBox.UseVisualStyleBackColor = true;
+            this.btnLoadAll.AutoSize = true;
+            this.btnLoadAll.Location = new System.Drawing.Point(232, 207);
+            this.btnLoadAll.Name = "btnLoadAll";
+            this.btnLoadAll.Size = new System.Drawing.Size(125, 23);
+            this.btnLoadAll.TabIndex = 11;
+            this.btnLoadAll.Text = "Load All from Controller";
+            this.btnLoadAll.UseVisualStyleBackColor = true;
+            this.btnLoadAll.Click += new System.EventHandler(this.btnLoadAll_Click);
             // 
             // setupDialogFormBindingSource
             // 
@@ -325,31 +357,12 @@ namespace ASCOM.VXAscom
             this.raAxisControlDisplay.DataBindings.Add(new System.Windows.Forms.Binding("Axis", this.setupDialogFormBindingSource, "RaAxis", true));
             this.raAxisControlDisplay.Location = new System.Drawing.Point(0, 3);
             this.raAxisControlDisplay.Name = "raAxisControlDisplay";
-            this.raAxisControlDisplay.Size = new System.Drawing.Size(240, 233);
+            this.raAxisControlDisplay.Size = new System.Drawing.Size(237, 233);
             this.raAxisControlDisplay.TabIndex = 1;
             // 
             // axisControlDisplayBindingSource
             // 
             this.axisControlDisplayBindingSource.DataSource = typeof(ASCOM.VXAscom.AxisControlDisplay);
-            // 
-            // trackingLabel
-            // 
-            trackingLabel.AutoSize = true;
-            trackingLabel.Location = new System.Drawing.Point(45, 277);
-            trackingLabel.Name = "trackingLabel";
-            trackingLabel.Size = new System.Drawing.Size(52, 13);
-            trackingLabel.TabIndex = 9;
-            trackingLabel.Text = "Tracking:";
-            // 
-            // trackingCheckBox1
-            // 
-            this.trackingCheckBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.setupDialogFormBindingSource, "Tracking", true));
-            this.trackingCheckBox1.Location = new System.Drawing.Point(103, 272);
-            this.trackingCheckBox1.Name = "trackingCheckBox1";
-            this.trackingCheckBox1.Size = new System.Drawing.Size(104, 24);
-            this.trackingCheckBox1.TabIndex = 10;
-            this.trackingCheckBox1.Text = "checkBox1";
-            this.trackingCheckBox1.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
@@ -413,5 +426,6 @@ namespace ASCOM.VXAscom
         private System.Windows.Forms.TextBox lAST_StringTextBox;
         private System.Windows.Forms.CheckBox trackingCheckBox;
         private System.Windows.Forms.CheckBox trackingCheckBox1;
+        private System.Windows.Forms.Button btnLoadAll;
     }
 }

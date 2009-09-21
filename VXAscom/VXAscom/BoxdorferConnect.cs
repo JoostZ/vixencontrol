@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using NLog;
+
 
 using ASCOM.Helper;
 
@@ -9,6 +11,36 @@ namespace ASCOM.VXAscom
 {
     namespace Controller
     {
+        enum CommandByte
+        {
+            writeLeftOn = 0xA8,
+            writeLeftOff = 0xA9,
+            writeRightOn = 0xAA,
+            writeRightOff = 0xAB,
+            writeOnOn = 0xAE,
+            writeOnOff = 0xAF,
+            writeFastOn = 0xB0,
+            writeFastOff = 0xB1,
+            readRaTargetPosition = 0xB2,
+            writeRaTargetPosition = 0xB3,
+            writeRaGotoStart = 0xB4,
+            writeRaGotoStop = 0xB5,
+            writeRaBacklash = 0x11,
+            readRaBacklash = 0x12,
+            readRALimit = 0xD2,
+            writeRALimit = 0xD1,
+            writeRAMicro = 0xD0,
+            readRAMicro = 0xD4,
+            readRaCurrentPos = 0xB7,
+            resetRaCurrentPos = 0xB8,
+            readRaAcceleration = 0xD5,
+            writeRaAcceleration = 0xD6,
+            readRaCurrentAccleration = 0xD9,
+            readRaAccelerationUpdate = 0xDA,
+            writeRaAccelerationUpdate = 0xDB,
+            getVersion = 0xD7,
+        }
+
         /// <summary>
         /// Commands associated with the registers
         /// </summary>
@@ -38,46 +70,61 @@ namespace ASCOM.VXAscom
             /// </summary>
             static private Dictionary<Registers, AccessCommands> accessMap =
                 new Dictionary<Registers, AccessCommands> {
-                    {Registers.RaPosition, new AccessCommands {readCommand = 0xAA, 
-                                                               writeCommand = 0xAB}},
-                    {Registers.RaBacklash, new AccessCommands {readCommand = 0x12,
-                                                               writeCommand = 0x11}
+                    {Registers.RaPosition, new AccessCommands {readCommand = (byte)CommandByte.readRaCurrentPos, 
+                                                               writeCommand = null}},
+                    {Registers.RaBacklash, new AccessCommands {readCommand = (byte)CommandByte.readRaBacklash,
+                                                               writeCommand = (byte)CommandByte.writeRaBacklash}
                                                                },
 
-                    {Registers.RaTarget, new AccessCommands {  readCommand = 0xB2,
-                                                               writeCommand = 0xB3}
+                    {Registers.RaTarget, new AccessCommands {  readCommand = (byte)CommandByte.readRaTargetPosition,
+                                                               writeCommand = (byte)CommandByte.writeRaTargetPosition}
                                                                },
                                                                
                     {Registers.RaAcceleration, new AccessCommands {  
-                                                                readCommand = 0xD5,
-                                                                writeCommand = 0xD6}
+                                                                readCommand = (byte)CommandByte.readRaAcceleration,
+                                                                writeCommand = (byte)CommandByte.writeRaAcceleration}
                                                                },
 
                     {Registers.RaAccUpdate, new AccessCommands {  
-                                                                readCommand = 0xDA,
-                                                                writeCommand = 0xDB}
+                                                                readCommand = (byte)CommandByte.readRaAccelerationUpdate,
+                                                                writeCommand = (byte)CommandByte.writeRaAccelerationUpdate}
+                                                                },
+                    {Registers.RaAccLimit, new AccessCommands {  
+                                                                readCommand = (byte)CommandByte.readRALimit,
+                                                                writeCommand = (byte)CommandByte.writeRALimit}
                                                                 },
                                                                
             };
 
             static private Dictionary<Commands, byte> commandMap = new Dictionary<Commands,byte> {
-                    { Commands.RaGotoStart, 0xB4},
-                    { Commands.RaGotoStop, 0xB5},
+                    { Commands.RaGotoStart, (byte)CommandByte.writeRaGotoStart},
+                    { Commands.RaGotoStop, (byte)CommandByte.writeRaGotoStop},
+                    { Commands.RaTrackingOn, (byte)CommandByte.writeOnOn},
+                    { Commands.RaTrackingOff, (byte)CommandByte.writeOnOff}, 
+                    {Commands.RaFastOn, (byte)CommandByte.writeFastOn},
+                    {Commands.RaFastOff, (byte)CommandByte.writeFastOff},
+                    {Commands.RaLeftOn, (byte)CommandByte.writeLeftOn},
+                    {Commands.RaLeftOff, (byte)CommandByte.writeLeftOff},
+                    {Commands.RaRightOn, (byte)CommandByte.writeRightOn},
+                    {Commands.RaRightOff, (byte)CommandByte.writeRightOff},
                 };
 
+            Serial _connection;
             public Serial Connection
             {
-                get;
-                set;
+                get { return _connection; }
+                set { _connection = value; }
             }
 
             /// <summary>
             /// Constructor
             /// </summary>
             /// <param name="aSerial">The serial port to use in the communication</param>
-            BoxdorferConnect(Serial aSerial)
+            public BoxdorferConnect(Serial aSerial)
             {
+                Log = LogManager.GetCurrentClassLogger();
                 Connection = aSerial;
+                Log.Debug("Creating BoxdorfeConnect with serial for {0}", aSerial);
             }
 
             /// <summary>
@@ -85,9 +132,12 @@ namespace ASCOM.VXAscom
             /// </summary>
             public BoxdorferConnect()
             {
+                Log =LogManager.GetCurrentClassLogger();
                 Connection = null;
+                Log.Debug("Creating BoxdorfeConnect without serial");
             }
 
+            private Logger Log { get; set; }
             /// <summary>
             /// Write a 4 byte integer to the controller
             /// </summary>
@@ -102,6 +152,7 @@ namespace ASCOM.VXAscom
             /// </remarks>
             private void SendLong(Int32 aValue)
             {
+                Log.Debug("SendLong {0}", aValue);
                 UInt32 theValue = (UInt32)aValue;
                 byte[] cmds = new byte[8];
                 for (int i = 0, j = 0; i < 4; i++)
@@ -141,10 +192,11 @@ namespace ASCOM.VXAscom
                         {
                             result = (result << 8) | theReadData[i];
                         }
-
+                        Log.Debug("Read register {0} value = {1}", aRegister, result);
                         return (Int32)result;
                     }
                 }
+                Log.Debug("No connection while reading register {0}", aRegister);
                 return 0;
             }
 
@@ -175,12 +227,23 @@ namespace ASCOM.VXAscom
             /// <param name="aCommand"></param>
             public void Command(Commands aCommand)
             {
+                Log.Debug("Send command {0}", aCommand);
                 Debug.Assert(commandMap.ContainsKey(aCommand));
                 if (Connection != null)
                 {
                     byte[] theCommand = { commandMap[aCommand] };
                     Connection.TransmitBinary(ref theCommand);
                 }
+            }
+
+            #endregion
+
+            #region IControllerConnect Members
+
+
+            public bool Connected
+            {
+                get { return Connection != null && Connection.Connected; }
             }
 
             #endregion
