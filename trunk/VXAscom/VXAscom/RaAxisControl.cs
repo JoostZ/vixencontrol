@@ -20,7 +20,8 @@ namespace ASCOM.VXAscom
                     {AxisStatus.Acceleration, Registers.RaAcceleration},
                     {AxisStatus.AccelerationUpdate, Registers.RaAccUpdate},
                     {AxisStatus.AccelerationLimit, Registers.RaAccLimit},
-                    {AxisStatus.Position, Registers.RaPosition}
+                    {AxisStatus.Position, Registers.RaPosition},
+                    {AxisStatus.Fast, Registers.RaFast},
                 };
 
                 // Set the default values for the RA status registers

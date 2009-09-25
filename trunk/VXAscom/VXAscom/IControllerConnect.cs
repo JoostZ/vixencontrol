@@ -21,9 +21,10 @@ namespace ASCOM.VXAscom
             RaPosition,     //!< Current position of RA axis
             RaTarget,       //!< Target position of the RA axis
             RaBacklash,     //!< Number of pulses to correct for backlash of the RA axis
-            RaAccLimit,        //!< Below this limit no ramping takes place
+            RaAccLimit,     //!< Below this limit no ramping takes place
             RaAcceleration, //!< Acceleration in tracking/sec for the RA axis
             RaAccUpdate,    //!< Acceleration update interval in msec for the RA axis
+            RaFast,         //!< Slewing speed in units of tracking speed for RA axis
          
         }
 
