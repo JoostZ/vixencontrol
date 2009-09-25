@@ -30,6 +30,7 @@ namespace ASCOM.VXAscom
             AccelerationUpdate,
             AccelerationLimit,
             Position,
+            Fast,
         };
 
         /// <summary>
@@ -147,6 +148,7 @@ namespace ASCOM.VXAscom
                 me.pulseTimer.Dispose();
                 me.EndPulse();
             }
+
 
             /// <summary>
             /// Constructor
@@ -362,6 +364,27 @@ namespace ASCOM.VXAscom
             public double TrackingRate
             { get; set; }
 
+            /// <summary>
+            /// The fast (=slewing) rate of this axis in degrees/second
+            /// </summary>
+            public double FastRate
+            {
+                get
+                {
+                    return StatusValues[AxisStatus.Fast] * SiderialTrackingSpeed;
+                }
+                set
+                {
+                    int ratio = (int)(value / SiderialTrackingSpeed);
+                    if (ratio != StatusValues[AxisStatus.Fast])
+                    {
+                        StatusValues[AxisStatus.Fast] = ratio;
+                        SetControllerStatus(AxisStatus.Fast, ratio);
+                    }
+                }
+            }
+
+
             protected abstract int CBacklash
             {
                 get;
@@ -384,7 +407,11 @@ namespace ASCOM.VXAscom
                 set;
             }
 
-            public void StartRotate()
+            public void StartRotate(double rate)
+            {
+            }
+
+            public void StopRotate()
             {
             }
 

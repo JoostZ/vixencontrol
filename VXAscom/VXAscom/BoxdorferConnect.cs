@@ -27,12 +27,14 @@ namespace ASCOM.VXAscom
             writeRaGotoStop = 0xB5,
             writeRaBacklash = 0x11,
             readRaBacklash = 0x12,
-            readRALimit = 0xD2,
-            writeRALimit = 0xD1,
+            readRaFast = 0xDE,
+            writeRaFast = 0xBE,
             writeRAMicro = 0xD0,
             readRAMicro = 0xD4,
             readRaCurrentPos = 0xB7,
             resetRaCurrentPos = 0xB8,
+            readRaAccLowerLimit = 0xD1,
+            writeRaAccLowerLimit = 0xD2,
             readRaAcceleration = 0xD5,
             writeRaAcceleration = 0xD6,
             readRaCurrentAccleration = 0xD9,
@@ -90,9 +92,13 @@ namespace ASCOM.VXAscom
                                                                 writeCommand = (byte)CommandByte.writeRaAccelerationUpdate}
                                                                 },
                     {Registers.RaAccLimit, new AccessCommands {  
-                                                                readCommand = (byte)CommandByte.readRALimit,
-                                                                writeCommand = (byte)CommandByte.writeRALimit}
+                                                                readCommand = (byte)CommandByte.readRaAccLowerLimit,
+                                                                writeCommand = (byte)CommandByte.writeRaAccLowerLimit}
                                                                 },
+                   {Registers.RaFast, new AccessCommands {
+                                                            readCommand = (byte)CommandByte.readRaFast,
+                                                            writeCommand = (byte)CommandByte.writeRaFast}
+                                                            },
                                                                
             };
 
@@ -181,11 +187,15 @@ namespace ASCOM.VXAscom
                     byte? command = accessMap[aRegister].readCommand;
                     if (command.HasValue)
                     {
-                        byte[] theCommand = { (byte)command };
+                        byte[] theReadData;
+                        lock (Connection)
+                        {
+                            byte[] theCommand = { (byte)command };
 
-                        Connection.TransmitBinary(ref theCommand);
+                            Connection.TransmitBinary(ref theCommand);
 
-                        byte[] theReadData = Connection.ReceiveCountedBinary(4);
+                            theReadData = Connection.ReceiveCountedBinary(4);
+                        }
 
                         UInt32 result = 0;
                         for (int i = 0; i < 4; ++i)
@@ -213,10 +223,13 @@ namespace ASCOM.VXAscom
                     byte? command = accessMap[aRegister].writeCommand;
                     if (command.HasValue)
                     {
-                        SendLong(aValue);
-                        byte[] theCommand = { (byte)command };
+                        lock (Connection)
+                        {
+                            SendLong(aValue);
+                            byte[] theCommand = { (byte)command };
 
-                        Connection.TransmitBinary(ref theCommand);
+                            Connection.TransmitBinary(ref theCommand);
+                        }
                     }
                 }
             }
@@ -231,15 +244,13 @@ namespace ASCOM.VXAscom
                 Debug.Assert(commandMap.ContainsKey(aCommand));
                 if (Connection != null)
                 {
-                    byte[] theCommand = { commandMap[aCommand] };
-                    Connection.TransmitBinary(ref theCommand);
+                    lock (Connection)
+                    {
+                        byte[] theCommand = { commandMap[aCommand] };
+                        Connection.TransmitBinary(ref theCommand);
+                    }
                 }
             }
-
-            #endregion
-
-            #region IControllerConnect Members
-
 
             public bool Connected
             {
