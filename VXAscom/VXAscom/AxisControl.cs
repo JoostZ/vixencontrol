@@ -18,39 +18,9 @@ namespace ASCOM.VXAscom
     {
         using Controller;
 
-        /// <summary>
-        /// The registers defined for an axis
-        /// </summary>
-        /// <remarks>
-        /// These are values for a generic axis. The actual registers are defined in the derived classes (for RA and DEC)
-        /// </remarks>
-        public enum AxisStatus
-        {
-            Acceleration,
-            AccelerationUpdate,
-            AccelerationLimit,
-            Position,
-            Fast,
-        };
+        
 
-        /// <summary>
-        /// The commands that can be sent to the controller
-        /// </summary>
-        /// <remarks>
-        /// These are values for a generic axis. The actual commands are defined in the derived classes (for RA and DEC)
-        /// </remarks>
-        public enum AxisCommands
-        {
-            TrackingOn,
-            TrackingOff,
-            FastOn,
-            FastOff,
-            LeftOn,
-            LeftOff,
-            RightOn,
-            RightOff
-        };
-
+        
         /// <summary>
         /// Base class for the control of an axis of the mount
         /// </summary>
@@ -59,6 +29,47 @@ namespace ASCOM.VXAscom
         /// sent to the controller.
         public abstract class AxisControl : IUpdatable, INotifyPropertyChanged
         {
+            /// <summary>
+            /// Direction of movement of the axis
+            /// </summary>
+            public enum Direction
+            {
+                forward,
+                backward
+            }
+            /// <summary>
+            /// The registers defined for an axis
+            /// </summary>
+            /// <remarks>
+            /// These are values for a generic axis. The actual registers are defined in the derived classes (for RA and DEC)
+            /// </remarks>
+            public enum Status
+            {
+                Acceleration,
+                AccelerationUpdate,
+                AccelerationLimit,
+                Position,
+                Fast,
+            };
+
+            /// <summary>
+            /// The commands that can be sent to the controller
+            /// </summary>
+            /// <remarks>
+            /// These are values for a generic axis. The actual commands are defined in the derived classes (for RA and DEC)
+            /// </remarks>
+            public enum AxisCommands
+            {
+                TrackingOn,
+                TrackingOff,
+                FastOn,
+                FastOff,
+                LeftOn,
+                LeftOff,
+                RightOn,
+                RightOff
+            };
+
      
             /// <summary>
             /// The tracking rate needed for siderial tracking in degrees per second
@@ -92,62 +103,9 @@ namespace ASCOM.VXAscom
             protected System.Threading.Timer pulseTimer = null;
 
             protected AxisCommands pulseOffCommand;
+            
+            private static Logger logger = LogManager.GetCurrentClassLogger();
 
-            /// <summary>
-            /// Switch the axis motor on (in slow speed) during a specified time
-            /// </summary>
-            /// <param name="aPositive">Direction to turn. true means in anti-clockwise direction</param>
-            /// <param name="duration">The duration in milli seconds that the motor should turn</param>
-            public void Pulse(bool aPositive, Int32 duration)
-            {
-                Logger theLog = LogManager.GetCurrentClassLogger();
-                theLog.Debug("Pulse {0}, {1}", aPositive, duration);
-
-                if (pulseOffCommand != 0)
-                {
-                    theLog.Debug("Already pulsing: ignore");
-                    return;
-                }
-
-                // Switch to slow speed
-                SendCommand(AxisCommands.FastOff);
-
-                // Start turning in the right direction
-                if (aPositive)
-                {
-                    theLog.Debug("Start pulse {0}", AxisCommands.RightOn);
-                    SendCommand(AxisCommands.RightOn);
-                    pulseOffCommand = AxisCommands.RightOff;
-                }
-                else
-                {
-                    theLog.Debug("Start pulse {0}", AxisCommands.LeftOn);
-                    SendCommand(AxisCommands.LeftOn);
-                    pulseOffCommand = AxisCommands.LeftOff;
-                }
-
-                // Start a timer
-                pulseTimer = new System.Threading.Timer(PulseTimeout, this, duration, Timeout.Infinite);
-            }
-
-            private void EndPulse()
-            {
-                Logger theLog = LogManager.GetCurrentClassLogger();
-                theLog.Debug("Stop pulse {0}", pulseOffCommand);
-                // Stop the movement
-                SendCommand(pulseOffCommand);
-                pulseOffCommand = 0;
-
-                // Go back to fast mode
-                SendCommand(AxisCommands.FastOn);
-            }
-      
-            static void PulseTimeout(object state)
-            {
-                AxisControl me = state as AxisControl;
-                me.pulseTimer.Dispose();
-                me.EndPulse();
-            }
 
 
             /// <summary>
@@ -191,6 +149,17 @@ namespace ASCOM.VXAscom
                     return String.Format("{0} {1:00}\' {2:00.00}", (int)theAngle.Deg, theAngle.Minutes, theAngle.Seconds);
                 }
             }
+
+            /// <summary>
+            /// The angle to move to in the nex goto
+            /// </summary>
+            public Angle Target { set; get; }
+
+            /// <summary>
+            /// The speed (in degrees/second) in fast movement
+            /// </summary>
+            public double FastSpeed { set; get; }
+
             #region Controller interface
 
             /// <summary>
@@ -228,7 +197,7 @@ namespace ASCOM.VXAscom
             /// </summary>
             /// <param name="aStatus">The register to be read. It is the <i>generic axis</i> register</param>
             /// <returns>The value of the register</returns>
-            public Int32 GetControllerStatus(AxisStatus aStatus)
+            protected Int32 GetControllerStatus(Status aStatus)
             {
                 Debug.Assert(StatusRegister.ContainsKey(aStatus));
                 Controller.Registers theRegister = StatusRegister[aStatus];
@@ -240,7 +209,7 @@ namespace ASCOM.VXAscom
             /// </summary>
             /// <param name="aStatus">The register to be written to. It is the <i>generic axis</i> register</param>
             /// <param name="aValue">The value to write in the register</param>
-            public void SetControllerStatus(AxisStatus aStatus, Int32 aValue)
+            protected void SetControllerStatus(Status aStatus, Int32 aValue)
             {
                 Debug.Assert(StatusRegister.ContainsKey(aStatus));
                 Controller.Registers theRegister = StatusRegister[aStatus];
@@ -251,7 +220,7 @@ namespace ASCOM.VXAscom
             /// Write a command to the controller
             /// </summary>
             /// <param name="aCommand">The command to be written. It is the <i>generic axis</i> command</param>
-            public void SendCommand(AxisCommands aCommand)
+            protected void SendCommand(AxisCommands aCommand)
             {
                 Debug.Assert(CommandRegister.ContainsKey(aCommand));
                 Controller.Commands theCommand = CommandRegister[aCommand];
@@ -268,7 +237,7 @@ namespace ASCOM.VXAscom
             /// This property reflects a local cache. However when settin the property
             /// the value will also be written to the controller.
             /// </remarks>
-            public Int32 this[AxisStatus aStatus]
+            public Int32 this[Status aStatus]
             {
                 get
                 {
@@ -291,11 +260,11 @@ namespace ASCOM.VXAscom
             {
                 get
                 {
-                    return this[AxisStatus.Acceleration] / 100.0;
+                    return this[Status.Acceleration] / 100.0;
                 }
                 set
                 {
-                    this[AxisStatus.Acceleration] = (int)(value * 100.0);
+                    this[Status.Acceleration] = (int)(value * 100.0);
                 }
             }
 
@@ -303,22 +272,22 @@ namespace ASCOM.VXAscom
             {
                 get
                 {
-                    return 0.1 * this[AxisStatus.AccelerationUpdate];
+                    return 0.1 * this[Status.AccelerationUpdate];
                 }
                 set
                 {
-                    this[AxisStatus.AccelerationUpdate] = (int)(value * 10);
+                    this[Status.AccelerationUpdate] = (int)(value * 10);
                 }
             }
             public double AccLimit
             {
                 get
                 {
-                    return this[AxisStatus.AccelerationLimit];
+                    return this[Status.AccelerationLimit];
                 }
                 set
                 {
-                    this[AxisStatus.AccelerationLimit] = (int)(value);
+                    this[Status.AccelerationLimit] = (int)(value);
                 }
             }
             #endregion
@@ -371,15 +340,15 @@ namespace ASCOM.VXAscom
             {
                 get
                 {
-                    return StatusValues[AxisStatus.Fast] * SiderialTrackingSpeed;
+                    return StatusValues[Status.Fast] * SiderialTrackingSpeed;
                 }
                 set
                 {
                     int ratio = (int)(value / SiderialTrackingSpeed);
-                    if (ratio != StatusValues[AxisStatus.Fast])
+                    if (ratio != StatusValues[Status.Fast])
                     {
-                        StatusValues[AxisStatus.Fast] = ratio;
-                        SetControllerStatus(AxisStatus.Fast, ratio);
+                        StatusValues[Status.Fast] = ratio;
+                        SetControllerStatus(Status.Fast, ratio);
                     }
                 }
             }
@@ -391,15 +360,6 @@ namespace ASCOM.VXAscom
                 set;
             }
 
-            #endregion
-
-            /// <summary>
-            /// Rotate around the axis to the specified target angle
-            /// </summary>
-            /// <param name="target">The angle to move to</param>
-            public void Goto(Angle target)
-            {
-            }
 
             public virtual int Backlash
             {
@@ -407,14 +367,156 @@ namespace ASCOM.VXAscom
                 set;
             }
 
-            public void StartRotate(double rate)
+            #endregion
+
+            /// <summary>
+            /// Switch the axis motor on (in slow speed) during a specified time
+            /// </summary>
+            /// <param name="aDirection">Direction to turn.</param>
+            /// <param name="duration">The duration in milli seconds that the motor should turn</param>
+            public void Pulse(Direction aDirection, Int32 duration)
+            {
+                logger.Debug("Pulse {0}, {1}", aDirection, duration);
+
+                if (pulseOffCommand != 0)
+                {
+                    logger.Debug("Already pulsing: ignore");
+                    return;
+                }
+
+                // Switch to slow speed
+                SendCommand(AxisCommands.FastOff);
+
+                // Start turning in the right direction
+                if (aDirection == Direction.forward)
+                {
+                    logger.Debug("Start pulse {0}", AxisCommands.RightOn);
+                    SendCommand(AxisCommands.RightOn);
+                    pulseOffCommand = AxisCommands.RightOff;
+                }
+                else
+                {
+                    logger.Debug("Start pulse {0}", AxisCommands.LeftOn);
+                    SendCommand(AxisCommands.LeftOn);
+                    pulseOffCommand = AxisCommands.LeftOff;
+                }
+
+                // Start a timer
+                pulseTimer = new System.Threading.Timer(PulseTimeout, this, duration, Timeout.Infinite);
+            }
+
+            private void EndPulse()
+            {
+                logger.Debug("Stop pulse {0}", pulseOffCommand);
+                // Stop the movement
+                SendCommand(pulseOffCommand);
+                pulseOffCommand = 0;
+
+                // Go back to fast mode
+                SendCommand(AxisCommands.FastOn);
+            }
+
+            static void PulseTimeout(object state)
+            {
+                AxisControl me = state as AxisControl;
+                me.pulseTimer.Dispose();
+                me.EndPulse();
+            }
+
+            public bool IsPulseGuiding
+            {
+                get
+                {
+                    return pulseOffCommand != 0;
+                }
+            }
+
+
+            /// <summary>
+            /// Start a goto to the current target
+            /// </summary>
+            public void StartGoto()
             {
             }
 
-            public void StopRotate()
+            /// <summary>
+            /// Abort the current Goto
+            /// </summary>
+            public void StopGoto()
             {
             }
 
+            class RotateStatus
+            {
+                public bool wasTracking;
+                public double oldFastSpeed;
+                public AxisCommands moveOffCommand;
+            };
+
+            private RotateStatus rotateStatus = null;
+
+            /// <summary>
+            /// Start fast rotation in the specified direction
+            /// </summary>
+            /// <param name="aSpeed">The speed with which to move. The sign indicates the direction. A value of 0 indicates to stop
+            /// the rotation
+            /// </param>
+            public void Rotate(double aSpeed)
+            {
+                Int32 controllerSpeed = (Int32)(aSpeed / SiderialTrackingSpeed);
+
+                if (controllerSpeed == 0)
+                {
+                    // This is a stop command
+                    if (rotateStatus == null)
+                    {
+                        // We are not rotating. Ignore the command
+                        logger.Trace("Ignoring stop rotate while not rotating");
+                        return;
+                    }
+
+                    // Stop the rotation
+                    SendCommand(rotateStatus.moveOffCommand);
+
+                    // Restore the old situation
+                    FastRate = rotateStatus.oldFastSpeed;
+                    if (rotateStatus.wasTracking)
+                    {
+                        IsTracking = true;
+                    }
+
+                    rotateStatus = null;
+                }
+                else
+                {
+                    // Start rotation.
+
+                    // First gather the current status
+                    rotateStatus = new RotateStatus();
+                    rotateStatus.wasTracking = IsTracking;
+                    rotateStatus.oldFastSpeed = FastSpeed;
+
+                    AxisCommands onCommmand;
+
+                    if (aSpeed >= 0)
+                    {
+                        onCommmand = AxisCommands.RightOn;
+                        rotateStatus.moveOffCommand = AxisCommands.RightOff;
+                    }
+                    else
+                    {
+                        aSpeed = -aSpeed;
+                        onCommmand = AxisCommands.LeftOn;
+                        rotateStatus.moveOffCommand = AxisCommands.LeftOff;
+                    }
+
+                    IsTracking = false;
+                    FastRate = aSpeed;
+                    SendCommand(onCommmand);
+
+
+                }
+            }
 
             /// <summary>
             /// Get the current position from the controller
@@ -424,13 +526,13 @@ namespace ASCOM.VXAscom
             /// by the actual AxisControl</remarks>
             protected Int32 GetPosition()
             {
-                return GetControllerStatus(AxisStatus.Position);
+                return GetControllerStatus(Status.Position);
             }
 
             /// <summary>
             /// Mapping between Axis generic and axis specific registers
             /// </summary>
-            protected Dictionary<AxisStatus, Registers> StatusRegister
+            protected Dictionary<Status, Registers> StatusRegister
             {
                 get;
                 set;
@@ -439,7 +541,7 @@ namespace ASCOM.VXAscom
             /// <summary>
             /// Local cache of all axis generic registers
             /// </summary>
-            public Dictionary<AxisStatus, Int32> StatusValues
+            protected Dictionary<Status, Int32> StatusValues
             {
                 get; set;
             }
@@ -457,13 +559,13 @@ namespace ASCOM.VXAscom
             /// </summary>
             public void LoadStatus()
             {
-                foreach (AxisStatus stat in StatusRegister.Keys)
+                foreach (Status stat in StatusRegister.Keys)
                 {
                     StatusValues[stat] = ReadInt(StatusRegister[stat]);
                 }
             }
 
-            public Int32 LoadStatus(AxisStatus stat)
+            protected Int32 LoadStatus(Status stat)
             {
                 return StatusValues[stat] = ReadInt(StatusRegister[stat]);
             }
@@ -473,7 +575,7 @@ namespace ASCOM.VXAscom
             /// </summary>
             public void StoreStatus()
             {
-                foreach (AxisStatus stat in StatusValues.Keys)
+                foreach (Status stat in StatusValues.Keys)
                 {
                     WriteInt(StatusRegister[stat], StatusValues[stat]);
                 }

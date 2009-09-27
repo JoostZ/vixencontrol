@@ -16,19 +16,21 @@ namespace ASCOM.VXAscom
                 : base(aController)
             {
                 // Initialize the commands for the RA status registers
-                StatusRegister = new System.Collections.Generic.Dictionary<AxisStatus, Registers> {
-                    {AxisStatus.Acceleration, Registers.RaAcceleration},
-                    {AxisStatus.AccelerationUpdate, Registers.RaAccUpdate},
-                    {AxisStatus.AccelerationLimit, Registers.RaAccLimit},
-                    {AxisStatus.Position, Registers.RaPosition},
-                    {AxisStatus.Fast, Registers.RaFast},
+                StatusRegister = new System.Collections.Generic.Dictionary<Status, Registers> {
+                    {Status.Acceleration, Registers.RaAcceleration},
+                    {Status.AccelerationUpdate, Registers.RaAccUpdate},
+                    {Status.AccelerationLimit, Registers.RaAccLimit},
+                    {Status.Position, Registers.RaPosition},
+                    {Status.Fast, Registers.RaFast},
                 };
 
                 // Set the default values for the RA status registers
-                StatusValues = new Dictionary<AxisStatus, Int32> { 
-                    {AxisStatus.Acceleration, 2410},
-                    {AxisStatus.AccelerationUpdate, 25},
-                    {AxisStatus.AccelerationLimit, 15},
+                StatusValues = new Dictionary<Status, Int32> { 
+                    {Status.Acceleration, 2410},
+                    {Status.AccelerationUpdate, 25},
+                    {Status.AccelerationLimit, 15},
+                    {Status.Position, 0},
+                    {Status.Fast, 20},
                 };
 
                 CommandRegister = new Dictionary<AxisCommands, Commands> {

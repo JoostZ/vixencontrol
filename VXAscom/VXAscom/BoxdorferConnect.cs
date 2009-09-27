@@ -115,6 +115,8 @@ namespace ASCOM.VXAscom
                     {Commands.RaRightOff, (byte)CommandByte.writeRightOff},
                 };
 
+            private static Logger logger = LogManager.GetCurrentClassLogger();
+
             Serial _connection;
             public Serial Connection
             {
@@ -128,9 +130,8 @@ namespace ASCOM.VXAscom
             /// <param name="aSerial">The serial port to use in the communication</param>
             public BoxdorferConnect(Serial aSerial)
             {
-                Log = LogManager.GetCurrentClassLogger();
                 Connection = aSerial;
-                Log.Debug("Creating BoxdorfeConnect with serial for {0}", aSerial);
+                logger.Debug("Creating BoxdorfeConnect with serial for {0}", aSerial);
             }
 
             /// <summary>
@@ -138,12 +139,10 @@ namespace ASCOM.VXAscom
             /// </summary>
             public BoxdorferConnect()
             {
-                Log =LogManager.GetCurrentClassLogger();
                 Connection = null;
-                Log.Debug("Creating BoxdorfeConnect without serial");
+                logger.Debug("Creating BoxdorfeConnect without serial");
             }
 
-            private Logger Log { get; set; }
             /// <summary>
             /// Write a 4 byte integer to the controller
             /// </summary>
@@ -158,7 +157,7 @@ namespace ASCOM.VXAscom
             /// </remarks>
             private void SendLong(Int32 aValue)
             {
-                Log.Debug("SendLong {0}", aValue);
+                logger.Debug("SendLong {0}", aValue);
                 UInt32 theValue = (UInt32)aValue;
                 byte[] cmds = new byte[8];
                 for (int i = 0, j = 0; i < 4; i++)
@@ -202,11 +201,11 @@ namespace ASCOM.VXAscom
                         {
                             result = (result << 8) | theReadData[i];
                         }
-                        Log.Debug("Read register {0} value = {1}", aRegister, result);
+                        logger.Debug("Read register {0} value = {1}", aRegister, result);
                         return (Int32)result;
                     }
                 }
-                Log.Debug("No connection while reading register {0}", aRegister);
+                logger.Debug("No connection while reading register {0}", aRegister);
                 return 0;
             }
 
@@ -240,7 +239,7 @@ namespace ASCOM.VXAscom
             /// <param name="aCommand"></param>
             public void Command(Commands aCommand)
             {
-                Log.Debug("Send command {0}", aCommand);
+                logger.Debug("Send command {0}", aCommand);
                 Debug.Assert(commandMap.ContainsKey(aCommand));
                 if (Connection != null)
                 {
