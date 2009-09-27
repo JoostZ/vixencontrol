@@ -13,7 +13,7 @@
 // Implements:	ASCOM Telescope interface version: 2.0
 // Author:		(XXX) Your N. Here <your@email.here>
 //
-// Edit Log:
+// Edit logger:
 //
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
@@ -47,7 +47,7 @@ namespace ASCOM.VXAscom
     /// </summary>
     [Guid("8a50875e-6eba-421f-b2b3-401fc4d22fd8")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ITelescope
+    public class Telescope : ITelescope, IUpdatable
     {
         //
         // Driver ID and descriptive string that shows in the Chooser
@@ -64,6 +64,17 @@ namespace ASCOM.VXAscom
             {
                 return s_csDriverID;
             }
+        }
+
+        uint errorBase = 0x80040400;
+        internal enum DriverErrors
+        {
+            AxisNotSupported,
+        }
+
+        internal int ErrorCode(DriverErrors aError)
+        {
+            return (int)(errorBase + (int)aError);
         }
 
         //
@@ -83,6 +94,22 @@ namespace ASCOM.VXAscom
 
         private Helper.Profile _profile = new Profile();
         private Logger TheLogger { get; set; }
+
+        internal double Axis2RA()
+        {
+            double ra = SiderealTime - RaAxis.Angle.Degrees / 15.0;
+            while (ra < 0)
+            {
+                ra += 24.0;
+            }
+
+            while (ra >= 24.0)
+            {
+                ra -= 24.0;
+            }
+
+            return ra;
+        }
 
         //
         // Constructor - Must be public for COM registration!
@@ -117,9 +144,10 @@ namespace ASCOM.VXAscom
             TheLogger.Debug("Serial = {0}", theSerial);
             Controller = new BoxdorferConnect(theSerial);
 
-            m_Axes = new Axis.AxisControl[2];
-            m_Axes[0] = new Axis.RaAxisControl(Controller);
-            m_Axes[1] = new Axis.DecAxisController(Controller);
+            m_Axes = new Axis.AxisControl[] {
+                new Axis.RaAxisControl(Controller),
+                //new Axis.DecAxisController(Controller);
+            };                                                                                                                        
             RaAxis = m_Axes[0];
         }
 
@@ -165,14 +193,16 @@ namespace ASCOM.VXAscom
 
         public void AbortSlew()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("AbortSlew");
+            foreach (Axis.AxisControl axis in m_Axes)
+            {
+                axis.StopGoto();
+                axis.Rotate(0.0);
+            }
         }
 
         public AlignmentModes AlignmentMode
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("AlignmentMode", false); }
+            get { return AlignmentModes.algGermanPolar; }
         }
 
         public double Altitude
@@ -213,8 +243,6 @@ namespace ASCOM.VXAscom
                     return m_AxisRates[0];
                 case TelescopeAxes.axisSecondary:
                     return m_AxisRates[1];
-                case TelescopeAxes.axisTertiary:
-                    return m_AxisRates[2];
                 default:
                     return null;
             }
@@ -228,20 +256,24 @@ namespace ASCOM.VXAscom
 
         public bool CanFindHome
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanFindHome", false); }
+            get { return false; }
         }
 
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("CanMoveAxis");
+            if (Axis == TelescopeAxes.axisTertiary)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public bool CanPark
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanPark", false); }
+            get { return false; }
         }
 
         public bool CanPulseGuide
@@ -269,8 +301,7 @@ namespace ASCOM.VXAscom
 
         public bool CanSetPierSide
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetPierSide", false); }
+            get { return false; }
         }
 
         public bool CanSetRightAscensionRate
@@ -281,20 +312,17 @@ namespace ASCOM.VXAscom
 
         public bool CanSetTracking
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSetTracking", false); }
+            get { return true; }
         }
 
         public bool CanSlew
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlew", false); }
+            get { return true; }
         }
 
         public bool CanSlewAltAz
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("CanSlewAltAz", false); }
+            get { return false; }
         }
 
         public bool CanSlewAltAzAsync
@@ -346,14 +374,13 @@ namespace ASCOM.VXAscom
 
         public bool Connected
         {
-            // TODO Replace this with your implementation
             get {
                 return (Controller.Connection != null) && Controller.Connection.Connected;
             }
             set {
                 if (Controller.Connection == null)
                 {
-                    System.Windows.Forms.MessageBox.Show("No serial connection is setup");
+                    TheLogger.Debug("No serial connection is setup");
                     return;
                 }
                 else
@@ -409,8 +436,7 @@ namespace ASCOM.VXAscom
 
         public EquatorialCoordinateType EquatorialSystem
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("EquatorialCoordinateType", false); }
+            get { return EquatorialCoordinateType.equLocalTopocentric; }
         }
 
         public void FindHome()
@@ -448,13 +474,25 @@ namespace ASCOM.VXAscom
         public bool IsPulseGuiding
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("IsPulseGuiding", false); }
+            get {
+                foreach (Axis.AxisControl axis in m_Axes)
+                {
+                    if (axis.IsPulseGuiding)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("MoveAxis");
+            if ((int)Axis > m_Axes.Length - 1)
+            {
+                throw new DriverException("Axis not supported", ErrorCode(DriverErrors.AxisNotSupported));
+            }
+            m_Axes[(int)Axis].Rotate(Rate);
         }
 
         public string Name
@@ -472,7 +510,7 @@ namespace ASCOM.VXAscom
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
             Axis.AxisControl theAxis = null;
-            bool toRight = false;
+            Axis.AxisControl.Direction  theDirection;
 
             if (Direction == GuideDirections.guideEast || Direction == GuideDirections.guideWest)
             {
@@ -483,21 +521,29 @@ namespace ASCOM.VXAscom
                 theAxis = null;
             }
 
-            if (Direction == GuideDirections.guideWest || Direction == GuideDirections.guideSouth)
+            if (Direction == GuideDirections.guideWest || Direction == GuideDirections.guideNorth)
             {
-                toRight = true;
+                theDirection = Axis.AxisControl.Direction.forward;
+            }
+            else
+            {
+
+                theDirection = Axis.AxisControl.Direction.backward;
             }
 
             if (theAxis != null)
             {
-                theAxis.Pulse(toRight, Duration);
+                theAxis.Pulse(theDirection, Duration);
             }
         }
 
         public double RightAscension
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("RightAscension", false); }
+            get
+            {
+                RaAxis.Update();
+                return Axis2RA();
+            }
         }
 
         public double RightAscensionRate
@@ -543,8 +589,11 @@ namespace ASCOM.VXAscom
 
         public double SiderealTime
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("SiderealTime", false); }
+            get
+            {
+                LocalSiderialTime.LST.Update();
+                return LocalSiderialTime.LST.LAST;
+            }
         }
 
         public double SiteElevation
@@ -688,6 +737,15 @@ namespace ASCOM.VXAscom
 
         #endregion
 
+
+        #region IUpdatable Members
+
+        public void Update()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
     }
 
     //

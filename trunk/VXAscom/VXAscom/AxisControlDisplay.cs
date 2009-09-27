@@ -10,7 +10,7 @@ namespace ASCOM.VXAscom
 {
     //using Axis;
 
-    [DefaultBindingProperty("Axis")]
+    [DefaultBindingProperty("axis")]
     public partial class AxisControlDisplay : UserControl
     {
         public AxisControlDisplay()
