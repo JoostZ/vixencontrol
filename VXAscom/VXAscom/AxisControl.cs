@@ -10,7 +10,7 @@ using NLog;
 
 using AAnet;
 
-using ASCOM.Helper;
+using ASCOM.Utilities;
 
 namespace ASCOM.VXAscom
 {
@@ -598,8 +598,8 @@ namespace ASCOM.VXAscom
                     }
                     catch (Exception ex)
                     {
-                        ASCOM.Helper.Util util = new Util();
-                        util.MessageBox(ex.Message, MessageBoxOptions.mbOKOnly, "Exception");
+                        ASCOM.Utilities.Util util = new Util();
+                        //MessageBox(ex.Message, MessageBoxOptions.mbOKOnly, "Exception");
                     }
                 }
             }
