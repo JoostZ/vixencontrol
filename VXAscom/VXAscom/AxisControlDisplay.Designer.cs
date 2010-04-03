@@ -35,6 +35,7 @@
             System.Windows.Forms.Label backlashLabel;
             System.Windows.Forms.Label trackingRateLabel;
             this.accelerationTextBox = new System.Windows.Forms.TextBox();
+            this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.accLimitTextBox = new System.Windows.Forms.TextBox();
             this.accUpdateTextBox = new System.Windows.Forms.TextBox();
             this.backlashTextBox = new System.Windows.Forms.TextBox();
@@ -46,14 +47,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
-            this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             accelerationLabel = new System.Windows.Forms.Label();
             accLimitLabel = new System.Windows.Forms.Label();
             accUpdateLabel = new System.Windows.Forms.Label();
             backlashLabel = new System.Windows.Forms.Label();
             trackingRateLabel = new System.Windows.Forms.Label();
-            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // accelerationLabel
@@ -103,15 +103,19 @@
             // 
             // accelerationTextBox
             // 
-            this.accelerationTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "axis.Acceleration", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, null, "N2"));
+            this.accelerationTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "Acceleration", true));
             this.accelerationTextBox.Location = new System.Drawing.Point(90, 19);
             this.accelerationTextBox.Name = "accelerationTextBox";
             this.accelerationTextBox.Size = new System.Drawing.Size(55, 20);
             this.accelerationTextBox.TabIndex = 2;
             // 
+            // axisControlDisplayBindingSource
+            // 
+            this.axisControlDisplayBindingSource.DataSource = typeof(ASCOM.VXAscom.Axis.AxisControl);
+            // 
             // accLimitTextBox
             // 
-            this.accLimitTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "axis.AccLimit", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, null, "N0"));
+            this.accLimitTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "AccLimit", true));
             this.accLimitTextBox.Location = new System.Drawing.Point(90, 45);
             this.accLimitTextBox.Name = "accLimitTextBox";
             this.accLimitTextBox.Size = new System.Drawing.Size(55, 20);
@@ -119,7 +123,7 @@
             // 
             // accUpdateTextBox
             // 
-            this.accUpdateTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "axis.AccUpdate", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, null, "N1"));
+            this.accUpdateTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "AccUpdate", true));
             this.accUpdateTextBox.Location = new System.Drawing.Point(90, 71);
             this.accUpdateTextBox.Name = "accUpdateTextBox";
             this.accUpdateTextBox.Size = new System.Drawing.Size(55, 20);
@@ -127,7 +131,7 @@
             // 
             // backlashTextBox
             // 
-            this.backlashTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "axis.Backlash", true));
+            this.backlashTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "Backlash", true));
             this.backlashTextBox.Location = new System.Drawing.Point(112, 154);
             this.backlashTextBox.Name = "backlashTextBox";
             this.backlashTextBox.Size = new System.Drawing.Size(116, 20);
@@ -135,7 +139,7 @@
             // 
             // isTrackingCheckBox
             // 
-            this.isTrackingCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.axisControlDisplayBindingSource, "axis.IsTracking", true));
+            this.isTrackingCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.axisControlDisplayBindingSource, "IsTracking", true));
             this.isTrackingCheckBox.Enabled = false;
             this.isTrackingCheckBox.Location = new System.Drawing.Point(211, 112);
             this.isTrackingCheckBox.Name = "isTrackingCheckBox";
@@ -145,7 +149,7 @@
             // 
             // trackingRateTextBox
             // 
-            this.trackingRateTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "axis.TrackingRate", true));
+            this.trackingRateTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.axisControlDisplayBindingSource, "TrackingRate", true));
             this.trackingRateTextBox.Location = new System.Drawing.Point(112, 210);
             this.trackingRateTextBox.Name = "trackingRateTextBox";
             this.trackingRateTextBox.Size = new System.Drawing.Size(116, 20);
@@ -211,17 +215,13 @@
             // 
             this.angleNewAngleControl.AutoSize = true;
             this.angleNewAngleControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.angleNewAngleControl.DataBindings.Add(new System.Windows.Forms.Binding("Angle", this.axisControlDisplayBindingSource, "axis.Angle", true));
+            this.angleNewAngleControl.DataBindings.Add(new System.Windows.Forms.Binding("Angle", this.axisControlDisplayBindingSource, "Angle", true));
             this.angleNewAngleControl.Label = "Position";
             this.angleNewAngleControl.Location = new System.Drawing.Point(3, 116);
             this.angleNewAngleControl.Margin = new System.Windows.Forms.Padding(0);
             this.angleNewAngleControl.Name = "angleNewAngleControl";
             this.angleNewAngleControl.Size = new System.Drawing.Size(145, 20);
             this.angleNewAngleControl.TabIndex = 8;
-            // 
-            // axisControlDisplayBindingSource
-            // 
-            this.axisControlDisplayBindingSource.DataSource = typeof(ASCOM.VXAscom.AxisControlDisplay);
             // 
             // AxisControlDisplay
             // 
@@ -239,9 +239,9 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "AxisControlDisplay";
             this.Size = new System.Drawing.Size(237, 233);
+            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
