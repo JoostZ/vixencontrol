@@ -35,7 +35,6 @@
             System.Windows.Forms.Label backlashLabel;
             System.Windows.Forms.Label trackingRateLabel;
             this.accelerationTextBox = new System.Windows.Forms.TextBox();
-            this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.accLimitTextBox = new System.Windows.Forms.TextBox();
             this.accUpdateTextBox = new System.Windows.Forms.TextBox();
             this.backlashTextBox = new System.Windows.Forms.TextBox();
@@ -47,13 +46,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.angleNewAngleControl = new AngleDisplay.NewAngleControl();
+            this.axisControlDisplayBindingSource = new System.Windows.Forms.BindingSource(this.components);
             accelerationLabel = new System.Windows.Forms.Label();
             accLimitLabel = new System.Windows.Forms.Label();
             accUpdateLabel = new System.Windows.Forms.Label();
             backlashLabel = new System.Windows.Forms.Label();
             trackingRateLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // accelerationLabel
@@ -108,10 +108,6 @@
             this.accelerationTextBox.Name = "accelerationTextBox";
             this.accelerationTextBox.Size = new System.Drawing.Size(55, 20);
             this.accelerationTextBox.TabIndex = 2;
-            // 
-            // axisControlDisplayBindingSource
-            // 
-            this.axisControlDisplayBindingSource.DataSource = typeof(ASCOM.VXAscom.Axis.AxisControl);
             // 
             // accLimitTextBox
             // 
@@ -223,6 +219,11 @@
             this.angleNewAngleControl.Size = new System.Drawing.Size(145, 20);
             this.angleNewAngleControl.TabIndex = 8;
             // 
+            // axisControlDisplayBindingSource
+            // 
+            this.axisControlDisplayBindingSource.DataMember = "Axis";
+            this.axisControlDisplayBindingSource.DataSource = typeof(ASCOM.VXAscom.AxisControlDisplay);
+            // 
             // AxisControlDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -239,9 +240,9 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "AxisControlDisplay";
             this.Size = new System.Drawing.Size(237, 233);
-            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axisControlDisplayBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
