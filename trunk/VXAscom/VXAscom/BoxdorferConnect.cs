@@ -5,7 +5,7 @@ using System.Diagnostics;
 using NLog;
 
 
-using ASCOM.Helper;
+using ASCOM.Utilities;
 
 namespace ASCOM.VXAscom
 {
@@ -169,7 +169,7 @@ namespace ASCOM.VXAscom
                     cmds[j++] = (byte)(0x80 | highNibble);
                     cmds[j++] = (byte)(lowNibble | 0x90);
                 }
-                Connection.TransmitBinary(ref cmds);
+                Connection.TransmitBinary(cmds);
             }
             #region IControllerConnect Members
 
@@ -191,7 +191,7 @@ namespace ASCOM.VXAscom
                         {
                             byte[] theCommand = { (byte)command };
 
-                            Connection.TransmitBinary(ref theCommand);
+                            Connection.TransmitBinary(theCommand);
 
                             theReadData = Connection.ReceiveCountedBinary(4);
                         }
@@ -227,7 +227,7 @@ namespace ASCOM.VXAscom
                             SendLong(aValue);
                             byte[] theCommand = { (byte)command };
 
-                            Connection.TransmitBinary(ref theCommand);
+                            Connection.TransmitBinary(theCommand);
                         }
                     }
                 }
@@ -246,7 +246,7 @@ namespace ASCOM.VXAscom
                     lock (Connection)
                     {
                         byte[] theCommand = { commandMap[aCommand] };
-                        Connection.TransmitBinary(ref theCommand);
+                        Connection.TransmitBinary(theCommand);
                     }
                 }
             }

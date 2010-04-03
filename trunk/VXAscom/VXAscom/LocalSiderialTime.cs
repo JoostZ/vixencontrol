@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-using ASCOM.Helper;
+using ASCOM.Utilities;
 
 
 namespace ASCOM.VXAscom
@@ -101,7 +101,7 @@ namespace ASCOM.VXAscom
         {
             get
             {
-                Util helper = new UtilClass();
+                Util helper = new Util();
                 return helper.HoursToHMS(LAST, ":", ":", "", 0);
             }
         }
@@ -156,7 +156,7 @@ namespace ASCOM.VXAscom
          */
         internal double GST(DateTime aDate)
         {
-            Helper2.UtilClass helper2 = new Helper2.UtilClass();
+            Utilities.Util helper2 = new Utilities.Util();
             double JD = helper2.DateUTCToJulian(aDate.Date);
             double gst0 = GST0(JD);
 

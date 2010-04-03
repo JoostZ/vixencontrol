@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-using ASCOM.Helper;
+using ASCOM.Utilities;
 
 namespace ASCOM.VXAscom
 {
@@ -16,15 +16,15 @@ namespace ASCOM.VXAscom
      */
     class ObservationLocation : INotifyPropertyChanged
     {
-        private Helper.Profile iProfile;
-        private Helper.Util iHelper;
+        private Utilities.Profile iProfile;
+        private Utilities.Util iHelper;
         private String iProgID;
 
         public ObservationLocation()
         {
-            iProfile = new Helper.ProfileClass();
-            iProfile.DeviceTypeV = "Telescope";
-            iHelper = new Helper.UtilClass();
+            iProfile = new Utilities.Profile();
+            iProfile.DeviceType = "Telescope";
+            iHelper = new Utilities.Util();
             iProgID = Telescope.ProgId;
 
             if (iProfile.IsRegistered(Telescope.ProgId))
@@ -80,8 +80,8 @@ namespace ASCOM.VXAscom
                 if (iLongitude != value)
                 {
                     iLongitude = value;
-                    Helper.Profile theProfile = new Helper.ProfileClass();
-                    theProfile.DeviceTypeV = "Telescope";
+                    Utilities.Profile theProfile = new Utilities.Profile();
+                    theProfile.DeviceType = "Telescope";
                     theProfile.WriteValue(iProgID, "Longitude", Convert.ToString(iLongitude), "");
                     NotifyPropertyChanged("Longitude");
                 }
@@ -167,9 +167,9 @@ namespace ASCOM.VXAscom
         public void IsSingleton()
         {
             //Telescope.RegisterASCOM(typeof(Telescope)); 
-            
-            Helper.Profile theProfile = new Helper.ProfileClass();
-            theProfile.DeviceTypeV = "Telescope";
+
+            Utilities.Profile theProfile = new Utilities.Profile();
+            theProfile.DeviceType = "Telescope";
             Assert.That(theProfile.IsRegistered(Telescope.ProgId));
 
             ObservationLocation theLocation = ObservationLocation.Location;
@@ -180,10 +180,10 @@ namespace ASCOM.VXAscom
         [Test]
         public void TestProfile()
         {
-            Telescope.RegisterASCOM(typeof(Telescope)); 
+            Telescope.RegisterASCOM(typeof(Telescope));
 
-            Helper.Profile theProfile = new Helper.ProfileClass();
-            theProfile.DeviceTypeV = "Telescope";
+            Utilities.Profile theProfile = new Utilities.Profile();
+            theProfile.DeviceType = "Telescope";
             Assert.That(theProfile.IsRegistered(Telescope.ProgId));
             ObservationLocation.Reset();
             try
@@ -213,8 +213,8 @@ namespace ASCOM.VXAscom
         [Test]
         public void TestLongitude()
         {
-            Helper.Profile theProfile = new Helper.ProfileClass();
-            theProfile.DeviceTypeV = "Telescope";
+            Utilities.Profile theProfile = new Utilities.Profile();
+            theProfile.DeviceType = "Telescope";
 
             theProfile.WriteValue(Telescope.ProgId, "Longitude", Convert.ToString(4.12345), "");
             ObservationLocation.Reset();

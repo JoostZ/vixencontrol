@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ASCOM.Helper;
+using ASCOM.Utilities;
 
 namespace ASCOM.VXAscom
 {

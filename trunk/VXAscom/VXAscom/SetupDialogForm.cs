@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 
 
-using ASCOM.Helper;
+using ASCOM.Utilities;
 
 namespace ASCOM.VXAscom
 {
@@ -41,17 +41,17 @@ namespace ASCOM.VXAscom
         }
 
         // List of supported baud rates
-        private PortSpeed[] baudList = {
-                PortSpeed.ps300,
-                PortSpeed.ps1200,
-                PortSpeed.ps4800,
-                PortSpeed.ps9600,
-                PortSpeed.ps14400,
-                PortSpeed.ps19200,
-                PortSpeed.ps28800,
-                PortSpeed.ps38400,
-                PortSpeed.ps57600,
-                PortSpeed.ps115200
+        private SerialSpeed[] baudList = {
+                SerialSpeed.ps300,
+                SerialSpeed.ps1200,
+                SerialSpeed.ps4800,
+                SerialSpeed.ps9600,
+                SerialSpeed.ps14400,
+                SerialSpeed.ps19200,
+                SerialSpeed.ps28800,
+                SerialSpeed.ps38400,
+                SerialSpeed.ps57600,
+                SerialSpeed.ps115200
             };
 
         public LocalSiderialTime LST
@@ -104,7 +104,7 @@ namespace ASCOM.VXAscom
                 comboPorts.SelectedIndex = 0;
             }
 
-            foreach (PortSpeed speed in baudList)
+            foreach (SerialSpeed speed in baudList)
             {
                 int value = (int)speed;
                 comboBaudRate.Items.Add(value.ToString());

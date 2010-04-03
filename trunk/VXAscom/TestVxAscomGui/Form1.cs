@@ -16,7 +16,7 @@ namespace TestVxAscomGui
     public partial class Form1 : Form, INotifyPropertyChanged 
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static ASCOM.Helper.Util util = new ASCOM.Helper.Util();
+        private static ASCOM.Utilities.Util util = new ASCOM.Utilities.Util();
 
         internal string progId = "ASCOM.VXAscom.Telescope";
         public Telescope Driver {get;set;}
