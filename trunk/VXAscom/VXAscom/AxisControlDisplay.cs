@@ -30,7 +30,7 @@ namespace ASCOM.VXAscom
                 _axis = value;
                 if (value != null && !this.DesignMode)
                 {
-                    axisControlDisplayBindingSource.DataSource = this;
+                    axisControlDisplayBindingSource.DataSource = value;
                 }
             }
         }
