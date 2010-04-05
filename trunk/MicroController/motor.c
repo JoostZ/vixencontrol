@@ -37,13 +37,18 @@ struct MotorStatus {
 	uint8_t ramping;	///< True if target frequency not yet reached
 
 	uint16_t rampSteps;	///< Number of steps still required to ramp up or down to the target frequency
-	float	rampStep;	///< Multiplaction step for frequency during ramp;
+	float	rampStep;	///< Multiplication step for frequency during ramp;
 	uint16_t	rampUpdate;	///< Counter used to delay ramping
 	uint16_t rampDelay;
 	float   acceleration;
 };
 
-void SetRaFrequency(float frequency, int8_t direction);
+enum Direction {
+	Forward = +1,
+	Backward = -1
+};
+
+void SetRaFrequency(float frequency, Direction direction);
 
 static struct MotorStatus raMotorStatus;
 
@@ -112,7 +117,7 @@ static void SetRaTimer()
 	}
 	if (raMotorStatus.lastDirection != 0 && raMotorStatus.lastDirection != raMotorStatus.currentDirection)
 	{
-		// Changingdirection
+		// Changing direction
 		raMotorStatus.backlashOffset = raMotorStatus.backlash - raMotorStatus.backlashOffset;
 		raMotorStatus.currentFrequency = raMotorStatus.limitFrequency;
 		raMotorStatus.ramping = 0;
@@ -377,7 +382,7 @@ void RampRA()
 	}
 	else
 	{
-		// Decelarating
+		// Decelerating
 		if (raMotorStatus.currentFrequency < raMotorStatus.limitFrequency)
 		{
 			raMotorStatus.currentFrequency = targetFrequency;
@@ -415,7 +420,7 @@ void RampRA()
 
 
 
-void SetRaFrequency(float frequency, int8_t direction)
+void SetRaFrequency(float frequency, Direction direction)
 {
 	raMotorStatus.targetDirection = direction;
 	raMotorStatus.targetFrequency = frequency;
@@ -433,14 +438,14 @@ void SetRaFrequency(float frequency, int8_t direction)
   * Calculate and set the RA frequency
   *
   * This function calculates the required frequency for the RA
-  * stepper motor based on the current value of buttons. Then if required,it changes the 
+  * stepper motor based on the current value of buttons. Then if required, it changes
   * the frequency of timer 1.
   */
  void CalculateAndSetRaFrequency()
  {
  	if (FastOn())
 	{
-		// For fast mode is not important if we are tracking
+		// For fast mode it is not important if we are tracking
 		if(ButtonRight())
 		{
 			SetRaFrequency(fastFrequency, +1);
