@@ -2,11 +2,6 @@
  * \file TelescopeControl.h
  */
 
-/**
- * \brief This is the clock frequency of the chip
- */
-#define F_CPU (1000000L)
-
 #include <avr/io.h>
 
 /** \name User friendly names of the physical ports
