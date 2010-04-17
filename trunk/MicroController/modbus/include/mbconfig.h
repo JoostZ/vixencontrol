@@ -93,7 +93,7 @@ PR_BEGIN_EXTERN_C
 /*! \brief If the <em>Write Multiple Coils</em> function should be enabled. */
 #define MB_FUNC_WRITE_MULTIPLE_COILS_ENABLED    (  1 )
 /*! \brief If the <em>Read Discrete Inputs</em> function should be enabled. */
-#define MB_FUNC_READ_DISCRETE_INPUTS_ENABLED    (  1 )
+#define MB_FUNC_READ_DISCRETE_INPUTS_ENABLED    (  0 )
 /*! \brief If the <em>Read/Write Multiple Registers</em> function should be enabled. */
 #define MB_FUNC_READWRITE_HOLDING_ENABLED       (  1 )
 /*! @} */

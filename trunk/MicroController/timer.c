@@ -24,6 +24,9 @@
 
 #include <avr/interrupt.h>
 
+#include "port.h"
+#include "mbport.h"
+
 #include "TelescopeControl.h"
 #include "timer.h"
 
@@ -44,6 +47,7 @@ uint8_t T1OCChanged = 0;
 static uint8_t timer1Running = 0;
 
 static uint8_t mbTimerValue; ///< The OCR value for the modbus timer
+
 /**
  * \brief Initialize the modbus timer
  *
@@ -61,7 +65,7 @@ xMBPortTimersInit( USHORT usTim1Timerout50us )
 	 * The required length is usTim1Timerout50us * 50 / 1000000
 	 * The time between clock pulses is  T0_PRESCALER / F_CPU
 	 */
-	mbTimerValue = (usTim1Timerout50us * F_CPU) / (TO_PRESCALER * 200000);
+	mbTimerValue = (usTim1Timerout50us * F_CPU) / (T0_PRESCALER * 200000);
 
     vMBPortTimersDisable(  );
 
