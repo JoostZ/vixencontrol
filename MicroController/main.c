@@ -15,7 +15,6 @@
 
 #include "TelescopeControl.h"
 #include "debounce.h"
-#include "usart.h"
 #include "keys.h"
 #include "motor.h"
 #include "output.h"
@@ -45,8 +44,7 @@ static void ioinit(void)
 {
 	intflags = 0;
 
-
-	UsartInit();
+//	UsartInit();
 
 	sei();
 }
@@ -71,11 +69,11 @@ int main(void)
 			sleep_mode();
 		}
 
-		if (bit_is_set(intflags, usart_rx))
-		{
-			ResetEvent(usart_rx);
-			HandleCommand();
-		}
+//		if (bit_is_set(intflags, usart_rx))
+//		{
+//			ResetEvent(usart_rx);
+//			HandleCommand();
+//		}
 
 		if (bit_is_set(intflags, tmr0))
 		{

@@ -1,1 +1,1 @@
-#define Version 6
+#define SoftwareVersion 6
