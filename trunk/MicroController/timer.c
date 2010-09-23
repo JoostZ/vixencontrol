@@ -1,25 +1,5 @@
 /**
  * \file timer.c
- *
- * \page timerpage The timers
- *
- * The TelescopeControl uses several timers. This page describes how the
- * hardware timers in the micro controller are used.
- *
- * Two timers are used to control the frequency with which the motors are stepped.
- * T1 is used to control the RA motor and T2 is used to control the declination motor.
- *
- * Besides these two timers we also need a periodic timer that triggers the checking of
- * pressed keys (and in ramping the speed of the motors) and a timer that is used in the
- * modbus protocol. Since we don't have two more hardware timers we use a software solution
- * around T0
- *
- * \section t0 Timer 0
- *
- * \section t1 Timer 1
- *
- * \section t2 Timer 2
- *
  */
 
 #include <avr/interrupt.h>
@@ -29,22 +9,49 @@
 
 #include "TelescopeControl.h"
 #include "timer.h"
+/*
+ * Value for OCR0 to generate the required interrupt rate
+ */
+#define OCR0_VAL (((T0_CLOCK +  (F_T0 >> 2)) / F_T0) - 1)
 
-/**
- * \brief OCR1A value
+/*
+ * OCR1A value
  *
  * This is the value that will be loaded in OCR1A.
  * Timer1 will continuously count from 0 to this value
  * and then reset to 0 again.
  */
-uint16_t T1OCValue = (uint16_t)(T1_CLOCK / (2 * T1_FREQUENCY) + 0.5);
+static uint16_t T1OCValue = OCR1_VAL;
 
-/**
+/*
  * Indication if T1OCValue has been changed.
  */
-uint8_t T1OCChanged = 0;
+static uint8_t T1OCChanged = 0;
 
 static uint8_t timer1Running = 0;
+
+volatile uint8_t T1Interrupts = 0;
+
+/**
+ * \brief Interrupt for Timer1 Output Compare
+ */
+ISR(TIMER1_COMPA_vect)
+{
+	T1Interrupts++;
+	SetEvent(tmr1);
+
+	if (T1OCChanged)
+	{
+		OCR1A = T1OCValue;
+		T1OCChanged = 0;
+	}
+}
+
+uint16_t GetT1Interval()
+{
+	return T1OCValue;
+}
+
 
 static uint8_t mbTimerValue; ///< The OCR value for the modbus timer
 
@@ -81,7 +88,20 @@ enum {
 inline void
 vMBPortTimersEnable(  )
 {
-
+	cli();
+	if (activeTimer == periodic) {
+    	uint8_t timeLeft = OCR0 - TCNT0;
+		if (mbTimerValue > timeLeft) {
+			nextTimerValue = mbTimerValue - timeLeft;
+		}
+		else {
+			nextTimerValue = timeLeft - mbTimerValue;
+			TCNT0 = 0;
+			OCR0 = mbTimerValue;
+			activeTimer = T35;
+		}
+	}
+	sei();
 }
 
 inline void
@@ -128,22 +148,6 @@ ISR(TIMER0_COMP_vect)
 }
 
 
-volatile uint8_t T1Interrupts = 0;
-
-/**
- * \brief Interrupt for Timer1 Output Compare
- */
-ISR(TIMER1_COMPA_vect)
-{
-	T1Interrupts++;
-	SetEvent(tmr1);
-
-	if (T1OCChanged)
-	{
-		OCR1A = T1OCValue;
-		T1OCChanged = 0;
-	}
-}
 
 void TimerInit()
 {
@@ -228,7 +232,3 @@ void SetFrequencyRA(float aFrequency)
 
 }
 
-uint16_t GetT1Interval()
-{
-	return T1OCValue;
-}

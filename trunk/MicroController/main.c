@@ -19,6 +19,7 @@
 #include "motor.h"
 #include "output.h"
 #include "timer.h"
+#include "mb.h"
 
 
 volatile uint8_t intflags = 0;
@@ -60,6 +61,7 @@ int main(void)
 	KeysInit();
 	OutputInit();
 	TimerInit();
+	eMBInit(MB_RTU, 1, 0, 9600, MB_PAR_NONE);
 	MotorInit();
 
 	for (;;)
@@ -78,6 +80,7 @@ int main(void)
 		if (bit_is_set(intflags, tmr0))
 		{
 			ResetEvent(tmr0);
+			eMBPoll();
 			CheckKeys();
 		}
 
