@@ -34,67 +34,6 @@
 						 _BV(BUTTON_LEFT))
 /*@}*/
 
-/** \name Settings for timer 0 
-@{*/
-/**
- * \brief Required frequency of generated T0 interrupts
- *
- * 100 means 10 msec between interrupts
- */
-#define F_T0 100 ///< 100 Hz means 10msec
-
-/**
- * \brief prescaler for timer 0
- *
- * The prescaler must be calculated to ensure that
- * the number of pulses needed to reach the F_T0 frequency
- * is between 0 and 255.
- *
- * Calculate Prescaler = F_CPU / (F_T0 * 256) and choose the 
- * next higher value from {1, 8, 64, 256, 1024}.
- */
-#define T0_PRESCALER 64
-
-/**
- * \brief
- * The value to select the timer 0 prescaler to T0_PRESCALER
- */
-#define T0_PRESCALE_SELECT 3
-
-/**
- * \brief
- * Value for OCR0 to generate the required interrupt rate
- */
-#define OCR0_VAL (((F_CPU / T0_PRESCALER +  (F_T0 >> 2)) / F_T0) - 1)
-/*@}*/
-
-/** \name Settings for timer 1 
-@{*/
-/**
- * \brief CS12:0 bits
- * 
- * Selection of prescaler. Must be selected to give roughly 1 MHz
- * input frequency for Timer1
- */
-#define PRESCALE1_SELECT 1
-
-/**
- * \brief Prescaler for Timer 1
- *
- * Must match what is specified in PRESCALE1_SELECT
- */
-#define T1_PRESCALER 1
-
-/**
- * \brief
- * Input clock for timer 1.
- *
- * This must be around 1MHz
- */
-#define T1_CLOCK  (F_CPU / T1_PRESCALER)
-#define T1_FREQUENCY 20
-/*@}*/
-
 /**
  * \name Internal events
  *

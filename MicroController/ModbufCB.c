@@ -19,6 +19,10 @@
  *   	- Holding Registers. These are 16-bit read-write entities.
  *  Each of these entities can be accessed with its own logical address.
  *  Which entity is addressed is defined by the function code.
+ *
+ *  All of the logic is handled in general Modbus functionality. The tie in to
+ *  the Telescope functionality is through a few call back functions that are defined
+ *  in \ref ModbufCB.c
  */
 #include "mb.h"
 #include "TelescopeControl.h"
@@ -123,10 +127,14 @@ void ChangeKey(uint8_t key, BOOL value) {
 eMBErrorCode eMBRegCoilsCB(UCHAR * pucRegBuffer, USHORT usAddress,
 		USHORT usNCoils, eMBRegisterMode eMode) {
 
+	if (usNCoils == 0 ) {
+		return MB_EINVAL;
+	}
+
 	if (eMode == MB_REG_READ) {
 		int i;
-		UCHAR buffer = 0;
 		for (i = 0; i < usNCoils; usAddress++, i++) {
+			UCHAR buffer = 0;
 			if (i % 8 == 0) {
 				buffer = *(pucRegBuffer++);
 			}

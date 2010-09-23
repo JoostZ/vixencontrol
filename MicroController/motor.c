@@ -51,6 +51,7 @@ enum Direction {
 void SetRaFrequency(float frequency, Direction direction);
 
 static struct MotorStatus raMotorStatus;
+static struct MotorStatus decMotorStatus;
 
 static float slowFrequency = 19.252588;
 static float fastFrequency = 600.0414;
@@ -67,6 +68,7 @@ static int32_t raAcceleration = 2500; ///< x 100 * tracking speed / second
 
 void MotorInit()
 {
+	decMotorStatus.lastDirection = 0;
 	fastFrequency = raFastMultiplier * slowFrequency;
 	float upStep = 0.01 * 0.01 * raAcceleration * slowFrequency;
 
