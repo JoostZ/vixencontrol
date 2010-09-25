@@ -48,6 +48,7 @@
 typedef enum {
 	tmr0 = 1, ///< Timer0 has reached TOP
 	tmr1,	  ///< Timer1 has reached TOP
+	t35Expired,  ///< T35 expired
 	usart_rx  ///< Command has been received over the UART
 } Event;
 

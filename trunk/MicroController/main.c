@@ -63,6 +63,7 @@ int main(void)
 	TimerInit();
 	eMBInit(MB_RTU, 1, 0, 9600, MB_PAR_NONE);
 	MotorInit();
+	eMBEnable();
 
 	for (;;)
 	{
@@ -76,6 +77,14 @@ int main(void)
 //			ResetEvent(usart_rx);
 //			HandleCommand();
 //		}
+
+		if (bit_is_set(intflags, t35Expired))
+		{
+			ResetEvent(t35Expired);
+			if (pxMBPortCBTimerExpired()) {
+				eMBPoll();
+			}
+		}
 
 		if (bit_is_set(intflags, tmr0))
 		{
