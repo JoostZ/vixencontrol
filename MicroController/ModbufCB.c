@@ -115,7 +115,7 @@ enum AxisCoils {
 	Backward	///< Anti clockwise motion
 };
 
-inline
+//inline
 void ChangeKey(uint8_t key, BOOL value) {
 	if (value) {
 		SetPcBit(key);
@@ -131,7 +131,7 @@ eMBErrorCode eMBRegCoilsCB(UCHAR * pucRegBuffer, USHORT usAddress,
 		return MB_EINVAL;
 	}
 
-	if (eMode == MB_REG_READ) {
+	if (eMode == MB_REG_WRITE) {
 		int i;
 		for (i = 0; i < usNCoils; usAddress++, i++) {
 			UCHAR buffer = 0;

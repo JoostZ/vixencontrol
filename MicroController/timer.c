@@ -53,7 +53,67 @@ uint16_t GetT1Interval()
 }
 
 
-static uint8_t mbTimerValue; ///< The OCR value for the modbus timer
+uint8_t mbTimerValue; ///< The OCR value for the modbus timer
+
+
+uint8_t nextTimerValue = 0;
+enum {
+	periodic,
+	T35
+} activeTimer;
+
+void
+vMBPortTimersEnable(  )
+{
+	int timeLeft;
+	if (activeTimer == periodic) {
+    	timeLeft = OCR0 - TCNT0;
+		if (mbTimerValue > timeLeft) {
+			nextTimerValue = mbTimerValue - timeLeft;
+		}
+		else {
+			nextTimerValue = timeLeft - mbTimerValue;
+			TCNT0 = 0;
+			OCR0 = mbTimerValue;
+			activeTimer = T35;
+		}
+	}
+	else {
+		// Calculate the time till the next periodic timeout
+		timeLeft = OCR0 - TCNT0 + nextTimerValue;
+
+		if (mbTimerValue > timeLeft) {
+			// The periodic time out comes first. Put the timeout value
+			// in the hardware timer and remember the rest
+			TCNT0 = 0;
+			OCR0 = timeLeft;
+			nextTimerValue = mbTimerValue - timeLeft;
+		    activeTimer = periodic;
+		}
+		else {
+			TCNT0 = 0;
+			OCR0 = mbTimerValue;
+			nextTimerValue = timeLeft - mbTimerValue;
+			activeTimer = T35;
+		}
+	}
+}
+
+inline void
+vMBPortTimersDisable(  )
+{
+	cli();
+    if (activeTimer == periodic) {
+    	nextTimerValue = 0;
+    } else {
+    	uint8_t timeLeft = OCR0 - TCNT0 + nextTimerValue;
+    	TCNT0 = 0;
+    	OCR0 = timeLeft;
+    	nextTimerValue = 0;
+    	activeTimer = periodic;
+    }
+    sei();
+}
 
 /**
  * \brief Initialize the modbus timer
@@ -67,57 +127,21 @@ static uint8_t mbTimerValue; ///< The OCR value for the modbus timer
 BOOL
 xMBPortTimersInit( USHORT usTim1Timerout50us )
 {
+	uint8_t value;
     /* Calculate overflow counter an OCR values for Timer0. */
 	/*
 	 * The required length is usTim1Timerout50us * 50 / 1000000
 	 * The time between clock pulses is  T0_PRESCALER / F_CPU
 	 */
-	mbTimerValue = (usTim1Timerout50us * F_CPU) / (T0_PRESCALER * 200000);
+	mbTimerValue = (usTim1Timerout50us * F_CPU) / (T0_PRESCALER * 20000UL);
+	value = mbTimerValue;
 
-    vMBPortTimersDisable(  );
+
+    //vMBPortTimersDisable(  );
 
     return TRUE;
 }
 
-uint8_t nextTimerValue = 0;
-enum {
-	periodic,
-	T35
-} activeTimer;
-
-inline void
-vMBPortTimersEnable(  )
-{
-	cli();
-	if (activeTimer == periodic) {
-    	uint8_t timeLeft = OCR0 - TCNT0;
-		if (mbTimerValue > timeLeft) {
-			nextTimerValue = mbTimerValue - timeLeft;
-		}
-		else {
-			nextTimerValue = timeLeft - mbTimerValue;
-			TCNT0 = 0;
-			OCR0 = mbTimerValue;
-			activeTimer = T35;
-		}
-	}
-	sei();
-}
-
-inline void
-vMBPortTimersDisable(  )
-{
-	cli();
-    if (activeTimer == periodic) {
-    	nextTimerValue = 0;
-    } else {
-    	uint8_t timeLeft = OCR0 - TCNT0 + nextTimerValue;
-    	TCNT0 = 0;
-    	OCR0 = timeLeft;
-    	activeTimer = periodic;
-    }
-    sei();
-}
 /**
  * \brief Interrupt routine for Timer 0 output compare
  */
@@ -142,7 +166,7 @@ ISR(TIMER0_COMP_vect)
 		else {
 			OCR0 = OCR0_VAL;
 		}
-		pxMBPortCBTimerExpired();
+		SetEvent(t35Expired);
 		activeTimer = periodic;
 	}
 }

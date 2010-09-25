@@ -18,7 +18,7 @@
 <configuration artifactName="Microcontroller" buildArtefactType="de.innot.avreclipse.buildArtefactType.app" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=de.innot.avreclipse.buildArtefactType.app" description="" id="de.innot.avreclipse.configuration.app.debug.900910019" name="Debug" parent="de.innot.avreclipse.configuration.app.debug">
 <folderInfo id="de.innot.avreclipse.configuration.app.debug.900910019." name="/" resourcePath="">
 <toolChain id="de.innot.avreclipse.toolchain.winavr.app.debug.1273230376" name="AVR-GCC Toolchain" superClass="de.innot.avreclipse.toolchain.winavr.app.debug">
-<option id="de.innot.avreclipse.toolchain.options.toolchain.objcopy.flash.app.debug.1244867023" name="Generate HEX file for Flash memory" superClass="de.innot.avreclipse.toolchain.options.toolchain.objcopy.flash.app.debug"/>
+<option id="de.innot.avreclipse.toolchain.options.toolchain.objcopy.flash.app.debug.1244867023" name="Generate HEX file for Flash memory" superClass="de.innot.avreclipse.toolchain.options.toolchain.objcopy.flash.app.debug" value="true" valueType="boolean"/>
 <option id="de.innot.avreclipse.toolchain.options.toolchain.objcopy.eeprom.app.debug.79587448" name="Generate HEX file for EEPROM" superClass="de.innot.avreclipse.toolchain.options.toolchain.objcopy.eeprom.app.debug"/>
 <option id="de.innot.avreclipse.toolchain.options.toolchain.objdump.app.debug.1452002474" name="Generate Extended Listing (Source + generated Assembler)" superClass="de.innot.avreclipse.toolchain.options.toolchain.objdump.app.debug"/>
 <option id="de.innot.avreclipse.toolchain.options.toolchain.size.app.debug.1573635668" name="Print Size" superClass="de.innot.avreclipse.toolchain.options.toolchain.size.app.debug"/>
@@ -784,6 +784,7 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cconfiguration>
 <cconfiguration id="de.innot.avreclipse.configuration.app.release.1591701751">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="de.innot.avreclipse.configuration.app.release.1591701751" moduleId="org.eclipse.cdt.core.settings" name="Release">
@@ -1596,6 +1597,7 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">

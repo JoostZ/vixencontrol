@@ -42,6 +42,7 @@
 
 #include "mbcrc.h"
 #include "mbport.h"
+#include "timer.h"
 
 /* ----------------------- Defines ------------------------------------------*/
 #define MB_SER_PDU_SIZE_MIN     4       /*!< Minimum size of a Modbus RTU frame. */
