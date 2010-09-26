@@ -102,7 +102,7 @@ vMBPortTimersEnable(  )
 inline void
 vMBPortTimersDisable(  )
 {
-	cli();
+//	cli();
     if (activeTimer == periodic) {
     	nextTimerValue = 0;
     } else {
@@ -112,7 +112,7 @@ vMBPortTimersDisable(  )
     	nextTimerValue = 0;
     	activeTimer = periodic;
     }
-    sei();
+//    sei();
 }
 
 /**

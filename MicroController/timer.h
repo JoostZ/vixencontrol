@@ -50,14 +50,14 @@
  * Calculate Prescaler = F_CPU / (F_T0 * 256) and choose the
  * next higher value from {1, 8, 64, 256, 1024}.
  */
-#define T0_PRESCALER 64
+#define T0_PRESCALER 1024
 
 /**
  * \ingroup timers
  * \brief
  * The value to select the timer 0 prescaler to T0_PRESCALER
  */
-#define T0_PRESCALE_SELECT 3
+#define T0_PRESCALE_SELECT 5
 
 /**
  * \ingroup timers
