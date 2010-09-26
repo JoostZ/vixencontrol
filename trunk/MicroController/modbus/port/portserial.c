@@ -22,7 +22,7 @@
  *
  * File: $Id: portserial.c,v 1.6 2006/09/17 16:45:53 wolti Exp $
  */
-
+#define __AVR_ATmega32__
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/signal.h>
@@ -143,7 +143,7 @@ SIGNAL( SIG_USART_DATA )
     pxMBFrameCBTransmitterEmpty(  );
 }
 
-SIGNAL( SIG_USART_RECV )
+SIGNAL( USART_RXC_vect )
 {
     pxMBFrameCBByteReceived(  );
 }
