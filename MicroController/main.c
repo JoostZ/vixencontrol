@@ -107,7 +107,7 @@ int main(void)
 			
 			if (nPulses  >= 2)
 			{
-				SteppedRA(nPulses / 2);
+				SteppedAxis(raMotorStatusP, nPulses / 2);
 			}
 			
 		}

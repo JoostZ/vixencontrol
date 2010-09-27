@@ -76,7 +76,7 @@ void SetPcBit(uint8_t aBit)
 	{
 		// One of the buttons that could change RA frequency has changed
 		// state. Calculate and set the required frequency for RA.
-		CalculateAndSetRaFrequency();
+		CalculateAndSetFrequency();
 	}
 
 	RampMotors();
@@ -91,7 +91,7 @@ void ClearPcBit(uint8_t aBit)
 	{
 		// One of the buttons that could change RA frequency has changed
 		// state. Calculate and set the required frequency for RA.
-		CalculateAndSetRaFrequency();
+		CalculateAndSetFrequency();
 	}
 
 	RampMotors();
@@ -118,7 +118,7 @@ void CheckKeys()
 	{
 		// One of the buttons that could change RA frequency has changed
 		// state. Calculate and set the required frequency for RA.
-		CalculateAndSetRaFrequency();
+		CalculateAndSetFrequency();
 	}
 
 	RampMotors();

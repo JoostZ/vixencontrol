@@ -1,3 +1,4 @@
+
 /**
  * \file motor.c
  */
@@ -12,12 +13,19 @@
 
 //#define NEWACCELERATION 1
 
+
+enum Direction {
+	Forward = +1,
+	Backward = -1
+};
+
+
 /**
  * \brief
  * Data about the status of a motor
  */
 struct MotorStatus {
-	int8_t	lastDirection;	  ///< 
+	int8_t	lastDirection;	  ///<
 	int8_t	currentDirection; ///< Direction motor is currently turning
 	float	currentFrequency; ///< Currently used frequency for the motor
 
@@ -25,14 +33,18 @@ struct MotorStatus {
 	float	targetFrequency;  ///< Frequency the motor should be turning
 
 	int32_t	targetPosition;	  ///< Position to move to
+	int32_t currentPosition;
 	int8_t  inGoto;			  ///< True if GOTO is active
 	int8_t  inGotoFinal;	  ///< True if decelerating to the final target position
 	float	gotoDistanceLimit;///< The distance from target when deceleration needs to start
 
-	int32_t backlash;		  ///< The number of steps in a backlash
-	int32_t backlashOffset;	  ///< The number of steps executed in the current backlash correction
+	int16_t backlash;		  ///< The number of steps in a backlash
+	int16_t backlashOffset;	  ///< The number of steps executed in the current backlash correction
 
 	float 	limitFrequency;	  ///< Frequency below which no ramping is required
+	uint16_t maxAcc;	  	  ///< Acceleration x 100 * tracking speed / second
+	//uint16_t fastMultiplier;  ///< Fast frequency in multiple of tracking speed
+	float   fastFrequency;	  ///< Step frequency in Hz
 
 	uint8_t ramping;	///< True if target frequency not yet reached
 
@@ -41,39 +53,46 @@ struct MotorStatus {
 	uint16_t	rampUpdate;	///< Counter used to delay ramping
 	uint16_t rampDelay;
 	float   acceleration;
+
+	void (*StartTimer)();
+	void (*StopTimer)();
+	void (*SetTimer)(float);
+
+	void (*SetDirection)(Direction);
+
+	uint8_t (*ButtonForward)();
+	uint8_t (*ButtonBackward)();
 };
 
-enum Direction {
-	Forward = +1,
-	Backward = -1
-};
+void SetAxisFrequency(struct MotorStatus* pStatus, float frequency, Direction direction);
+void Ramp(struct MotorStatus* pStatus);
+void StartGoto(struct MotorStatus* pStatus);
 
-void SetRaFrequency(float frequency, Direction direction);
-
-static struct MotorStatus raMotorStatus;
-static struct MotorStatus decMotorStatus;
-
-static float slowFrequency = 19.252588;
-static float fastFrequency = 600.0414;
-
-static float nRampSteps = 100; ///< Number of steps to go from 0 to fast
-static float rampUpStep;
-static float rampDownStep;
+struct MotorStatus raMotorStatus;
+struct MotorStatus decMotorStatus;
 
 
-static int32_t RAPos = 0;
+struct MotorStatus* raMotorStatusP;
+struct MotorStatus* decMotorStatusP;
 
-static int32_t raFastMultiplier = 80; ///< How much faster fast speed is then tracking speed
-static int32_t raAcceleration = 2500; ///< x 100 * tracking speed / second
+static float trackingFrequency = 19.252588;
+//static float fastFrequency = 600.0414;
+
+//static float nRampSteps = 100; ///< Number of steps to go from 0 to fast
+//static float rampUpStep;
+//static float rampDownStep;
+
+
+//static int32_t raFastMultiplier = 80; ///< How much faster fast speed is then tracking speed
+//static int32_t raAcceleration = 2500; ///< x 100 * tracking speed / second
 
 void MotorInit()
 {
 	decMotorStatus.lastDirection = 0;
-	fastFrequency = raFastMultiplier * slowFrequency;
-	float upStep = 0.01 * 0.01 * raAcceleration * slowFrequency;
 
-	rampUpStep = upStep / nRampSteps;
-	rampDownStep = -upStep / nRampSteps;
+	raMotorStatus.acceleration = 0.0;
+	raMotorStatus.fastFrequency = 600.0414;
+	raMotorStatus.maxAcc= 2500;
 
 	raMotorStatus.lastDirection = 0;
 	raMotorStatus.currentDirection = 0;
@@ -90,155 +109,157 @@ void MotorInit()
 	raMotorStatus.backlash = 600;
 	raMotorStatus.backlashOffset = 0;
 
-	raMotorStatus.limitFrequency = 20 * slowFrequency;
+	raMotorStatus.limitFrequency = 20 * trackingFrequency;
 	raMotorStatus.rampUpdate = 20;
 	raMotorStatus.rampDelay = 20;
 
-	raMotorStatus.rampStep = 0.01 * 0.01 * raMotorStatus.rampUpdate * raAcceleration * slowFrequency;
+	raMotorStatus.rampStep = 0.01 * 0.01 * raMotorStatus.rampUpdate * raMotorStatus.maxAcc * trackingFrequency;
 	raMotorStatus.ramping = 0;
-
-	raMotorStatus.acceleration = 0.0;
 	
-	CalculateAndSetRaFrequency();
+	raMotorStatus.SetTimer = &SetFrequencyRA;
+	raMotorStatus.StartTimer = &StartTimerRA;
+	raMotorStatus.StopTimer = &StopTimerRA;
+
+	raMotorStatus.SetDirection= &SetRADirection;
+
+	raMotorStatus.ButtonForward = &ButtonRight;
+	raMotorStatus.ButtonBackward = &ButtonLeft;
+
+	raMotorStatusP = &raMotorStatus;
+
+
+
+	CalculateAndSetFrequency(raMotorStatusP);
 }
 
-static void SetRaTimer()
+static void SetTimer(struct MotorStatus* pStatus)
 {
-	if (raMotorStatus.inGoto)
+	if (pStatus->inGoto)
 	{
-		if (raMotorStatus.currentFrequency < raMotorStatus.limitFrequency)
+		if (pStatus->currentFrequency < pStatus->limitFrequency)
 		{
-			raMotorStatus.gotoDistanceLimit = 0.0;
+			pStatus->gotoDistanceLimit = 0.0;
 		}
 		else
 		{
-			float v02 = raMotorStatus.currentFrequency * raMotorStatus.currentFrequency;
-			float vlim2 = raMotorStatus.limitFrequency * raMotorStatus.limitFrequency;
-			raMotorStatus.gotoDistanceLimit = (v02 - vlim2) / (2 * raAcceleration * 0.01 * slowFrequency) + 500;
+			float v02 = pStatus->currentFrequency * pStatus->currentFrequency;
+			float vlim2 = pStatus->limitFrequency * pStatus->limitFrequency;
+			pStatus->gotoDistanceLimit = (v02 - vlim2) / (2 * pStatus->maxAcc * 0.01 * trackingFrequency) + 500;
 		}
 	}
-	if (raMotorStatus.lastDirection != 0 && raMotorStatus.lastDirection != raMotorStatus.currentDirection)
+	if (pStatus->lastDirection != 0 && pStatus->lastDirection != pStatus->currentDirection)
 	{
 		// Changing direction
-		raMotorStatus.backlashOffset = raMotorStatus.backlash - raMotorStatus.backlashOffset;
-		raMotorStatus.currentFrequency = raMotorStatus.limitFrequency;
-		raMotorStatus.ramping = 0;
+		pStatus->backlashOffset = pStatus->backlash - pStatus->backlashOffset;
+		pStatus->currentFrequency = pStatus->limitFrequency;
+		pStatus->ramping = 0;
 	}
-	raMotorStatus.lastDirection = raMotorStatus.currentDirection;
-	SetFrequencyRA(raMotorStatus.currentFrequency);
-	SetRADirection(raMotorStatus.currentDirection >= 0 ? DirectionCW : DirectionCCW);
-	StartTimerRA();
+	pStatus->lastDirection = pStatus->currentDirection;
+	pStatus->SetTimer(pStatus->currentFrequency);
+	pStatus->SetDirection(pStatus->currentDirection >= 0 ? DirectionCW : DirectionCCW);
+	pStatus->StartTimer();
 }
 
 /**
  * \brief Do administration when a step has occurred
  */
- void SteppedRA(uint8_t nSteps)
+ void SteppedAxis(struct MotorStatus *pStatus, uint8_t nSteps)
  {
  	if (nSteps == 0)
 	{
 		return;
 	}
 
-	if (raMotorStatus.backlashOffset)
+	if (pStatus->backlashOffset)
 	{
-		raMotorStatus.backlashOffset -= nSteps;
-		if (raMotorStatus.backlashOffset <= 0)
+		pStatus->backlashOffset -= nSteps;
+		if (pStatus->backlashOffset <= 0)
 		{
-			raMotorStatus.backlashOffset = 0;
-			if (raMotorStatus.inGoto)
+			pStatus->backlashOffset = 0;
+			if (pStatus->inGoto)
 			{
-				StartRaGoto();
+				StartGoto(pStatus);
 			}
 			else
 			{
-				CalculateAndSetRaFrequency();
+				CalculateAndSetFrequency();
 			}
 		}
 		return;
 	}
 
- 	if (raMotorStatus.currentDirection > 0)
+ 	if (pStatus->currentDirection > 0)
 	{
- 		RAPos += nSteps;;
+ 		pStatus->currentPosition += nSteps;;
 	}
 	else 
 	{
-		RAPos -= nSteps;
+		pStatus->currentPosition -= nSteps;
 	}
 
-	if (raMotorStatus.inGoto)
+	if (pStatus->inGoto)
 	{
  		uint8_t isFinished = 0;
-		if (!raMotorStatus.inGotoFinal)
+		if (!pStatus->inGotoFinal)
 		{
-			int32_t deltaS = labs(raMotorStatus.targetPosition - RAPos);
-			if (deltaS <= raMotorStatus.gotoDistanceLimit)
+			int32_t deltaS = labs(pStatus->targetPosition - pStatus->currentPosition);
+			if (deltaS <= pStatus->gotoDistanceLimit)
 			{
-				raMotorStatus.inGotoFinal = 1;
-				SetRaFrequency(raMotorStatus.limitFrequency, raMotorStatus.targetDirection);
+				pStatus->inGotoFinal = 1;
+				SetAxisFrequency(pStatus, pStatus->limitFrequency, pStatus->targetDirection);
 			}
 		}
 
-		if (raMotorStatus.targetDirection > 0)
+		if (pStatus->targetDirection > 0)
 		{
-			isFinished = RAPos >= raMotorStatus.targetPosition;
+			isFinished = pStatus->currentPosition >= pStatus->targetPosition;
 		}
 		else
 		{
-			isFinished = RAPos <= raMotorStatus.targetPosition;
+			isFinished = pStatus->currentPosition <= pStatus->targetPosition;
 		}
 
 		if (isFinished)
 		{
-			raMotorStatus.currentFrequency = 0.0;
-			raMotorStatus.currentDirection = 0;
+			pStatus->currentFrequency = 0.0;
+			pStatus->currentDirection = 0;
 			StopTimerRA();
-			raMotorStatus.inGoto = 0;
-			raMotorStatus.ramping = 0;
-			CalculateAndSetRaFrequency();
+			pStatus->inGoto = 0;
+			pStatus->ramping = 0;
+			CalculateAndSetFrequency();
 		}
 	}
  }
 
- int32_t GetRaPos()
+ int32_t GetCurrentPosition(struct MotorStatus *pStatus)
  {
- 	return RAPos;
+ 	return pStatus->currentPosition;
  }
 
-void ResetRaPos()
-{
-	RAPos = 0;
-}
- 
-int32_t GetRaFast()
-{
-	return raFastMultiplier;
-}
 
-int32_t GetRaTargetPos()
+int32_t GetTargetPos(struct MotorStatus* status)
  {
- 	return raMotorStatus.targetPosition;
+ 	return status->targetPosition;
  }
 
- 
-void SetRaTargetPos(int32_t aRaTarget)
+
+void SetTargetPos(struct MotorStatus* status, int32_t aRaTarget)
 {
-	raMotorStatus.targetPosition = aRaTarget;
+	status->targetPosition = aRaTarget;
 }
 
-void StartRaGoto()
+void StartGoto(struct MotorStatus* pStatus)
 {
 	int8_t direction;
 
-	if (raMotorStatus.targetPosition == RAPos)
+	if (pStatus->targetPosition == pStatus->currentPosition)
 	{
 		return;
 	}
-	raMotorStatus.inGoto = 1;
-	raMotorStatus.inGotoFinal = 0;
+	pStatus->inGoto = 1;
+	pStatus->inGotoFinal = 0;
 
-	if (raMotorStatus.targetPosition > RAPos)
+	if (pStatus->targetPosition > pStatus->currentPosition)
 	{
 		direction = +1;
 	}
@@ -246,70 +267,75 @@ void StartRaGoto()
 	{
 		direction = -1;
 	}
-	SetRaFrequency(fastFrequency, direction);
+	SetAxisFrequency(pStatus, pStatus->fastFrequency, direction);
 }
 
 void StopRaGoto()
 {
 	raMotorStatus.inGoto = 0;
-	CalculateAndSetRaFrequency();
+	CalculateAndSetFrequency();
 }
 
-void SetRaFast(uint32_t raFast)
-{
-	raFastMultiplier = raFast;
-	fastFrequency = slowFrequency * raFast;
-	CalculateAndSetRaFrequency();
-}
 
-int32_t GetRaAcceleration()
-{
-	return raAcceleration;
-}
-
-void SetRaAcceleration (uint32_t raAccel)
-{
-	raAcceleration = raAccel;
-	float upStep = 0.01 * 0.01 * raAcceleration * slowFrequency;
-	raMotorStatus.rampStep = 0.01 * raMotorStatus.rampUpdate * 0.01 * raAcceleration * slowFrequency;
-
-	rampUpStep = upStep / nRampSteps;
-	rampDownStep = -upStep / nRampSteps;
-
-}
 
 int32_t GetRaCurrentSpeed()
 {
-	int32_t result = (int32_t)(10 * raMotorStatus.currentFrequency / slowFrequency + 0.5);
+	int32_t result = (int32_t)(10 * raMotorStatus.currentFrequency / trackingFrequency + 0.5);
 	
 	return result;
 }
 
 
-uint32_t GetRaUpdatePeriod()
+uint16_t GetAccLL(struct MotorStatus* pStatus)
 {
-	return raMotorStatus.rampUpdate;
+	return (uint16_t)(pStatus->limitFrequency / trackingFrequency + 0.5);
 }
 
-void SetRaUpdatePeriod(uint32_t aRaUpdatePeriod)
+void SetAccLL(struct MotorStatus* pStatus, uint16_t aAccLL)
 {
-	raMotorStatus.rampUpdate = (int16_t) aRaUpdatePeriod;
-	raMotorStatus.rampStep = 0.01 * raMotorStatus.rampUpdate * 0.01 * raAcceleration * slowFrequency;
-	raMotorStatus.rampDelay = 1;
+	pStatus->limitFrequency = aAccLL * trackingFrequency;
 }
 
-uint32_t GetRaAccLL()
+void SetFastFrequency(struct MotorStatus* pStatus, uint16_t value)
 {
-	uint32_t result = (uint32_t)(raMotorStatus.limitFrequency / slowFrequency + 0.5);
-	
-	return result;
+	pStatus->fastFrequency = value * trackingFrequency;
 }
 
-void SetRaAccLL(uint32_t aRaAccLL)
+uint16_t  GetFastFrequency(struct MotorStatus* pStatus)
 {
-	raMotorStatus.limitFrequency = aRaAccLL * slowFrequency;
+	return pStatus->fastFrequency / trackingFrequency;
+}
+uint16_t GetUpdatePeriod(struct MotorStatus* pStatus)
+{
+	return pStatus->rampUpdate;
 }
 
+void SetUpdatePeriod(struct MotorStatus* pStatus, uint16_t aRaUpdatePeriod)
+{
+	pStatus->rampUpdate = (int16_t) aRaUpdatePeriod;
+	pStatus->rampStep = 0.01 * pStatus->rampUpdate * 0.01 * pStatus->maxAcc * trackingFrequency;
+	pStatus->rampDelay = 1;
+}
+
+uint16_t GetAcceleration(struct MotorStatus* pStatus)
+{
+	return pStatus->maxAcc;
+}
+
+void SetAcceleration(struct MotorStatus* pStatus, uint16_t acc)
+{
+	pStatus->maxAcc = acc;
+		pStatus->rampStep = 0.01 * pStatus->rampUpdate * 0.01 * acc * trackingFrequency;
+}
+uint16_t GetBacklash(struct MotorStatus* pStatus)
+{
+	return pStatus->backlash;
+}
+
+void SetBacklash(struct MotorStatus* pStatus, uint16_t value)
+{
+	pStatus->backlash = value;
+}
 uint32_t GetRaBacklash()
 {
 	return raMotorStatus.backlash;
@@ -324,75 +350,75 @@ void SetRaBacklash(uint32_t aRaBacklash)
   * \brief
   * Ramp RA frequency up or down
   */
-void RampRA()
+void Ramp(struct MotorStatus* pStatus)
 {
-	if (!raMotorStatus.ramping)
+	if (!pStatus->ramping)
 	{
 		// No change required
 		return;
 	}
 
-	if (raMotorStatus.rampDelay < raMotorStatus.rampUpdate)
+	if (pStatus->rampDelay < pStatus->rampUpdate)
 	{
-		raMotorStatus.rampDelay++;
+		pStatus->rampDelay++;
 		return;
 	}
 
-	raMotorStatus.rampDelay = 0;
+	pStatus->rampDelay = 0;
 
 
-	float rampStep = raMotorStatus.rampStep;
-	float targetFrequency = raMotorStatus.targetFrequency;
-	uint8_t targetDirection = raMotorStatus.targetDirection;
+	float rampStep = pStatus->rampStep;
+	float targetFrequency = pStatus->targetFrequency;
+	uint8_t targetDirection = pStatus->targetDirection;
 	uint8_t switching = 0;
 	uint8_t done = 0;
 
-	if ( (raMotorStatus.currentDirection == -1 && raMotorStatus.targetDirection == +1) ||
-		 (raMotorStatus.currentDirection == +1 && raMotorStatus.targetDirection == -1) )
+	if ( (pStatus->currentDirection == -1 && pStatus->targetDirection == +1) ||
+		 (pStatus->currentDirection == +1 && pStatus->targetDirection == -1) )
 	{
 		// We need to change direction. Decelarate first to stop
 		targetFrequency = 0.0;
 		switching = 1;
 	}
-	else if (raMotorStatus.currentDirection == 0)
+	else if (pStatus->currentDirection == 0)
 	{
-		raMotorStatus.currentDirection = raMotorStatus.targetDirection;
+		pStatus->currentDirection = pStatus->targetDirection;
 	}
 
-	if (fabs(raMotorStatus.currentFrequency - targetFrequency) < fabs(rampStep))
+	if (fabs(pStatus->currentFrequency - targetFrequency) < fabs(rampStep))
 	{
-		raMotorStatus.currentFrequency = targetFrequency;
+		pStatus->currentFrequency = targetFrequency;
 		done = 1;
 	}
-	else if (raMotorStatus.currentFrequency < targetFrequency)
+	else if (pStatus->currentFrequency < targetFrequency)
 	{
 		// Accelerating
-		if (targetFrequency <= raMotorStatus.limitFrequency)
+		if (targetFrequency <= pStatus->limitFrequency)
 		{
 			// We can jump directly to the correct frequency
-			raMotorStatus.currentFrequency = targetFrequency;
+			pStatus->currentFrequency = targetFrequency;
 			done = 1;
 		}
-		else if (raMotorStatus.currentFrequency < raMotorStatus.limitFrequency)
+		else if (pStatus->currentFrequency < pStatus->limitFrequency)
 		{
-			raMotorStatus.currentFrequency = raMotorStatus.limitFrequency;
+			pStatus->currentFrequency = pStatus->limitFrequency;
 		}
 		else
 		{
-			raMotorStatus.currentFrequency += rampStep;
+			pStatus->currentFrequency += rampStep;
 		}
 	}
 	else
 	{
 		// Decelerating
-		if (raMotorStatus.currentFrequency < raMotorStatus.limitFrequency)
+		if (pStatus->currentFrequency < pStatus->limitFrequency)
 		{
-			raMotorStatus.currentFrequency = targetFrequency;
+			pStatus->currentFrequency = targetFrequency;
 			done = 1;
 		}
 		else 
 		{
-			raMotorStatus.currentFrequency -= rampStep;
+			pStatus->currentFrequency -= rampStep;
 		}
 	}
 	
@@ -400,39 +426,39 @@ void RampRA()
 	{
 		if (!switching)
 		{
-			raMotorStatus.currentDirection = targetDirection;
-			raMotorStatus.ramping = 0;
+			pStatus->currentDirection = targetDirection;
+			pStatus->ramping = 0;
 		}
 		else
 		{
-			raMotorStatus.currentDirection = 0;
+			pStatus->currentDirection = 0;
 		}
 		
 	}
 
-	if (raMotorStatus.currentDirection == 0)
+	if (pStatus->currentDirection == 0)
 	{
-		StopTimerRA();
+		pStatus->StopTimer();
 	}
 	else
 	{
-		SetRaTimer();
+		SetTimer(pStatus);
 	}
 }
 
 
 
-void SetRaFrequency(float frequency, Direction direction)
+void SetAxisFrequency(struct MotorStatus* pStatus, float frequency, Direction direction)
 {
-	raMotorStatus.targetDirection = direction;
-	raMotorStatus.targetFrequency = frequency;
+	pStatus->targetDirection = direction;
+	pStatus->targetFrequency = frequency;
 	
-	raMotorStatus.ramping = 1;
-	if (raMotorStatus.currentDirection == 0)
+	pStatus->ramping = 1;
+	if (pStatus->currentDirection == 0)
 	{
-		raMotorStatus.currentDirection = raMotorStatus.targetDirection;
+		pStatus->currentDirection = pStatus->targetDirection;
 	}
-	RampRA();
+	Ramp(pStatus);
 }
  
  /**
@@ -443,28 +469,28 @@ void SetRaFrequency(float frequency, Direction direction)
   * stepper motor based on the current value of buttons. Then if required, it changes
   * the frequency of timer 1.
   */
- void CalculateAndSetRaFrequency()
+ void CalculateAndSetFrequency(struct MotorStatus* pStatus)
  {
  	if (FastOn())
 	{
 		// For fast mode it is not important if we are tracking
-		if(ButtonRight())
+		if(pStatus->ButtonForward())
 		{
-			SetRaFrequency(fastFrequency, +1);
+			SetAxisFrequency(pStatus, pStatus->fastFrequency, +1);
 		}
-		else if (ButtonLeft())
+		else if (pStatus->ButtonBackward())
 		{
-			SetRaFrequency(fastFrequency, -1);
+			SetAxisFrequency(pStatus, pStatus->fastFrequency, -1);
 		}
 		else
 		{
 			if (IsTracking())
 			{
-				SetRaFrequency(slowFrequency, +1);
+				SetAxisFrequency(pStatus, trackingFrequency, +1);
 			}
 			else
 			{
-				SetRaFrequency(0., 0);
+				SetAxisFrequency(pStatus, 0., 0);
 			}
 		}
 	}
@@ -472,32 +498,32 @@ void SetRaFrequency(float frequency, Direction direction)
 	{
 		if (IsTracking())
 		{
-			if (ButtonRight())
+			if (pStatus->ButtonForward())
 			{
-				SetRaFrequency(slowFrequency * 1.5, +1);
+				SetAxisFrequency(pStatus, trackingFrequency * 1.5, +1);
 			}
-			else if (ButtonLeft())
+			else if (pStatus->ButtonBackward())
 			{
-				SetRaFrequency(slowFrequency * 0.5, +1);
+				SetAxisFrequency(pStatus, trackingFrequency * 0.5, +1);
 			}
 			else 
 			{
-				SetRaFrequency(slowFrequency, +1);
+				SetAxisFrequency(pStatus, trackingFrequency, +1);
 			}
 		}
 		else
 		{
-			if (ButtonRight())
+			if (pStatus->ButtonForward())
 			{
-				SetRaFrequency(slowFrequency, +1);
+				SetAxisFrequency(pStatus, trackingFrequency, +1);
 			}
-			else if (ButtonLeft())
+			else if (pStatus->ButtonBackward())
 			{
-				SetRaFrequency(slowFrequency, -1);
+				SetAxisFrequency(pStatus, trackingFrequency, -1);
 			}
 			else
 			{
-				SetRaFrequency(0.0, 0);
+				SetAxisFrequency(pStatus, 0.0, 0);
 			}
 		}
 	}
@@ -506,7 +532,7 @@ void SetRaFrequency(float frequency, Direction direction)
 
 void RampMotors()
 {
-	RampRA();
+	Ramp(raMotorStatusP);
 }
 
 
