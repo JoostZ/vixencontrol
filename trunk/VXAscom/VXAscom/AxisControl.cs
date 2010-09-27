@@ -16,9 +16,10 @@ namespace ASCOM.VXAscom
 {
     namespace Axis
     {
+        
+
         using Controller;
 
-        
 
         
         /// <summary>
@@ -29,6 +30,9 @@ namespace ASCOM.VXAscom
         /// sent to the controller.
         public abstract class AxisControl : IUpdatable, INotifyPropertyChanged
         {
+
+            static TraceLogger syLog = new ASCOM.Utilities.TraceLogger();
+
             /// <summary>
             /// Direction of movement of the axis
             /// </summary>
@@ -85,6 +89,8 @@ namespace ASCOM.VXAscom
             /// </summary>
             protected const double kDegreesPerStep = 360.0 / (motorSteps * wormGearing * axisGearing);
 
+            protected const double SiderialTrackingSteps = SiderialTrackingSpeed / kDegreesPerStep;
+
             /// <summary>
             /// The interface to the controller 
             /// </summary>
@@ -116,6 +122,8 @@ namespace ASCOM.VXAscom
             {
                 iController = aController;
                 CurrentPosition = 0;
+                syLog.Enabled = true;
+                syLog.LogMessage("AxisControl", "Starting");
             }
 
             /// <summary>
@@ -467,11 +475,13 @@ namespace ASCOM.VXAscom
 
                 if (controllerSpeed == 0)
                 {
+
+                    syLog.LogMessage("Rotate", "Stop Rotation");
                     // This is a stop command
                     if (rotateStatus == null)
                     {
                         // We are not rotating. Ignore the command
-                        logger.Trace("Ignoring stop rotate while not rotating");
+                        syLog.LogMessage("Rotate", "Ignoring stop rotate while not rotating");
                         return;
                     }
 
@@ -490,6 +500,8 @@ namespace ASCOM.VXAscom
                 else
                 {
                     // Start rotation.
+
+                    syLog.LogMessage("Rotate", "Start Rotation speed = " + controllerSpeed);
 
                     // First gather the current status
                     rotateStatus = new RotateStatus();
@@ -511,7 +523,8 @@ namespace ASCOM.VXAscom
                     }
 
                     IsTracking = false;
-                    FastRate = aSpeed;
+                    FastRate = controllerSpeed;
+                    SendCommand(AxisCommands.FastOn);
                     SendCommand(onCommmand);
 
 
@@ -526,7 +539,9 @@ namespace ASCOM.VXAscom
             /// by the actual AxisControl</remarks>
             protected Int32 GetPosition()
             {
-                return GetControllerStatus(Status.Position);
+                Int32 pos = GetControllerStatus(Status.Position);
+                syLog.LogMessage("GetPosition", "Position = " + pos.ToString());
+                return pos;
             }
 
             /// <summary>
@@ -594,7 +609,7 @@ namespace ASCOM.VXAscom
                         CurrentPosition = GetPosition();
                         // This call will trigger users to read the Angle
                         // which will be obtained from the controller
-                        NotifyPropertyChanged("Angle");
+                        //NotifyPropertyChanged("Angle");
                     }
                     catch (Exception ex)
                     {

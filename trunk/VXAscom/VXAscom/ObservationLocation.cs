@@ -119,7 +119,7 @@ namespace ASCOM.VXAscom
             set
             {
                 iOffset = value.Subtract(DateTime.UtcNow);
-                NotifyPropertyChanged("UTC");
+                //NotifyPropertyChanged("UTC");
             }
         }
 

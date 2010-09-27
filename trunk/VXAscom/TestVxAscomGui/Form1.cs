@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using NLog;
 using ASCOM;
+using ASCOM.Utilities;
 using ASCOM.DriverAccess;
 
 namespace TestVxAscomGui
@@ -21,20 +22,21 @@ namespace TestVxAscomGui
         internal string progId = "ASCOM.VXAscom.Telescope";
         public Telescope Driver {get;set;}
 
+        internal DriverData data = new DriverData();
+
         public Form1()
         {
             InitializeComponent();
-            Driver = new Telescope(progId);
-            form1BindingSource.DataSource = this;
-            RaMoveRate = 10.5;
+            form1BindingSource.DataSource = data;
+            //data.LST = Driver.SiderealTime;
+            //data.RA = Driver.RightAscension;
+            RaMoveRate = 1.0;
         }
 
-        public string RaString
+        public double RA
         {
-            get
-            {
-                return util.HoursToHMS(Driver.RightAscension, ":", ":", "", 1);
-            }
+            get;
+            set;
         }
 
         public string LSTString
@@ -54,7 +56,11 @@ namespace TestVxAscomGui
 
         private void tmrAutoUpdate_Tick(object sender, EventArgs e)
         {
-            NotifyPropertyChanged("LSTString");
+            if (Driver == null)
+            {
+                return;
+            }
+            data.Update(Driver);
         }
 
         #region INotifyPropertyChanged Members
@@ -91,6 +97,40 @@ namespace TestVxAscomGui
             else
             {
                 Driver.MoveAxis(ASCOM.Interface.TelescopeAxes.axisPrimary, 0.0);
+            }
+        }
+
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Chooser choose = new Chooser();
+                choose.DeviceType = "Telescope";
+                string ProgId = choose.Choose(progId);
+                if (ProgId != "")
+                {
+                    if (Driver != null)
+                    {
+                        Driver.Dispose();
+                    }
+
+                    Driver = new Telescope(ProgId);
+                    btnSetup.Enabled = true;
+
+                    nameTextBox.Text = Driver.Name;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void trackingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (data.Tracking != trackingCheckBox.Checked)
+            {
+                Driver.Tracking = trackingCheckBox.Checked;
             }
         }
     }

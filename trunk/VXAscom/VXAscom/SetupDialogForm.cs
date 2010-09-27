@@ -212,6 +212,7 @@ namespace ASCOM.VXAscom
         {
             Connection.Connected = true;
             Driver.Controller.Connection = Connection;
+            chkConnected.Checked = true;
             Tracking = false;
         }
 
@@ -219,7 +220,7 @@ namespace ASCOM.VXAscom
         {
             foreach (IUpdatable item in _updateList)
             {
-                item.Update();
+                //item.Update();
             }
 
         }

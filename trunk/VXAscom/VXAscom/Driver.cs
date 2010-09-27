@@ -55,8 +55,8 @@ namespace ASCOM.VXAscom
         // TODO Change the descriptive string for your driver then remove this line
         private static string s_csDriverDescription = "Vixen Telescope Mount";
 
-        private static string s_SerialSubKey = "Serial"; 
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static string s_SerialSubKey = "Serial";
+        static TraceLogger sysLog = new ASCOM.Utilities.TraceLogger();
 
 
 
@@ -98,7 +98,7 @@ namespace ASCOM.VXAscom
 
         internal double Axis2RA()
         {
-            logger.Debug("RaAxis = {0}", RaAxis.Angle.Degrees);
+            //logger.Debug("RaAxis = {0}", RaAxis.Angle.Degrees);
             double ra = SiderealTime - RaAxis.Angle.Degrees / 15.0;
             while (ra < 0)
             {
@@ -113,14 +113,14 @@ namespace ASCOM.VXAscom
             return ra;
         }
 
-        //
         // Constructor - Must be public for COM registration!
         /// <summary>
         /// Constructor
         /// </summary>
         public Telescope()
         {
-            logger.Debug("Creating Telescope");
+            sysLog.Enabled = true;
+            sysLog.LogMessage("Telescope", "Creating Telescope");
             m_AxisRates = new AxisRates[2];
             m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
             m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
@@ -140,13 +140,13 @@ namespace ASCOM.VXAscom
                     theSerial = new Serial();
                     theSerial.Port = Convert.ToInt16(portname);
                     theSerial.Speed = (ASCOM.Utilities.SerialSpeed)Convert.ToInt16(baudRate);
+                    theSerial.Connected = true;
                 }
             }
             else
             {
                 RegUnregASCOM(true);
             }
-            logger.Debug("Serial = {0}", theSerial);
             Controller = new BoxdorferConnect(theSerial);
 
             m_Axes = new Axis.AxisControl[] {
@@ -385,7 +385,7 @@ namespace ASCOM.VXAscom
             set {
                 if (Controller.Connection == null)
                 {
-                    logger.Debug("No serial connection is setup");
+                    sysLog.LogMessage("Telescope", "No serial connection is setup");
                     return;
                 }
                 else
@@ -493,6 +493,7 @@ namespace ASCOM.VXAscom
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
+            sysLog.LogMessage("MoveAxis", "Move at " + Rate);
             if ((int)Axis > m_Axes.Length - 1)
             {
                 throw new DriverException("Axis not supported", ErrorCode(DriverErrors.AxisNotSupported));
@@ -711,6 +712,7 @@ namespace ASCOM.VXAscom
             }
             set
             {
+                sysLog.LogMessage("Tracking", "Set to " + value);
                 RaAxis.IsTracking = value;
             }
         }

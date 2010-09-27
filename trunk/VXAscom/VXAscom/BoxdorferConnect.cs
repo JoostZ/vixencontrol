@@ -5,6 +5,7 @@ using System.Diagnostics;
 using NLog;
 
 
+
 using ASCOM.Utilities;
 
 namespace ASCOM.VXAscom
@@ -67,6 +68,8 @@ namespace ASCOM.VXAscom
         /// send the write command.
         public class BoxdorferConnect : IControllerConnect
         {
+
+            static TraceLogger sysLog = new TraceLogger();
             /// <summary>
             /// Mapping of the different registers to the required commands
             /// </summary>
@@ -115,7 +118,6 @@ namespace ASCOM.VXAscom
                     {Commands.RaRightOff, (byte)CommandByte.writeRightOff},
                 };
 
-            private static Logger logger = LogManager.GetCurrentClassLogger();
 
             Serial _connection;
             public Serial Connection
@@ -130,8 +132,9 @@ namespace ASCOM.VXAscom
             /// <param name="aSerial">The serial port to use in the communication</param>
             public BoxdorferConnect(Serial aSerial)
             {
+                sysLog.Enabled = true;
                 Connection = aSerial;
-                logger.Debug("Creating BoxdorfeConnect with serial for {0}", aSerial);
+                sysLog.LogMessage("Connect", "Creating BoxdorfeConnect with serial for {0}" + aSerial);
             }
 
             /// <summary>
@@ -140,7 +143,6 @@ namespace ASCOM.VXAscom
             public BoxdorferConnect()
             {
                 Connection = null;
-                logger.Debug("Creating BoxdorfeConnect without serial");
             }
 
             /// <summary>
@@ -157,7 +159,7 @@ namespace ASCOM.VXAscom
             /// </remarks>
             private void SendLong(Int32 aValue)
             {
-                logger.Debug("SendLong {0}", aValue);
+                sysLog.LogMessage("SendLong", "Value = " + aValue);
                 UInt32 theValue = (UInt32)aValue;
                 byte[] cmds = new byte[8];
                 for (int i = 0, j = 0; i < 4; i++)
@@ -201,11 +203,11 @@ namespace ASCOM.VXAscom
                         {
                             result = (result << 8) | theReadData[i];
                         }
-                        logger.Debug("Read register {0} value = {1}", aRegister, result);
+                        sysLog.LogMessage("Read", "Register = " + aRegister + "value = " + result);
                         return (Int32)result;
                     }
                 }
-                logger.Debug("No connection while reading register {0}", aRegister);
+                sysLog.LogMessage("Read", "No connection while reading register " + aRegister);
                 return 0;
             }
 
@@ -222,10 +224,11 @@ namespace ASCOM.VXAscom
                     byte? command = accessMap[aRegister].writeCommand;
                     if (command.HasValue)
                     {
+                        byte[] theCommand = { (byte)command };
+                        sysLog.LogStart("Write", "Write " + aValue + " to " + command);
                         lock (Connection)
                         {
                             SendLong(aValue);
-                            byte[] theCommand = { (byte)command };
 
                             Connection.TransmitBinary(theCommand);
                         }
@@ -239,7 +242,7 @@ namespace ASCOM.VXAscom
             /// <param name="aCommand"></param>
             public void Command(Commands aCommand)
             {
-                logger.Debug("Send command {0}", aCommand);
+                sysLog.LogMessage("Command",((int) aCommand).ToString());
                 Debug.Assert(commandMap.ContainsKey(aCommand));
                 if (Connection != null)
                 {

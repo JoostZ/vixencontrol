@@ -66,8 +66,8 @@ namespace ASCOM.VXAscom
             // Calculate the difference between the actual time and our base time
             TimeSpan dt = iLocation.UTC.Subtract(iBaseUTC);
             iTimeOffset = dt.TotalHours;
-            NotifyPropertyChanged("LAST");
-            NotifyPropertyChanged("LAST_String");
+            //NotifyPropertyChanged("LAST");
+            //NotifyPropertyChanged("LAST_String");
         }
 
         /**
