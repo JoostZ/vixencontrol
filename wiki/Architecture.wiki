@@ -1,0 +1,15 @@
+#High-level architecture of the project.
+
+= Introduction =
+
+Add your content here.
+
+
+= Details =
+
+<wiki:gadget url="http://creately.com/player/gadget/createlyplayer.xml" height="500" width="500" border="0" up_did="geo2su701" up_dlogo="true" up_dtitle="Embedding in Google Code" up_bgcolor="#EEEEEE" />
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
