@@ -1,4 +1,4 @@
-#summary Main page for the VixenContro,l project
+#summary Main page for the VixenControl project
 
 = Introduction =
 
