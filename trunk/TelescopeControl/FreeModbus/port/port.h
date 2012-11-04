@@ -36,8 +36,8 @@
 #define PR_BEGIN_EXTERN_C           extern "C" {
 #define	PR_END_EXTERN_C             }
 
-#define ENTER_CRITICAL_SECTION( )   cli()
-#define EXIT_CRITICAL_SECTION( )    sei()
+#define ENTER_CRITICAL_SECTION( )   cpu_irq_disable()
+#define EXIT_CRITICAL_SECTION( )    cpu_irq_enable()
 
 #define assert( x )
 

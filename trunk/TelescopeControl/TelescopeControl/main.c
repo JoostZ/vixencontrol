@@ -13,6 +13,8 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
+#include <asf.h>
+
 #include "TelescopeControl.h"
 #include "debounce.h"
 #include "keys.h"
@@ -33,9 +35,9 @@ void SetEvent(Event aEvent)
 
 void ResetEvent(Event aEvent)
 {
-	cli();
+	cpu_irq_disable();
 	clear_bit(intflags, aEvent);
-	sei();
+	cpu_irq_enable();
 }
 
 /**
@@ -47,7 +49,7 @@ static void ioinit(void)
 
 //	UsartInit();
 
-	sei();
+	cpu_irq_enable();
 }
 
 /**
@@ -96,10 +98,10 @@ int main(void)
 		if (bit_is_set(intflags, tmr1))
 		{
 			ResetEvent(tmr1);
-			cli();
+			cpu_irq_disable();
 			int nPulses = T1Interrupts;
 			T1Interrupts = nPulses % 2;
-			sei();
+			cpu_irq_enable();
 
 			// OC1A has just been toggled. If bit is now
 			// 1, it means the stepper motor has made a step

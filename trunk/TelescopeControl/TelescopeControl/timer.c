@@ -244,7 +244,7 @@ void SetFrequencyRA(float aFrequency)
 		}
 		
 		// Disable interrupts to allow the change of T1OCValue
-		cli();
+		cpu_irq_disable();
 		T1OCValue = timval;
 		T1OCChanged = 1;
 
