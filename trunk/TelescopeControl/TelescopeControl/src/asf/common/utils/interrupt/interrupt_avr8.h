@@ -84,8 +84,8 @@
 #endif
 
 #ifdef __GNUC__
-#  define cpu_irq_enable()     cpu_irq_enable()
-#  define cpu_irq_disable()    cpu_irq_disable()
+#  define cpu_irq_enable()     sei()
+#  define cpu_irq_disable()    cli()
 #else
 #  define cpu_irq_enable()     __enable_interrupt()
 #  define cpu_irq_disable()    __disable_interrupt()

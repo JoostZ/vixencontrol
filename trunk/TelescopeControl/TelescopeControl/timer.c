@@ -4,6 +4,8 @@
 
 #include <avr/interrupt.h>
 
+#include <asf.h>
+
 #include "port.h"
 #include "mbport.h"
 
