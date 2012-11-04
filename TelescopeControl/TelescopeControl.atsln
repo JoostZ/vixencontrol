@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Atmel Studio Solution File, Format Version 11.00
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "TelescopeControl", "TelescopeControl\TelescopeControl.cproj", "{8F1D9A11-1D2B-48CA-9A0F-82151E9F3106}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0DC4C0B0-F60B-4DA4-879F-5E272762A108} = {0DC4C0B0-F60B-4DA4-879F-5E272762A108}
+	EndProjectSection
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "FreeModbus", "FreeModbus\FreeModbus.cproj", "{0DC4C0B0-F60B-4DA4-879F-5E272762A108}"
 EndProject

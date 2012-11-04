@@ -51,6 +51,20 @@
   <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
   <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
   <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>F_CPU=8000000</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>../ascii</Value>
+      <Value>../functions</Value>
+      <Value>../include</Value>
+      <Value>../port</Value>
+      <Value>../rtu</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
   <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
   <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
@@ -65,5 +79,85 @@
 </AvrGcc>
     </ToolchainSettings>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="functions\" />
+    <Folder Include="include\" />
+    <Folder Include="port\" />
+    <Folder Include="rtu\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="functions\mbfunccoils.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="functions\mbfuncdiag.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="functions\mbfuncdisc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="functions\mbfuncholding.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="functions\mbfuncinput.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="functions\mbfuncother.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="functions\mbutils.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\mb.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\mbconfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\mbframe.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\mbfunc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\mbport.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\mbproto.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\mbutils.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mb.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="port\mbcrc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="port\port.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="port\portevent.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="port\portserial.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="port\porttimer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="rtu\mbcrc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="rtu\mbcrc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="rtu\mbrtu.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="rtu\mbrtu.h">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>
