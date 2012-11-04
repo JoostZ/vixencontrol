@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "TelescopeControl", "TelescopeControl\TelescopeControl.cproj", "{8F1D9A11-1D2B-48CA-9A0F-82151E9F3106}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "FreeModbus", "FreeModbus\FreeModbus.cproj", "{0DC4C0B0-F60B-4DA4-879F-5E272762A108}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F1D9A11-1D2B-48CA-9A0F-82151E9F3106}.Debug|AVR.ActiveCfg = Debug|AVR
+		{8F1D9A11-1D2B-48CA-9A0F-82151E9F3106}.Debug|AVR.Build.0 = Debug|AVR
+		{8F1D9A11-1D2B-48CA-9A0F-82151E9F3106}.Release|AVR.ActiveCfg = Release|AVR
+		{8F1D9A11-1D2B-48CA-9A0F-82151E9F3106}.Release|AVR.Build.0 = Release|AVR
+		{0DC4C0B0-F60B-4DA4-879F-5E272762A108}.Debug|AVR.ActiveCfg = Debug|AVR
+		{0DC4C0B0-F60B-4DA4-879F-5E272762A108}.Debug|AVR.Build.0 = Debug|AVR
+		{0DC4C0B0-F60B-4DA4-879F-5E272762A108}.Release|AVR.ActiveCfg = Release|AVR
+		{0DC4C0B0-F60B-4DA4-879F-5E272762A108}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
