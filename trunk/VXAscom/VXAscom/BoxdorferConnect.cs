@@ -12,42 +12,12 @@ namespace ASCOM.VXAscom
 {
     namespace Controller
     {
-        enum CommandByte
-        {
-            writeLeftOn = 0xA8,
-            writeLeftOff = 0xA9,
-            writeRightOn = 0xAA,
-            writeRightOff = 0xAB,
-            writeOnOn = 0xAE,
-            writeOnOff = 0xAF,
-            writeFastOn = 0xB0,
-            writeFastOff = 0xB1,
-            readRaTargetPosition = 0xB2,
-            writeRaTargetPosition = 0xB3,
-            writeRaGotoStart = 0xB4,
-            writeRaGotoStop = 0xB5,
-            writeRaBacklash = 0x11,
-            readRaBacklash = 0x12,
-            readRaFast = 0xDE,
-            writeRaFast = 0xBE,
-            writeRAMicro = 0xD0,
-            readRAMicro = 0xD4,
-            readRaCurrentPos = 0xB7,
-            resetRaCurrentPos = 0xB8,
-            readRaAccLowerLimit = 0xD1,
-            writeRaAccLowerLimit = 0xD2,
-            readRaAcceleration = 0xD5,
-            writeRaAcceleration = 0xD6,
-            readRaCurrentAccleration = 0xD9,
-            readRaAccelerationUpdate = 0xDA,
-            writeRaAccelerationUpdate = 0xDB,
-            getVersion = 0xD7,
-        }
+       
 
         /// <summary>
         /// Commands associated with the registers
         /// </summary>
-        class AccessCommands
+        public class AccessCommands
         {
             public byte? readCommand;
             public byte? writeCommand;
@@ -68,56 +38,14 @@ namespace ASCOM.VXAscom
         /// send the write command.
         public class BoxdorferConnect : IControllerConnect
         {
-
+            protected Dictionary<Registers, AccessCommands> accessMap;
+            protected Dictionary<Commands, byte> commandMap;
             static TraceLogger sysLog = new TraceLogger();
             /// <summary>
             /// Mapping of the different registers to the required commands
             /// </summary>
-            static private Dictionary<Registers, AccessCommands> accessMap =
-                new Dictionary<Registers, AccessCommands> {
-                    {Registers.RaPosition, new AccessCommands {readCommand = (byte)CommandByte.readRaCurrentPos, 
-                                                               writeCommand = null}},
-                    {Registers.RaBacklash, new AccessCommands {readCommand = (byte)CommandByte.readRaBacklash,
-                                                               writeCommand = (byte)CommandByte.writeRaBacklash}
-                                                               },
 
-                    {Registers.RaTarget, new AccessCommands {  readCommand = (byte)CommandByte.readRaTargetPosition,
-                                                               writeCommand = (byte)CommandByte.writeRaTargetPosition}
-                                                               },
-                                                               
-                    {Registers.RaAcceleration, new AccessCommands {  
-                                                                readCommand = (byte)CommandByte.readRaAcceleration,
-                                                                writeCommand = (byte)CommandByte.writeRaAcceleration}
-                                                               },
-
-                    {Registers.RaAccUpdate, new AccessCommands {  
-                                                                readCommand = (byte)CommandByte.readRaAccelerationUpdate,
-                                                                writeCommand = (byte)CommandByte.writeRaAccelerationUpdate}
-                                                                },
-                    {Registers.RaAccLimit, new AccessCommands {  
-                                                                readCommand = (byte)CommandByte.readRaAccLowerLimit,
-                                                                writeCommand = (byte)CommandByte.writeRaAccLowerLimit}
-                                                                },
-                   {Registers.RaFast, new AccessCommands {
-                                                            readCommand = (byte)CommandByte.readRaFast,
-                                                            writeCommand = (byte)CommandByte.writeRaFast}
-                                                            },
-                                                               
-            };
-
-            static private Dictionary<Commands, byte> commandMap = new Dictionary<Commands,byte> {
-                    { Commands.RaGotoStart, (byte)CommandByte.writeRaGotoStart},
-                    { Commands.RaGotoStop, (byte)CommandByte.writeRaGotoStop},
-                    { Commands.RaTrackingOn, (byte)CommandByte.writeOnOn},
-                    { Commands.RaTrackingOff, (byte)CommandByte.writeOnOff}, 
-                    {Commands.RaFastOn, (byte)CommandByte.writeFastOn},
-                    {Commands.RaFastOff, (byte)CommandByte.writeFastOff},
-                    {Commands.RaLeftOn, (byte)CommandByte.writeLeftOn},
-                    {Commands.RaLeftOff, (byte)CommandByte.writeLeftOff},
-                    {Commands.RaRightOn, (byte)CommandByte.writeRightOn},
-                    {Commands.RaRightOff, (byte)CommandByte.writeRightOff},
-                };
-
+            
 
             Serial _connection;
             public Serial Connection

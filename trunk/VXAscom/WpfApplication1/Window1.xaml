@@ -1,0 +1,13 @@
+﻿<Window x:Class="WpfApplication1.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Window1" Height="300" Width="300">
+    <Grid>
+        <StackPanel Height="100"  Name="stackPanel1" VerticalAlignment="Top">
+            <StackPanel Height="auto" Name="stackPanel2" Width="auto" Orientation="Horizontal">
+                <TextBlock Height="21" Name="txtTelescopName" Width="180" Text="Vixen" Padding="0" Margin="5" Background="Beige" />
+                <Button Height="23" Name="btnSelect" Width="Auto" Margin="5" Click="btnSelect_Click">Select</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
