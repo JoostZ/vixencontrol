@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VXAscom", "VXAscom\VXAscom.csproj", "{F3B9536C-11A8-4480-8D5C-AEFD37398B4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVxAscom", "TestVxAscom\TestVxAscom.csproj", "{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}"

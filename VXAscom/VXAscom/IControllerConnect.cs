@@ -10,37 +10,54 @@ namespace ASCOM.VXAscom
      * 
      * Through this interface we simulate the micro controller
      * as having a set of registers that we can read and write
+     * 
+     * There are several types of registers:
+     * - One bit status registers
+     * - 32 bit Read-only registers
+     * - 32 bit Read/Write registers
+     * - float Read/Write registers
      */
     namespace Controller
     {
+        /**
+         * @brief boolean status registers
+         */
+        public enum StatusRegister
+        {
+            Left,
+            Right,
+            Up,
+            Down,
+            RaTracking,
+            DecTracking,
+            RaGoto,
+            DecGoto,
+            Fast,
+        }
+
         /// <summary>
-        /// Name of registers in the simulated micro controller
+        /// Name of Read-only registers
         /// </summary>
-        public enum Registers
+        public enum RoRegisters
         {
             RaPosition,     //!< Current position of RA axis
+            DePosition,     //!< Current position of Dec axis
+        }
+
+        public enum Registers {
             RaTarget,       //!< Target position of the RA axis
-            RaBacklash,     //!< Number of pulses to correct for backlash of the RA axis
-            RaAccLimit,     //!< Below this limit no ramping takes place
-            RaAcceleration, //!< Acceleration in tracking/sec for the RA axis
-            RaAccUpdate,    //!< Acceleration update interval in msec for the RA axis
-            RaFast,         //!< Slewing speed in units of tracking speed for RA axis
+            DecTarget,      //!< Number of pulses to correct for backlash of the RA axis
          
         }
 
-        public enum Commands
+        public enum FloatRegisters
         {
-            RaGotoStart,        //!< Start GoTo for the RA axis
-            RaGotoStop,         //!< Stop GoTo for the RA axis
-            RaTrackingOn,       //!< Swith Tracking in RA direction on
-            RaTrackingOff,      //!< Swith Tracking in RA direction off
-            RaFastOn,
-            RaFastOff,
-            RaLeftOn,
-            RaLeftOff,
-            RaRightOn,
-            RaRightOff
+            RaFast,
+            DecFast,
+            RaSlow,
+            DecSlow
         }
+
 
         /// <summary>
         /// Interface defining access to the micro controller
@@ -48,6 +65,10 @@ namespace ASCOM.VXAscom
         /// <seealso cref="Registers"/>
         public interface IControllerConnect
         {
+            Boolean ReadStatus(StatusRegister aRegister);
+
+            Int32 Read(RoRegisters aRegister);
+
             /// <summary>
             /// Read register
             /// </summary>
@@ -62,11 +83,8 @@ namespace ASCOM.VXAscom
             /// <param name="aValue">The value to write to register aRegister</param>
             void Write(Registers aRegister, Int32 aValue);
 
-            /// <summary>
-            /// Write a command
-            /// </summary>
-            /// <param name="aCommand">The command to write</param>
-            void Command(Commands aCommand);
+            float Read(FloatRegisters aRegister);
+            void Write(FloatRegisters aRegister, float aValue);
 
             bool Connected { get; }
         }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ASCOM.VXAscom.Properties {
+namespace WpfApplication1.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ASCOM.VXAscom.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ASCOM.VXAscom.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WpfApplication1.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,13 +57,6 @@ namespace ASCOM.VXAscom.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ASCOM {
-            get {
-                object obj = ResourceManager.GetObject("ASCOM", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
